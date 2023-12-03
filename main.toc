@@ -1,0 +1,134 @@
+\gdef \the@ipfilectr {@-1}
+\contentsline {chapter}{\numberline {1}Floating Point Arithmetic}{7}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Representation of Real Numbers}{7}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Floating Point Numbers}{7}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Rounding}{9}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Arithmetic Operations}{9}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}Error Accumulation: Multiplication}{10}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}Error Accumulation: Addition}{11}{subsection.1.4.2}%
+\contentsline {section}{\numberline {1.5}Exercises}{11}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Theoretical Part}{12}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}Computational Part}{12}{subsection.1.5.2}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-2}
+\contentsline {chapter}{\numberline {2}Interpolation}{15}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Polynomial Interpolation}{15}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Lagrange Polynomial}{16}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Interpolation Error}{17}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Runge's Phenomenon}{19}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Chebyshev Interpolation}{19}{subsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.1.5}Stability of Polynomial Interpolation}{21}{subsection.2.1.5}%
+\contentsline {subsection}{\numberline {2.1.6}Newton Form}{22}{subsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.1.7}Hermite Polynomial Interpolation}{24}{subsection.2.1.7}%
+\contentsline {section}{\numberline {2.2}Trigonometric Interpolation}{25}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Fourier Series}{25}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Fast Fourier Transform}{28}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Interpolation Error of Trigonometric Polynomial}{28}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Spline Interpolation}{30}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Linear Splines}{30}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Cubic Splines}{31}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Interpolation Error of Cubic Spline}{33}{subsection.2.3.3}%
+\contentsline {section}{\numberline {2.4}Reproduce Kernel Hilbert Space}{33}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Exercises}{33}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Theoretical Part}{33}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Computational Part}{35}{subsection.2.5.2}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-3}
+\contentsline {chapter}{\numberline {3}Differentiation and Quadrature}{37}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Extrapolation}{37}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Richardson Extrapolation}{38}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Wynn's epsilon method}{39}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Differentiation with Finite Difference}{40}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Finite Difference from Taylor Expansion}{41}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Rounding Error Issue}{44}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Improve by Extrapolation}{44}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Quadrature Rules}{45}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Interpolation Based Rules}{46}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Numerical Error of Interpolation Based Rules}{47}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Newton-Cotes Formula}{48}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Romberg Integration}{51}{subsection.3.3.4}%
+\contentsline {subsection}{\numberline {3.3.5}Adaptive Integrations}{51}{subsection.3.3.5}%
+\contentsline {subsection}{\numberline {3.3.6}Improper Integral}{52}{subsection.3.3.6}%
+\contentsline {section}{\numberline {3.4}Gauss Quadrature}{53}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Gauss Quadrature on Unbounded Domain}{56}{section.3.5}%
+\contentsline {subsubsection}{Laguerre polynomial}{56}{section*.2}%
+\contentsline {subsubsection}{Hermite polynomial}{56}{section*.3}%
+\contentsline {section}{\numberline {3.6}Probabilistic Integration}{57}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Quasi Monte-Carlo Integration}{57}{subsection.3.6.1}%
+\contentsline {section}{\numberline {3.7}Exercises}{57}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Theoretical Part}{57}{subsection.3.7.1}%
+\contentsline {subsection}{\numberline {3.7.2}Computational Part}{57}{subsection.3.7.2}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-4}
+\contentsline {chapter}{\numberline {4}Approximation}{59}{chapter.4}%
+\contentsline {section}{\numberline {4.1}General Approximation Theory}{59}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Minimax Approximation}{60}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Remez Algorithm}{62}{subsection.4.2.1}%
+\contentsline {section}{\numberline {4.3}Orthogonal Polynomials}{63}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Chebyshev Polynomials}{64}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Legendre Polynomial}{64}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4.4}Approximation Theory for Compact Groups}{65}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Pad\'e Approximation}{65}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Neural Network}{65}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Radial Basis}{65}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Universal Approximation Theorem}{65}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Gradient-Flow}{65}{subsection.4.6.3}%
+\contentsline {section}{\numberline {4.7}Exercises}{65}{section.4.7}%
+\contentsline {subsection}{\numberline {4.7.1}Theoretical Part}{65}{subsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7.2}Computational Part}{65}{subsection.4.7.2}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-5}
+\contentsline {chapter}{\numberline {5}Ordinary Differential Equations}{67}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Initial Value Problem}{67}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}One-step Methods}{68}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Absolute Stability}{70}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Rounding Error}{71}{subsection.5.1.3}%
+\contentsline {subsection}{\numberline {5.1.4}Extrapolation Methods}{71}{subsection.5.1.4}%
+\contentsline {subsection}{\numberline {5.1.5}Adaptive One-step Methods}{72}{subsection.5.1.5}%
+\contentsline {subsection}{\numberline {5.1.6}Multistep Methods}{72}{subsection.5.1.6}%
+\contentsline {subsection}{\numberline {5.1.7}Adams Method}{75}{subsection.5.1.7}%
+\contentsline {section}{\numberline {5.2}Boundary Value Problem}{77}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Finite Difference Method}{77}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Galerkin Method}{78}{subsection.5.2.2}%
+\contentsline {section}{\numberline {5.3}Exercises}{78}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Theoretical Part}{78}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Computational Part}{79}{subsection.5.3.2}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-6}
+\contentsline {chapter}{\numberline {6}Partial Differential Equations}{81}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Finite Difference Method}{81}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Finite Volume Method}{81}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Pseudo Spectral Method}{81}{section.6.3}%
+\contentsline {section}{\numberline {6.4}IMEX Method}{81}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Sector Operators}{81}{section.6.5}%
+\contentsline {section}{\numberline {6.6}PINN}{81}{section.6.6}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-7}
+\contentsline {chapter}{\numberline {7}Integral Equations}{83}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Nystr\"om Method}{83}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Galerkin Method}{83}{section.7.2}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-8}
+\contentsline {chapter}{\numberline {8}Matrix Computation}{85}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Factorization}{85}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Preconditioning}{85}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Large-scale Computation}{85}{section.8.3}%
+\gdef \the@ipfilectr {}
+\gdef \the@ipfilectr {@-9}
+\contentsline {chapter}{\numberline {9}Extended Topics}{87}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Radial Basis Interpolation}{88}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Quadrature in multi-dimension}{88}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Stiff ODE}{88}{section.9.3}%
+\contentsline {section}{\numberline {9.4}Fast Multipole Method}{88}{section.9.4}%
+\contentsline {section}{\numberline {9.5}Random Algorithm}{88}{section.9.5}%
+\contentsline {section}{\numberline {9.6}Optimization}{88}{section.9.6}%
+\contentsline {section}{\numberline {9.7}Sampling Algorithm}{88}{section.9.7}%
+\contentsline {section}{\numberline {9.8}Parallel Computing}{88}{section.9.8}%
+\contentsline {section}{\numberline {9.9}Regularization}{88}{section.9.9}%
+\contentsline {section}{\numberline {9.10}Optimal Transport}{88}{section.9.10}%
+\contentsline {section}{\numberline {9.11}Point Cloud}{88}{section.9.11}%
+\contentsline {section}{\numberline {9.12}Inverse Crime}{88}{section.9.12}%
+\contentsline {section}{\numberline {9.13}Low Rank Approximation}{88}{section.9.13}%
+\contentsline {section}{\numberline {9.14}Finite Element Method}{88}{section.9.14}%
+\contentsline {section}{\numberline {9.15}Computation on Graph}{88}{section.9.15}%
+\gdef \the@ipfilectr {}
