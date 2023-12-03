@@ -416,6 +416,7 @@ Periodic functions occur in many applications, that is, $f(x + T) = f(x)$, $x\in
 \end{definition}
 The concept of ``degree'' here can be validated by the addition theorem of trigonometric functions. For instance, if $f_1\in F_k$, $f_2\in F_l$, then $f_1 f_2 \in F_{k+l}$. In the next, we discuss the uniqueness of the interpolation with the trigonometric polynomial.
 \begin{lemma}
+\label{Lem: 2-Tri-pl-zer}
     A trigonometric polynomial $f\in F_n$ that has more than $2n$ zeros in $[0, 2\pi)$ must vanish identically.
 \end{lemma}
 \begin{proof}
@@ -430,13 +431,14 @@ The concept of ``degree'' here can be validated by the addition theorem of trigo
     one can rewrite $f_n(x) = z^{-n} p(z)$. If $f_n(x)$ has more than $2n$ zeros, then $p(z)$ has more than $2n$ zeros, which is a contradiction since $p(z)$ is a polynomial of degree $2n$.
 \end{proof}
 \begin{remark}
-    Since $\sin nx\in F_n$ has $2n$ zeros $\frac{\pi j}{n}$, $j=0,\dots, 2n-1$, it means to uniquely determine a trigonometric polynomial in $F_n$, exactly $2n+1$ values are needed. This is also known as the Nyquist sampling theorem.
+    Since $\sin nx\in F_n$ has $2n$ zeros $\frac{\pi j}{n}$, $j=0,\dots, 2n-1$, it means to uniquely determine a trigonometric polynomial in $F_n$, exactly $2n+1$ values are needed. This is also known as the ``Nyquist-Shanon sampling theorem''.
 \end{remark}
 A direct corollary is the linear independence of the functions $1$, $\cos k x$ and $\sin k x$, $k = 1, \dots n$, these $(2n+1)$ functions form a natural basis for the trigonometric polynomial space $F_n$. 
 \begin{corollary}
-    The functions $1, \cos kx, \sin kx$, $k=1,\dots, n$ are linearly independent on $C([0, 2\pi])$, hence $F_n$ is a $(2n+1)$ dimensional space.
+\label{Cor: 2-Fou-bas-ind}
+    The functions $1, \cos kx, \sin kx$, $k=1,\dots, n$ are linearly independent on $C [0, 2\pi]$, hence $F_n$ is a $(2n+1)$ dimensional space.
 \end{corollary}
-To determine the coefficients $a_k, b_k$ from $(2n+1)$ data paris $(x_j, y_j)$, $j=0, \dots, 2n$. We simply follow the idea of Lagrange polynomials by creating the basis polynomial $l_k(x)$ such that
+To determine the coefficients $a_k, b_k$ from $(2n+1)$ data pairs $(x_j, y_j)$, $j=0, \dots, 2n$. We simply follow the idea of Lagrange polynomials by creating the basis polynomial $l_k(x)$ such that
 \begin{eqnarray}
     l_k(x_j) = \begin{cases}
         1, &j = k,\\
