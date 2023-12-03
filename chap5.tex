@@ -1,0 +1,547 @@
+\chapter{Ordinary Differential Equations}
+The ordinary differential equations in the form
+$$y' = f(y, t),\quad y(a) = y_0$$
+are commonly used in modeling for various fields of physical sciences and biological studies. In this chapter we will derive and analyze the numerical methods for solving the above problems for ordinary differential equations.
+\section{Initial Value Problem}
+Let $f(y, t): \bbR^n\times [a, b]\to \bbR^N$ be a continuous function, the initial value problem is to determine a differentiable solution $y$ satisfying that 
+\begin{equation}\label{EQ: ODE}
+    y' = f(y, t),\quad y(a) = y_0
+\end{equation}
+the derivative $y'\in\bbR$ denotes taking derivatives on all components of $y$. The general existence and uniqueness of solution to ODE~\eqref{EQ: ODE} depends on the Lipschitz condition of $f$
+$$\|f(y_1, t) - f(y_2, t)\|\le L\|y_1 - y_2\|,\quad t\in[a, b].$$
+\begin{theorem}
+    If $f$ is $L$-Lipschitz continuous, then 
+    \begin{enumerate}
+        \item The ODE~\eqref{EQ: ODE} has a unique continuously differentiable solution $y: [t_0, t_1]\mapsto \bbR^N$.
+        \item The stability with respect to initial condition is Lipschitz, 
+        $$\|y(t) - \tilde{y}(t)\|\le e^{L(t- t_0)}\|y(t_0) - \tilde{y}(t_0)\|$$
+        where $y(t_0), \tilde{y}(t_0)$ are the initial conditions for $y$ and $\tilde{y}$.
+    \end{enumerate}
+\end{theorem}
+\begin{remark}
+    Consider a perturbative ODE:
+    \begin{equation}
+        \begin{aligned}
+            y' = f(y, t) + \delta(t),\quad y(a) = y_0 + \delta_0
+        \end{aligned}
+    \end{equation}
+    such that $\|\delta(t)\|, \|\delta_0\|\le \eps$ for all $t\in [a, b]$ and the resulting perturbative equation's solution $\tilde{y}$ satisfies 
+    $$\|y(t) - \tilde{y}(t)\|\le C\eps$$
+    then the problem is Liapunov stable. The Lipschitz continuity of $f$ guarantees the Liapunov stability.
+\end{remark}
+\subsection{One-step Methods}
+The simplest numerical solution for IVP is the one-step method. We consider the discretization of solution 
+$$y_n\simeq y(t_n), \quad n = 0,1,\dots, M$$
+on the grid 
+$$\Delta = \{ a=  t_0 < t_1 < \dots < t_M  = b\},\quad h_n := t_{n+1} - t_n.$$
+\begin{definition}[scheme]
+    The explicit (forward) one-step method for approximation of the solution to the IVP~\eqref{EQ: ODE} is in the from
+    \begin{equation}
+        y_{n+1} = y_n + h_n \phi(t_n, y_n; h_n),\quad y_0:= y(t_0).
+    \end{equation}
+where $\phi$ is the iteration function.
+\end{definition}
+\begin{definition}[convergence]
+    The \underline{convergence order} is $p$ if the global error 
+    \begin{equation}
+        \max_{n\ge 0}\|y_n - y(t_n)\| \le C \bar{h}^p,\quad \bar{h}:=\max_{n\ge 0}  h_n
+    \end{equation} 
+    where $C$ is independent of the grid $\Delta$.
+\end{definition}
+\begin{definition}[local error]
+The local error $E(t, h)$ (the quantity $E(t, h)/h$ is the local truncation error)
+\begin{equation}
+    E(t, h) := y(t) + h \phi(t, y(t); h) - y(t + h),\quad 0\le h\le b - t
+\end{equation}
+denotes the induced error by one-step method at time $t+ h$.
+\end{definition}
+\begin{definition}[consistency]
+    The \underline{consistency order} is $p$ if 
+    \begin{equation}
+        \|E(t, h)\|\le C h^{p+1},\quad t\in[a, b],\quad 0\le h \le b - t,
+    \end{equation}
+    where $C$ is independent of $t, h$.
+\end{definition}
+\begin{example}[Forward Euler]
+    If we let $\phi(t, y; h) = f(t, y)\in C^1([a, b]\times \bbR^N; \bbR^N)$, then we will have the local error in the form 
+    \begin{equation}
+        \begin{aligned}
+            E(t, h) &= y(t) + h f(t, y(t)) - y(t + h) \\    
+            &= y(t) + h f(t, y(t)) - (y(t) + h y'(t) + \frac{h^2}{2} y''(\xi)) \\
+            & = -\frac{h^2}{2} y''(\xi).
+        \end{aligned} 
+    \end{equation}
+    which means consistency order is $p = 1$.
+\end{example}
+\begin{example}[modified Euler]
+    Let the iteration function $$\phi(t, y;h) = a_1 f(t, y ) + a_2f( t+b_1h, y+b_2 hf(t, y))$$
+    then local error
+    \begin{equation}\nonumber
+        \begin{aligned}
+            E(t, h) &= y(t) + a_1 h f(t, y(t)) + a_2 h \left[ f(t, y(t)) + \partial_t f|_{t,y(t)} b_1 h + \partial_y f|_{t, y(t)} b_2 h +\cO(h^2) \right]\\
+            &\quad - (y(t) + h y'(t) + \frac{h^2}{2} y''(t) + \frac{h^3}{6}y'''(\xi))\\
+            & = (a_1 + a_2 - 1) f(t, y(t)) + h^2 \left( a_2 b_1 \partial_t f|_{t,y(t)} + a_2 b_2 \partial_y f|_{t, y(t)}-\frac{1}{2}y''(t)\right) + \cO(h^3)
+        \end{aligned}
+    \end{equation}
+    Therefore if the constants
+    $$a_1 + a_2 = 1,\quad a_2b_1 = \frac{1}{2},\quad a_2 b_2 = \frac{1}{2},$$
+    the consistency order is $p = 2$. This formulation cannot obtain a formula for $p=3$. 
+    \begin{enumerate}
+        \item     The modified Euler is $a_1 = 0$, $a_2= 1$, $b_1 = b_2 = \frac{1}{2}$. The algorithm can be divided into two updating sub-steps:
+        \begin{equation}
+            \begin{aligned}
+                y_{n+1/2} &= y_n + \frac{1}{2}h_n f(t_n, y_n),\quad t_{n+1/2} = t_n + \frac{1}{2}h_n, \\
+                y_{n+1} &= y_{n+1/2} + \frac{1}{2} h_n f(t_{n+1/2}, y_{n+1/2})
+            \end{aligned}
+        \end{equation}
+        \item The Heun's method is $a_1 = \frac{1}{2}$, $a_2 = \frac{1}{2}$, $b_1 = b_2 = 1$. This method can be written into similar sub-steps as well.
+    \end{enumerate}
+\end{example}
+\begin{remark}
+    For implicit methods, the iteration function involves unknown values. Two famous examples are implicit Euler:
+    $$y_{n+1} = y_n + h_n f(t_{n+1}, y_{n+1})$$
+    and Crank-Nicolson:
+    $$y_{n+1} = y_n + \frac{h_n}{2} ( f(t_n, y_n) + f(t_{n+1}, y_{n+1}).$$
+\end{remark}
+
+\begin{theorem}
+    If the one-step method has consistency order $p\ge 1$ and $\phi(t, y; h)$ is Lipschitz continuous in $y$ variable, then convergence order is $p$.
+\end{theorem}
+\begin{proof}
+    Let $e_n = y_n - y(t_n)$, then using the local error relation that 
+    \begin{equation}
+        y(t_{n+1}) = y(t_n) + h_n \phi(t_n, y(t_n);h_n) - E(t_n, h_n)
+    \end{equation}
+    we have 
+    \begin{equation}
+        e_{n+1} = e_n + h_n (\phi(t_n, y_n; h_n) -\phi(t_n, y(t_n); h_n)) + E(t_n, h_n)
+    \end{equation}
+    which implies that 
+    \begin{equation}
+        \begin{aligned}
+            \|e_{n+1}\|&\le \|e_n\| + h_n L\|y_n - y(t_n)\| + C h_n^{p+1} \\
+            &\le (1 + h_n L)\|e_n\| + C h_n^{p+1} \\
+            &\le e^{h_n L }\|e_n\| + C h_n^{p+1} \\
+            &\le e^{h_n L }e^{h_{n-1} L }\|e_{n-1}\| + e^{h_{n-1} L }C h_n ^{p+1} + C h_{n-1}^{p+1} \\
+            &\dots \\
+            &\le e^{(b-a) L }\|e_0\| + C e^{(b-a) L } \sum_{n\ge 0} h_n^{p+1}\\
+            &\le C(b-a) e^{L(b-a)} \bar{h}^p.
+        \end{aligned}
+    \end{equation}
+\end{proof}
+
+\begin{example}[explicit Runge Kutta]
+    The Runge Kutta method $\texttt{RK4}$ has convergence order $p = 4$ uses $\phi$ as 
+    \begin{equation}
+        \phi(t, y;h) = \frac{1}{6}\left( k_1 + 2 k_2 + 2 k_3 + k4 \right)
+    \end{equation}
+    where 
+    \begin{equation}
+        \begin{aligned}
+            k_1 &= f(t, y), \\ 
+            k_2 &= f(t + \frac{h}{2}, y + \frac{h}{2}k_1),\\
+            k_3 &= f(t + \frac{h}{2}, y+ \frac{h}{2}k_2), \\
+            k_4&= f(t + h, y  + h k_3).
+        \end{aligned}
+    \end{equation}
+    The proof of consistency order uses Taylor's expansion, see exercises.
+\end{example}
+\subsection{Absolute Stability}
+In the previous section, we have discussed the so-called zero-stability, which shows that small perturbation (comparable to step size) during each step will not cause too much trouble. This stability is with respect to perturbation. The absolute stability is to keep the numerical solution bounded (actually decaying) as $n\to \infty$, which is an asymptotic behavior. The usual toy problem is 
+\begin{eqnarray}\label{EQ: ASTAB}
+    y'(t) = f(t, y):= \lambda y(t),\quad t > 0
+\end{eqnarray}
+where $\lambda \in \bbC$ and initial condition is $y(0)= 1$. The solution is simple $y(t) = e^{\lambda t}$, of course if $\Re \lambda > 0$, the solution would blow and the solution will decay to zero if $\Re \lambda < 0$. 
+
+\begin{definition}
+    A numerical scheme is absolutely stable if 
+    $$y_n\to 0,\quad n\to \infty,$$
+    where the time step is fixed and $y_n$ is the numerical solution to~\eqref{EQ: ASTAB} under the given scheme.  The region of absolute stability refers to the value of $z = h\lambda$ such that 
+    \begin{eqnarray}
+        \cA = \{ z = h\lambda\in\bbC\mid  y_n\to 0,\,n\to \infty\}
+    \end{eqnarray}
+\end{definition}
+\begin{example}[forward Euler]
+    With the scheme that 
+    $$y_{n+1} = y_n + h \lambda y_n = (1 + h\lambda) y_n$$
+    we can easily find $y_n = (1 + h\lambda)^n = (1 +z )^n$. This value decays to zero as long as 
+    $$|1 + z |< 1.$$
+    This region is a unit disk centered at $z= - 1$, which means 
+$$h\lambda \in \bbC^{-},\quad h\in (0, -2\frac{\Re\lambda}{|\lambda|^2}).$$
+This shows that only when the step size is small enough, we can make sure the solution reflects the correct behavior of the solution's exponential decay.
+\end{example}
+\begin{example}
+    Similarly, consider the implicit Euler, we will have 
+    $$y_n = (1 - h\lambda)^{-n}$$
+    then $|1 - z| < 1$ derives $\cA \supset \bbC^{-}$. This means when $\lambda < 0$, the numerical solution's behavior will be decaying as well.
+\end{example}
+The numerical scheme is called $A$-stable if $\cA\supset\bbC^{-}$. It can be shown that no explicit linear schemes can be $A$-stable~\cite{widlund1967note}.
+
+
+
+
+
+
+
+\subsection{Rounding Error}
+In this section, we briefly discuss the impact of rounding error. 
+Following the previous theorem about the local error, if each step involves rounding error of size $|\delta_n|\le \delta$ 
+\begin{equation}
+    y_{n+1} = y_n + h_n \phi(t_n, y_n; h_n) + \delta_n 
+\end{equation}
+then $e_{n+1}$ satisfies 
+\begin{equation}
+    \begin{aligned}
+        \|e_{n+1}\| & = \|e_n + h_n(\phi(t_n, y_n;h_n) - \phi(t_n, y(t_n); h_n)) + \delta_n + E(t_n, h_n)  \|  \\
+        &\le  e^{(b-a)L} \|e_0\| + C e^{(b-a)L} \sum_{n\ge 0}(h_n^{p+1} +\delta) \\
+        &\le e^{(b-a)L} \|\delta_0\| + C e^{(b-a)L}  (b-a) \left( \bar{h}^p + \frac{\delta}{\underline{h}}\right)
+    \end{aligned}
+\end{equation}
+where $\underline{h} = \min_{n\ge 0} h_n$. When the grid is uniform that $h_n = h$, then the optimal grid size is minimizing $h^p + \frac{\delta}{h}$.
+\subsection{Extrapolation Methods}
+When the grid $\Delta$ is uniform, it is known that 
+$$y(t_n) - y_n = \cO(h^p),$$
+where $p$ is the consistency order. Actually, one can show that $y(t_n) - y_n$ can be written in an asymptotic expansion. For a proof of the following theorem, we refer to~\cite{gragg1965extrapolation}.
+\begin{theorem}
+    Let $f$ and $\phi$ be $(p+r)$-times continuously partial differentiable in each variable. Then there exists coefficients $c_{p+j}\in C^{r+1- j}([a, b],\bbR^N)$ that $c_{p+j}(a) = 0$ for $j=0,1,\dots, r-1$ and 
+    \begin{equation}
+        y(t_n) - y_n = \sum_{j=0}^{r-1} c_{p+j}(t_n) h^{p+j} + \cO(h^{p+r}).
+    \end{equation}
+\end{theorem}
+In order to find solution's value $y(t_n)$ with higher order of error, one can simply apply Richardson extrapolation.
+\subsection{Adaptive One-step Methods}
+The idea of adaptive one-step method is similar to the adaptive quadrature. The basic algorithm is briefly outlined in the following:
+\begin{enumerate}
+    \item Using an initial uniform grid $\Delta$ with grid size of $h$, one can compute the numerical solution $y_n$ with error of $e_h = \cO(h^p)$.
+    \item For each time step from $t_{n-1}$ to $t_n$, estimate the error of $e_h = y(t_n) - y_n$ from extrapolation, which is approximated by 
+    $$y_n(h) - z_n(h)\simeq (1 - 2^{-p})e_h$$
+    where $z_n(h)$ is computed through a refined one-step method locally,
+    \begin{equation}
+        \begin{aligned}
+            w_n(h) &= y_n(h) + \frac{h}{2} \phi(t_n, y_n; h/2), \\ 
+            z_n(h)&=w_n(h) + \frac{h}{2}\phi(t_n+\frac{h}{2}, w(h); \frac{h}{2}).
+        \end{aligned}
+    \end{equation}
+    \item If the error is within certain tolerance threshold, then continue to next time step, otherwise sub-divide $[t_{n-1}, t_n]$ and perform the adaptive one-step method.
+\end{enumerate}
+
+\subsection{Multistep Methods}
+An $m$-step method for the ODE~\eqref{EQ: ODE} on uniform grid is formulated by 
+\begin{equation}
+    \sum_{j=0}^m c_j y_{l + j} = h \phi(t_l, y_l, \dots, y_{l+m}; h)
+\end{equation}
+ The coefficients $c_j\in\bbR$ and the leading coefficient $c_m\neq 0$. Clearly the one-step method is a special case that $c_0 = -1$ and $c_1 = 1$. The time stamps are equally spaced $t_l = a + l h$ for $l = 0, \dots, n$, where $h = \frac{b-a}{n}$. The initial values $y_0,\dots, y_{m-1}$ are assumed known.
+
+ \begin{remark}
+     Usually, the initial value $y_0$ is given, while the other initial values are not. The preparation of the remaining values $y_1,\dots, y_{m-1}$ can be done through the aforementioned one-step methods. The $m$-step method can also be implicit if unknown values are involved.
+ \end{remark}
+
+ \begin{example}
+     The central difference explicit scheme 
+     $$y_{n+1} = y_{n-1} + 2h f(t_n, y_n)$$
+     Intuitively, 
+     \begin{equation}
+         y_{n+1} = y_{n-k} + \int_{t_{n-k}}^{t_{n+1}} f(t, y(t)) dt
+     \end{equation}
+     and one can replace the integral with any quadrature rule involving nodes $t_{j}$ in between (end nodes included, but could be implicit).
+ \end{example}
+We can define the convergence and consistency for $m$-step methods similarly by extending one-step methods.
+\begin{definition}[convergence]
+    The convergence order is $p$ if the scheme satisfies 
+    $$\|y(t_n) - y_n\|\le C h^p$$
+    for an independent $C$ for all $n$ (including initial values). 
+\end{definition}
+\begin{definition}[local error]
+    The local error is
+    \begin{equation}
+        E(t, h) = \left(\sum_{j=0}^m c_j y(t + jh) \right) - h\phi(t, y(t), y(t+h),\dots, y(t + mh); h)
+    \end{equation}
+    $E(t, h)/h$ is local truncation error. Here we normalize the formula by setting $c_m = 1$.
+\end{definition}
+\begin{definition}[consistency]
+    The consistency order is $p$ if local error 
+    $$\|E(t, h)\|\le C h^{p+1}.$$
+\end{definition}
+For the following context, we assume that \emph{$\phi$ is Lipschitz for all variables except the first one}, clearly the linear multi-step methods satisfies this condition. 
+\begin{definition}[root condition]
+    The generating polynomial with respect to multi-step method is 
+    \begin{equation}
+        p(\xi) := \sum_{j=0}^m c_j \xi^m
+    \end{equation}
+    The Dahlquist's root condition is that the roots of $p(\xi)$ satisfies 
+    \begin{equation}
+        p(\xi) = 0\Rightarrow |\xi|\le 1
+    \end{equation}
+    if a root $|\xi| = 1$, then it is simple. 
+\end{definition}
+\begin{theorem}
+    If root condition is satisfied, then 
+    \begin{equation}
+        \|y_l - y(t_l)\|\le C \left(\max_{0\le j\le m-1} \|y_j - y(t_j)\| + \max_{t\in[a. b - mh]} \|E(t, h)\|/h\right)
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    Similar to one-step method, we have 
+    \begin{equation}
+        \begin{aligned}
+            \sum_{j=0}^m c_j y(t_{l+j}) &= h \phi(t_l, y(t_l),\dots, y_{t_{l+m}}; h) + E(t_l, h) \\
+            \sum_{j=0}^m c_j y_{l+j} &= h \phi(t_l, y_l,\dots, y_{l+m}; h) 
+        \end{aligned}
+    \end{equation}
+    Take the difference, then 
+    \begin{equation}
+        \sum_{j=0}^m c_j e_{l+j} = \underbrace{h\left[  \phi(t_l, y_l,\dots, y_{l+m}; h)  - \phi(t_l, y(t_l),\dots, y_{t_{l+m}}; h)  \right]}_{\delta_l} - E(t_l, h)
+    \end{equation}
+    The right-hand-side can be reviewed as certain perturbation and left-hand-side is a linear recursive scheme. This can be made into matrix form 
+    \begin{equation}
+        \underbrace{\begin{pmatrix}
+            e_{l+1} \\ e_{l+2}\\ \vdots \\ e_{l +m} 
+        \end{pmatrix}}_{E_l} = 
+        \underbrace{\begin{pmatrix}
+            0& 1 & 0 & \cdots  & 0\\
+            0& 0 & 1 & \cdots &  0 \\
+            \vdots & \ddots & \ddots & \ddots  & 0\\
+            \vdots & \ddots & \ddots & \ddots  & 1\\
+            -c_0 & \cdots & \cdots & \cdots  &- c_{m-1} 
+        \end{pmatrix}}_{A}
+        \underbrace{\begin{pmatrix}
+            e_{l} \\ e_{l+1}\\ \vdots \\ e_{l +m-1} 
+        \end{pmatrix}}_{E_l} + 
+        \underbrace{\begin{pmatrix}
+            0 \\0\\ \vdots \\ \delta_l - E(t_l, h)
+        \end{pmatrix}}_{\Delta_l}  
+    \end{equation}
+    The iteration then can be written as
+    \begin{equation}
+        E_l = A^l E_0 + \sum_{j=0}^{l-1} A^{l-1-j} \Delta_j 
+    \end{equation}
+    If $E_l$ does not below, we need all eigenvalues $\lambda_k$ of $A$ satisfy $|\lambda_k|\le 1$, which are the roots of the polynomial (use elementary operations)
+    $$\det(\lambda I - A) = 0$$
+    That is exactly the generating polynomial:
+    \begin{equation}
+        p(\lambda) = \sum_{j=0}^{m} c_j \lambda^m 
+    \end{equation}
+    When the root condition is satisfied, for the $|\lambda_k|<1$, those components will decay exponentially. If $|\lambda_k|=1$, its geometric multiplicity has to be equal to algebraic multiplicity (then the Jordan block is diagonal), otherwise one Jordan block will be with size greater than one,
+     \begin{equation}
+        J_k =\begin{pmatrix}
+            \lambda_k & 1 &  &  \\ 
+             &\lambda_k   & \ddots & \\
+             &  & \ddots & 1 \\
+             &&  & \lambda_k 
+        \end{pmatrix}
+    \end{equation}
+    and 
+    \begin{equation}
+        \begin{pmatrix}
+            \lambda_k & 1 &  &  \\ 
+             &\lambda_k   & \ddots & \\
+             &  & \ddots & 1 \\
+             &&  & \lambda_k 
+        \end{pmatrix}^s \begin{pmatrix}
+           0 \\1 \\ 0 \\ \vdots \\0
+        \end{pmatrix} = \begin{pmatrix}
+            s \lambda_k^{s-1} \\ \lambda_k^s \\ 0\\\vdots \\ 0 
+        \end{pmatrix}
+    \end{equation}   
+    which will lead to unbounded behavior of $A^l$. Of course the root condition eliminates this case. Therefore 
+    \begin{equation}
+        \|E_{l}\|_{\infty} \le C \left( \|E_0\|_{\infty} + \sum_{j=0}^{l-1} \|\Delta_j\|_{\infty}\right) 
+    \end{equation}
+    where $\Delta_s$ is bounded by the Lipschitz condition 
+    \begin{equation}
+        \begin{aligned}
+            \|\Delta_s\|_{\infty} & \le \|E(t_s, h)\| + h L \sum_{j=0}^m |e_{s+j}| \\
+            & \le        \|E(t_s, h)\| + h L m \|E_s\|_{\infty} + hL \|E_{s+1}\|_{\infty}
+        \end{aligned}
+    \end{equation}
+    Hence 
+    \begin{equation}
+        \begin{aligned}
+           \sum_{s = 0}^{l-1} \|\Delta_s\|_{\infty} & \le l\max_{s}\|E(t_s, h)\| + h L (m +1) \sum_{s=0}^{l-1}\|E_s\|_{\infty} + hL \|E_{l}\|_{\infty}  
+        \end{aligned}
+    \end{equation}
+    It is then easy to see when $h$ is small, the error $E_l$ is bounded by $E_0$ and $E(t_s, h)$ (note $l\le n\simeq \cO(h^{-1})$). 
+\end{proof}
+\begin{corollary}
+    If root condition is satisfied, then consistency order $p$ implies convergence order $p$ for suitable step size $h$.
+\end{corollary} 
+For consistency order, the main tool is the Taylor expansion, we carry out the following lemma without providing a proof (see exercise). 
+\begin{lemma}\label{LEM: CONSISTENCY}
+    The linear $m$-step method 
+    \begin{equation}
+        \sum_{j=0}^m c_j y_{l+j} = h \sum_{j=0}^m \beta_j f(t_{l + j}, y_{l+j})
+    \end{equation}
+    has consistency order $p$ if 
+    \begin{equation}
+        \sum_{j=0}^m (j^s c_j - s j^{s-1}\beta_j) = 0,\quad s = 0,1,\dots, p.
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    The proof is simple. Here we need $f$ to be $p$-times continuously differentiable.
+\end{proof}
+\subsection{Adams Method}
+Let us recall the idea of quadrature for ODE solving.
+\begin{equation}
+    y(t_{l+m}) - y(t_{l+m-1}) = \int_{t_{l+m-1}}^{t_{l+m}} f(t, y(t))dt
+\end{equation}
+The $m$-step method now needs to represent the integral by a discrete quadrature scheme over $t_{l+j}$, $j=0, 1, \dots, m$ or $j=0,1,\dots, m-1$ depending the scheme is implicit or explicit. Following the intuition when we derive quadrature rules, it is first to find a interpolating polynomial. 
+
+Let $p(x)$ be a degree $(m-1)$ polynomial interpolating on the nodes $(t_j, f(t_j, y_j))$, $j = l, l+1,\dots, l+m-1$, then approximately 
+\begin{equation}
+    y(t_{l+m}) - y(t_{l+m-1}) = \int_{t_{l+m-1}}^{t_{l+m}} p(t) dt
+\end{equation}
+Note this is extrapolation. In the next, we try to calculate $p(x)$ with the Newton form backward.
+\begin{equation}
+    \begin{aligned}
+        p(t_{l+m-1} + s h) &= \sum_{k=0}^{m-1} p[t_{l+m-1},\dots, t_{{l+m-1- k}}] \prod_{j=0}^{k-1} (t_{l+m-1}+sh - (t_{l+m-1} - j h)) \\
+        &=   \sum_{k=0}^{m-1} p[t_{l+m-1},\dots, t_{{l+m-1- k}}] h^k \prod_{j=0}^{k-1} (s+j) 
+    \end{aligned}
+\end{equation}
+Therefore 
+\begin{equation}\label{EQ: ADAM B}
+    y(t_{l+m}) - y(t_{l+m-1}) \approx h \int_{0}^{1}  \sum_{k=0}^{m-1} p[t_{l+m-1},\dots, t_{{l+m-1- k}}] h^k \prod_{j=0}^{k-1} (s+j) ds 
+\end{equation}
+This method is called Adam-Bashfort method. The above formula can be written into linear form uniquely. Here are a few examples of Adam-Bashfort $m$-step methods.
+\begin{enumerate}
+    \item $m=1$. $y_{l+1} - y_{l} = h f(t_l, y_l)$. This is explicit Euler. 
+    \item $m=2$. $y_{l+2} - y_{l+1} = \frac{h}{2}(3 f(t_{l+1}, y_{l+1}) - f(t_l, y_l))$.
+    \item $m=3$. $y_{l+3} - y_{l+2} = \frac{h}{12} (23 f(t_{l+2}, y_{l+2}) - 16 f(t_{l+1}, y_{l+1}) + 5 f(t_l, y_l))$. 
+    \item $m=4$.  $y_{l+4} - y_{l+3} = \frac{h}{24} (55  f(t_{l+3}, y_{l+3}) - 59 f(t_{l+2}, y_{l+2}) +37 f(t_{l+1}, y_{l+1}) -9 f(t_l, y_l))$. 
+\end{enumerate}
+Now we can study the consistency order of the above $m$-step method. First the generating polynomial is 
+$$q(\xi) = \xi^{m-1}(\xi - 1)$$
+which satisfies root condition clearly. The local error is to compare the interpolating polynomial and the right-hand-side of~\eqref{EQ: ADAM B}, which means 
+\begin{equation}
+    E(t, h) = h \cO(h^{m}) = \cO(h^{m+1})\quad \text{since } \deg(p) = m-1.
+\end{equation}
+That means consistency order is $p = m$. 
+
+When the Adams method considers implicit scheme (called Adam-Moulton method), that is, the interpolation is including the end point.
+\begin{equation}
+    p(t_j) = f(t_j, y_{j}),\quad j = l, \dots, l+m,
+\end{equation}
+the polynomial is of degree $m$. The similar approach applies. The consistency order is clearly $p = m+1$ using the error estimate of polynomial interpolation. Here we also list a few cases for this case. 
+\begin{enumerate}
+    \item $m=1$. $y_{l+1} - y_{l} = \frac{h}{2}( f(t_l, y_l)  + f(t_{l+1}, y_{l+1}))$. This is Crank-Nicolson method. 
+    \item $m=2$. $y_{l+2} - y_{l+1} = \frac{h}{12}(5 f(t_{l+2}, y_{l+2}) + 8 f(t_{l+1}, y_{l+1}) - f(t_l, y_l))$.
+    \item $m=3$. $y_{l+3} - y_{l+2} = \frac{h}{24} (9 f(t_{l+3}, y_{l+3}) + 19 f(t_{l+2}, y_{l+2}) - 5 f(t_{l+1}, y_{l+1}) +  f(t_l, y_l))$. 
+\end{enumerate}
+\section{Boundary Value Problem}
+The boundary value problem (BVP) considers the problem
+\begin{equation}
+    \sum_{j = 0}^m c_j D^j y = f(x, y, Dy, \dots, D^{m-1} y)
+\end{equation}
+with boundary conditions 
+$$\sum_{j=0}^{m-1} c_{kj} D^j y (a) + d_{kj} D^j y(b) = \alpha_k,\quad k = 0,\dots, m-1.$$
+All BVP can be formulated into vector form of first order ODE. Let $Y_k = D^k y$, then we can obtain an ODE for the unknown vector $\cY = (Y_0, \dots, Y_m)$ such that 
+\begin{equation}
+    D Y_k = Y_{k+1},\quad k = 0, \dots, m-1
+\end{equation}
+and 
+\begin{equation}
+   c_m  D Y_m + \sum_{j=0}^{m-1} c_j Y_j = f(x, Y_0,\dots, Y_{m-1}).
+\end{equation}
+Among all kinds of ODE, the second order ODE is mostly considered (e.g. Sturm-Liouville). We state some properties for these ODEs. 
+\begin{theorem}
+    The Sturm-Liouville problem 
+    \begin{equation}
+        \begin{aligned}
+            &-y''(x) + r(x) y(x) = f(x), \\ 
+            &y(a) = y(b ) = 0,
+        \end{aligned}
+    \end{equation}
+    where $f$ is a continuous functions. This problem permits a unique solution $y\in C^2([a, b])$ when $r$ is a non-negative continuous function.
+\end{theorem}
+\begin{remark}
+    One can show there exists a unique weak solution $y\in H^1([a, b])$ which is H\"older continuous by embedding, therefore it is a strong solution due to $y'' = r y -f\in C^0([a, b])$.
+\end{remark} 
+\subsection{Finite Difference Method}
+The finite difference method is to discretize the derivatives by finite difference. Let us recall the central scheme for first derivative and second derivative of $y$ by 
+\begin{equation}
+    \begin{aligned}
+        \frac{y(x + h) - y(x - h)}{2h} &= y'(x) + y'''(\xi)\frac{h^2}{6} \\
+        \frac{y(x + h) - 2 y(x) + y(x - h)}{h^2} &= y''(x) - y^{(4)}(\xi)\frac{h^2}{12}
+    \end{aligned}
+\end{equation}
+The central scheme usually has better local error than forward or backward difference. In the following, we try to formulate the finite difference method for the Sturm-Liouville problem with $r\ge 0$. Take the grid $\Delta\subset [a, b]$ as 
+\begin{equation}
+    \Delta = \{x_k = a + k h, \, k = 0,\dots, N\}
+\end{equation}
+such that $h = \frac{b-a}{N}$ as step size which stands for the solution resolution. Then we use central scheme for the second derivative at each $x_k$,
+\begin{equation}
+    \frac{-y_{k+1} + 2 y_k - y_{k-1}}{h^2} + r_k y_k = f_k
+\end{equation}
+where $r_k = r(x_k)$, $f_k = f(x_k)$, $k = 1,\dots, N-1$, the two end points are excluded since they are prescribed as $y_0 = y_N = 0$. This linear system about $\cY = (y_1,\dots, y_{N-1})$ is 
+\begin{equation}
+    \frac{1}{h^2}\begin{pmatrix}
+        2 + r_1h^2 & - 1 &&&&\\
+        -1 & 2 + r_2 h^2 & -1 &&&\\
+        &\ddots &\ddots & \ddots && \\ 
+        & &\ddots &\ddots & \ddots & \\ 
+        & &&\ddots & \ddots & -1 \\
+        &&&& -1 & 2 + r_{N-1} h^2  
+    \end{pmatrix}  \cY = \begin{pmatrix}
+        f_1\\f_2\\\vdots \\ f_{N-1}
+    \end{pmatrix}
+\end{equation}
+if we denote the right-hand-side as $F$, then $\cY = A^{-1} F$. There error can be derived from the approximation error of finite difference, which is 
+\begin{equation}
+    \frac{1}{h^2}\begin{pmatrix}
+        2 + r_1h^2 & - 1 &&&&\\
+        -1 & 2 + r_2 h^2 & -1 &&&\\
+        &\ddots &\ddots & \ddots && \\ 
+        & &\ddots &\ddots & \ddots & \\ 
+        & &&\ddots & \ddots & -1 \\
+        &&&& -1 & 2 + r_{N-1} h^2  
+    \end{pmatrix} \widetilde{ \cY} = \begin{pmatrix}
+        f_1\\f_2\\\vdots \\ f_{N-1}
+    \end{pmatrix}  + \cO(h^2)\|y^{(4)}\|_{\infty}
+\end{equation}
+where $\widetilde{\cY}$ is the exact solution evaluated at nodes $x_k$. Therefore we can find the numerical error by 
+\begin{equation}
+    \cY - \widetilde{\cY} = A^{-1} \left(   \cO(h^2) \|y^{(4)}\|_{\infty} \right)
+\end{equation}
+For reliable numerical solution, we will require $\|\cY - \widetilde{\cY}\|_{\infty}\to 0$ as $h\to 0$. This will need the estimate of $\|A\|_{\infty}$.
+\begin{lemma}
+    Let $0\le S \le T$, that is, $0\le s_{ij}\le t_{ij}$ for all elements. Then $$\|S\|_{\infty}\le \|T\|_{\infty}.$$
+\end{lemma}
+
+
+
+
+
+\subsection{Galerkin Method}
+\section{Exercises}
+\subsection{Theoretical Part}
+\begin{problem}
+    Show the Runge Kutta $\texttt{RK4}$ has order of convergence $p=4$.
+\end{problem}
+\begin{problem}
+    Prove Lemma~\ref{LEM: CONSISTENCY}.
+\end{problem}
+\begin{problem}
+    Determine the consistency order of the multi-step method 
+    \begin{equation}
+        y_{l+2} - y_{l} = \frac{h}{3} \left( f(t_{l+2}, y_{l+2}) + 4 f(t_{l+1}, y_{l+1}) + f(t_l, y_l) \right)
+    \end{equation}
+\end{problem}
+\begin{problem}
+    For what values of $\gamma$, the following method
+    \begin{equation}
+        y_{l+3} + \gamma(y_{l+2} - y_{l+1}) - y_{l} = \frac{(3 + \gamma) h}{2} \left( f(t_{l+2}, y_{l+2}) + f(t_{l+1}, y_{l+1}) \right)
+    \end{equation} 
+    provides a convergent method, what is the order.
+\end{problem}
+\subsection{Computational Part}
+\begin{problem}
+    Implement Runge-Kutta method $\texttt{RK4}$ and apply the method for the ODE 
+    \begin{equation}
+        y' = - y,\quad y(0) = 1.
+    \end{equation}
+    Validate the convergence order on $[0, 1]$.
+\end{problem}
+\begin{problem}
+    Implement the Adam-Bashfort method for $m=2$. The initial two steps can be computed first by $\texttt{RK4}$.
+\end{problem}
+\bibliographystyle{apalike}
+\bibliography{chap5}

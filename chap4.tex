@@ -1,0 +1,260 @@
+\chapter{Approximation}
+The approximation solves the problem 
+$$\min_{p\in P}\|f - p\|$$
+which is to select the function $p\in P$ in a specific set that has the minimum distance from the target function $f$. 
+\section{General Approximation Theory}
+The most famous example in approximation theory is the Least Square problem 
+$$\min_{x\in S} \|Ax - b\|_2$$
+where $A\in\bbR^{N\times k}$ and a given vector $b\in \bbR^N$. Seeking for solution $x\in S = \bbR^k$ is the simplest case, in general the problem can be efficiently solved if $S$ is a convex set. 
+\begin{definition}
+    Let $\cM\subset \cV$ of a normed space $(\cV, \|\cdot\|)$ and given $v\in\cV$, the best approximation in $\|\cdot\|$ is 
+    $$u^{\ast}\in\cM,\quad \|u^{\ast} - v\| = \inf_{u\in\cM} \|u - v\|$$
+\end{definition}
+\begin{definition}
+    The sequence $u_k$, $k\in\bbN$ is an minimizing sequence if 
+    \begin{equation}
+        u_k \in\cM,\quad \|u_k - v\|\to \inf_{u\in\cM}\|u - v\|,\quad k\to\infty.
+    \end{equation}
+\end{definition}
+\begin{theorem}[existence of best approximation]
+If $u_k$ is a minimizing sequence and has an accumulation point $u^{\ast}$ in $\cM$, then  $u^{\ast}$ is a best approximation to $v$.
+\end{theorem}
+\begin{proof}
+    Just take limit (subsequence) on both sides to 
+    \begin{equation}
+        \|u^{\ast} - v\| \le \|u^{\ast} - u_k\| + \|u_k - v\|
+    \end{equation}
+\end{proof}
+\begin{theorem}
+    If $\cM$ is a compact subset of $\cV$, then best approximation always exists.
+\end{theorem}
+One special case is that $\cM$ is a finite dimension linear subspace of $\cV$, then one can take a bounded closed set truncating the minimizing sequence, then such set must be compact.
+\begin{lemma}[convexity]
+If $\cM$ is a convex set of normed space $\cV$, then the set of best approximations is convex.
+\end{lemma}
+\begin{theorem}[uniqueness]
+    If $\cM$ is strictly convex of normed space $\cV$, then the best approximation is unique. It is worthwhile to notice the strictly convexity is sufficient but not necessary.
+\end{theorem}
+\begin{definition}
+   The normed space $(\cV, \|\cdot\|)$ is strictly normed if and only if unit ball is strictly convex).
+\end{definition}
+\begin{theorem}[uniqueness]
+    If $\cM$ is a strictly normed linear subspace of normed space $\cV$, then there exists at most one best approximation for each $v\in\cV$.
+\end{theorem}
+\section{Minimax Approximation}
+Given $f\in C^0([a, b])$, find a polynomial $p_n\in\Pi_n$ such that $$\|f - p_n\|_{\infty} = \min_{g\in\Pi_n} \|f - g\|_{\infty}$$
+Such problem is the minimax approximation problem. In the previous sections, we have seen a similar problem which is to minimize the maximum of $|\omega(x)|$ with $\omega(x) = \prod_{j=0}^n(x - x_j)$. The proof used there can be borrowed for the following theorem as well. 
+
+
+\begin{theorem}[de la Vall\'ee-Poussin]
+    Let $f\in C^0([a, b])$ and $n\ge 0$, let $x_0<x_1<\dots<x_{n+1}$ be $n+2$ nodes in $[a, b]$. If there exists a polynomial $q_n\in\Pi_n$ such that 
+    $$f(x_j) - q_n(x_j) = (-1)^j e_j,\quad j =0,\dots, n+1.$$ 
+    where $e_j$ are having the same sign and nonzero, then 
+    \begin{equation}
+        \min_j |e_j|\le E_n^{\ast}(f): = \min_{g\in\Pi_n} \|f - g\|_{\infty} \le \max_j |e_j|.
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    Prove by contradiction. Suppose $E_n^{\ast}(f)$ is achieved by some polynomial $g\in\Pi_n$. If $q_n$ satisfies that 
+    \begin{equation}
+        |e_j| > E_n^{\ast}(f) = \|f - g\|_{\infty}.
+    \end{equation}
+    Then $q_n - g = q_n - f - (g - f)$, which implies that 
+    \begin{equation}
+    \sgn(q_n - g)(x_j) = \sgn(q_n - f)(x_j) = -(-1)^j\sgn(e_j)
+    \end{equation}
+    which changes sign $n+1$ times while $q_n - g$ only has $n$ roots.
+\end{proof}
+\begin{theorem}[Chebyshev equioscillation theorem]
+    Let $f\in C^0([a, b])$ and $n\ge 0$. Then there \underline{exists a unique polynomial} $q^{\ast}\in\Pi_n$ such that 
+    \begin{equation}
+        E_{n}^{\ast}(f) = \|f - q_n^{\ast}\|_{\infty}
+    \end{equation}
+    This polynomial is uniquely characterized by the property:
+    $$a\le x_0<\dots < x_{n+1}\le b $$
+    for which we can select $\sigma = \pm 1$ that 
+    \begin{equation}
+        f(x_j) - q_n^{\ast}(x_j) = \sigma (-1)^j E_n^{\ast}(f),\quad j=0,1,\dots, n+1.
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    The existence of such minimizing polynomial $q^{\ast}\in\Pi_n$ can be proved through a minimizing sequence argument. Let $q^k\in \Pi_n$ be a minimizing sequence to having $\|q^k - f\|\to E_n^{\ast}(f)$, then it is clear that the set 
+    \begin{equation}
+        \cM = \{q\in \Pi_n\mid \|q - f\|\le  E_n^{\ast}(f) + 1\}
+    \end{equation}
+    must be non-empty and also such set is compact since $\cM$ is of finite dimension and closed. Then the minimizing sequence will have a converging sub-sequence such that the limit sits in $\cM$.
+
+    Then we show the alternation property for this minimizing polynomial. If there is no alternation between $f$ and $q_n$, then we can partition the interval $[a, b]$ into $1\le N\le n+1$ parts 
+    $$[a, b]=\cup_{j=1}^N [t_{j-1}, t_j],\quad a = t_0<\dots< t_N = b.$$
+    that 
+    \begin{enumerate}
+        \item $f(t_k) - q_n(t_k) = 0$, $k = 1,\dots, N-1$.
+        \item for each $1\le k\le N$, there exists $s_k\in [t_{k-1}, t_k]$ such that 
+        $$|f(s_k) - q_n(s_k)| = \|f - q_n\|_{\infty}\neq 0$$
+        and for any $x\in [t_{k-1}, t_k]$, 
+        $$-(f(x) - q_n(x)) \neq (f(s_k) - q_n(s_k)).$$
+        \item for each $1\le k\le N-1$, 
+        $$f(s_k) - q_n(s_k) = -(f(s_{k+1}) - q_n(s_k),$$
+    \end{enumerate}
+    Without loss of generality, one can assume that 
+    \begin{eqnarray}
+        \sgn(f(s_k) - q_n(s_k)) = (-1)^{k-1}
+    \end{eqnarray}
+    then using the second condition, there exists $\eps$ such that $\forall x\in [t_{k-1}, t_k]$,
+    \begin{equation}
+        \begin{aligned}
+            -\|f-q_n\|_{\infty} + \eps &\le  f(x) - q_n(x)\quad& k &\text{ is odd}\\
+            f(x) - q_n(x) &\le \|f-q_n\|_{\infty} - \eps\quad& k &\text{ is even}     
+        \end{aligned}
+    \end{equation}
+    Then we construct a polynomial $g\in \Pi_{N-1}$ that 
+    \begin{eqnarray}
+        \sgn(g(x)) = (-1)^k,\quad x\in[t_{k-1}, t_k].
+    \end{eqnarray}
+    and $\|g\|\le \frac{\eps}{2}$ and let $k(x) = q_n(x) - g(x)\in \Pi_{n}$ and $f(x) - k(x) = f(x)-q_n(x) + g(x)$, which implies that 
+    \begin{enumerate}
+        \item $f(x) - k(x) < f(x) - q_n(x)$, if $x\in (t_{k-1}, t_k)$ for $k$ odd.
+        \item $f(x) - k(x)\ge - \|f - q_n\| + \frac{\eps}{2}$, if $x\in (t_{k-1}, t_k)$ for $k$ odd.
+        \item $f(x) - k(x) > f(x) - q_n(x)$, if $x\in (t_{k-1}, t_k)$ for $k$ even.
+        \item $f(x) - k(x)\le \|f - q_n\| -\frac{\eps}{2}$, if $x\in (t_{k-1}, t_k)$ for $k$ odd.
+    \end{enumerate}
+    In this way, $\|f - k\|_{\infty} < \|f - q_n\|_{\infty}$, contradiction.
+
+    In the last, we show the uniqueness. Suppose there are two polynomials $q_n, \tilde{q}_n$ being the minimax approximation. Then $\frac{1}{2}(q_n +\tilde{q}_n)$ must also be a minimax approximation, therefore there exists the alternation nodes 
+    \begin{equation}
+        a\le s_0 < s_1 <\dots < s_{n+1} \le b
+    \end{equation}
+    such that 
+    \begin{equation}
+        \frac{1}{2}(q_n - f)(s_k) + \frac{1}{2}(\tilde{q}_n - f)(s_k) = \sigma (-1)^k E_n^{\ast}(f)
+    \end{equation}
+    Therefore, we must have 
+    \begin{equation}
+        (q_n - f)(s_k) = (\tilde{q}_n - f)(s_k)\Rightarrow q_n(s_k) = \tilde{q}_n(s_k).
+    \end{equation}
+\end{proof}
+\subsection{Remez Algorithm}
+The numerical method to find the minimax polynomial is using the idea of the above Chebyshev equioscillation theorem. Intuitively, the aiming polynomial will be oscillatory comparing with $f$, therefore we can start with the Chebyshev polynomial approximation, which is
+\begin{equation}
+    C_n(x) = \sum_{j=0}^n c_j T_j(x),\quad c_j = \aver{f, T_j}_w/\aver{T_j,T_j}_w
+\end{equation}
+where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especially if $f\in C^r([a, b])$, the coefficient $c_j\sim \cO(j^{-r})$ decays fast, then the reminder approximately $f - C_n\simeq c_{n+1}T_{n+1}$, this reminder achieves equioscillation at exactly $(n+2)$ points. The Remez algorithm is based on the above idea and perform an iterative construction.
+\begin{enumerate}
+    \item Initialize local extrema nodes $x_j$ of $T_{n+1}$. 
+    \item Solve the equation that 
+    \begin{equation}
+        \sum_{j=0}^{n} a_j x_k^j + (-1)^k E = f(x_k)
+    \end{equation}
+    for unknown coefficients $a_j$ and the estimated error $E$, $k = 0,\dots, n+1$.
+    \item Form a new polynomial $p(x) = \sum_{j=0}^n a_j x^j$.
+    \item Locate the local extrema nodes of $|p(x) - f(x)|$ as a new set of nodes (if no local extrema on the sub-interval, then take the larger magnitude on end nodes). If equioscillation condition is nearly achieved, then stop. Otherwise repeat step $2$ with the new extrema nodes.
+\end{enumerate}
+
+
+
+\section{Orthogonal Polynomials}
+The orthogonal polynomials are actually a special case of generalized Fourier series.  Let the weight function $w(x)\ge 0$ on the interval $(-1, 1)$ be an integrable function. Then we can define a sequence of polynomials $p_k$, $\deg (p_k) = k$ and 
+\begin{equation}
+    \int_{-1}^1 w(x) p_k(x) p_j(x) dx = 0,\quad \text{ if } k\neq j.
+\end{equation}
+Here we define the inner product $\aver{f, g}_w$ by 
+\begin{equation}
+    \aver{f, g}_w = \int_{-1}^1 w(x) f(x) g(x) dx 
+\end{equation}
+This inner product induces a norm $\|f\|_w = \sqrt{\aver{f, f}_w}$, we then define the corresponding space as 
+\begin{equation}
+    L^2_w = \{ f: (-1,1)\to\bbR \mid \|f\|_w < \infty\}.
+\end{equation}
+Then for any $f\in L^2_w$, we can define the generalized Fourier series by $S f$:
+\begin{equation}
+    Sf = \sum_{j = 0}^{\infty} a_j p_j,\quad a_j = \frac{\aver{f, p_j}_w}{\aver{p_j, p_j}_w}.
+\end{equation} 
+The series converges to $f$ in $L^2_w$ sense from the Parseval's equality:
+\begin{equation}
+    \|f\|^2_w = \sum_{j = 0}^{\infty} a_j^2 \|p_j\|_w^2. 
+\end{equation}
+The truncated series $f_n$:
+$$f_n = \sum_{j=0}^n a_j p_j$$
+is the best degree-$n$ polynomial approximation to $f$, that is
+$$\|f - f_n\|_w = \min_{q \in \Pi_n} \|f - q\|_w.$$
+The polynomial $f_n$ is the orthogonal projection of $f$ onto $\Pi_n$ in the sense of $L^2_w$.
+
+The generation of $p_j$ follows from the following recursive formula 
+\begin{equation}\label{EQ: RECUR}
+    p_{j+1} = (x - \alpha_j) p_j(x) - \beta_j p_{j-1}(x),\quad j\ge 0
+\end{equation}
+The initial conditions are $p_{-1} = 0$, $p_0 = 1$. The constants $\alpha_j$ and $\beta_j$ can be obtained by noticing that 
+\begin{equation}
+    \begin{aligned}
+        \aver{p_{j+1}, p_j}_w &= 0\Rightarrow \alpha_j = \frac{\aver{xp_j, p_j}_w}{\aver{p_j, p_j}_w} \\
+        \aver{p_{j+1}, p_{j-1}}_w &= 0\Rightarrow \beta_j = \frac{\aver{p_j, p_j}_w}{\aver{p_{j-1}, p_{j-1}}_w}    
+    \end{aligned}
+\end{equation}
+Here $p_j$ are not normalized.
+\subsection{Chebyshev Polynomials}
+The Chebyshev polynomials are generated by using the weight $w(x) = (1- x^2)^{-1/2}$ on $(-1, 1)$. The corresponding space is 
+$$L_{w}^2 = \{ f:(-1,1)\to \bbR\mid \int_{-1}^1 f^2(x) (1 - x^2)^{-1/2}dx <\infty\}$$
+It is clear that by setting $p_k(x) = \cos(k \arccos x)$, the integral 
+\begin{equation}
+    \int_{-1}^1 p_k(x) p_j(x) (1 - x^2)^{-1/2} dx = \int_{0}^{\pi} \cos(k \theta) \cos(j\theta) d\theta = \begin{cases}
+        \pi & k = j = 0\\
+        \frac{\pi}{2} & k = j\neq 0\\
+        0 & \text{otherwise}
+    \end{cases}
+\end{equation}
+Therefore the generalized Fourier series with Chebyshev polynomials is 
+$$f(x) = \sum_{j=0}^{\infty} a_j p_j(x)$$
+where $p_j (x)= T_j(x)$ the $j$-th Chebyshev polynomial and $a_j = \frac{1}{\pi}\aver{f, p_j}_w$ if $j = 0$ and $a_j = \frac{2}{\pi}\aver{f, p_j}_w$ otherwise.
+\subsection{Legendre Polynomial}
+The Legendre polynomials are generated by using the weight $w(x) = 1$. The corresponding space is the normal $L^2(-1,1)$. The recursive formula for Legendre polynomials is 
+\begin{equation}
+    L_{j+1}(x) = \frac{2j+1}{j+1} x L_j(x) - \frac{j}{j+1} L_{j-1}(x)
+\end{equation}
+and $\aver{L_j, L_j}_w = \frac{2}{2j+1}$. Therefore the generalized Fourier  series is 
+\begin{equation}
+    f(x) = \sum_{j=0}^{\infty} a_j L_j(x),\quad a_j =  \frac{2j+1}{2}\aver{f, L_j}_w.
+\end{equation}
+The first a few Legendre polynomials are 
+    \begin{equation}
+        \begin{aligned}
+            L_0 = 1, \quad L_1(x) = x,\quad L_2(x) = \frac{1}{2}(3x^2 - 1).
+        \end{aligned}
+    \end{equation}
+\begin{remark}
+    Both of above examples are special cases of Jacobi polynomials which are generated by weight function $w(x) = (1 - x)^{\alpha}(1 + x)^{\beta}$. 
+\end{remark}
+
+\section{Approximation Theory for Compact Groups}
+
+
+\section{Pad\'e Approximation}
+
+\section{Neural Network}
+\subsection{Radial Basis}
+\subsection{Universal Approximation Theorem}
+\subsection{Gradient-Flow}
+\section{Exercises}
+\subsection{Theoretical Part}
+\begin{problem}
+    Show that the vector space $C^0([a, b])$ with $\|\cdot\|_{\infty}$ is not strictly normed.
+\end{problem}
+\begin{problem}[interlacing]
+    Let $p_n$ be the orthogonal polynomials with respect to weight function $w(x)\ge 0$, prove the zeros of $p_n$ and $p_{n+1}$ are alternating. 
+    \begin{equation}
+        -1 < x_{1, n+1} < x_{1, n} < x_{2,n+1} < x_{2,n}<\dots < x_{n,n+1} < x_{n, n} < x_{n+1, n+1} < 1.
+    \end{equation}
+    where $x_{j, k}, 1\le j\le k$ are the zeros of $p_k$. Hint: use the recursive formula.
+\end{problem}
+\begin{problem}
+    Let $f(x)\in C^0([-1,1])$ is even (odd). Show that the minimax approximation $q_n(x)\in\Pi_n$ is also even (odd).
+    Hint: think about the function $\frac{1}{2}(q_n(x) \pm q_n(-x))$, then use Chebyshev equioscillation theorem and the uniqueness.
+\end{problem}
+
+\subsection{Computational Part}
+\begin{problem}
+    Implement Remez algorithm and find the nearly minimax approximation in $\Pi_3$ for the function $f(x) = e^x$ on $[0, 1]$.
+\end{problem}
+
+\begin{problem}
+    Implement the Gauss quadrature $n=4$ and compare the accuracy with Newton-Cotes closed formula $n=4$ for $f(x) = e^x$ on $[0, 1]$.
+\end{problem}
