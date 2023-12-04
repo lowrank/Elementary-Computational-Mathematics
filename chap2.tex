@@ -603,9 +603,11 @@ The $L^2$ error estimate will be discussed at a later point. This part only focu
         &= \cO(n^{-\alpha} \log n).
     \end{aligned}
     \end{equation}
-    Therefore $|f - f_n|\le C n^{-\alpha} |\log n|^2$.
+    Therefore $|f - f_n|=\cO( n^{-\alpha} |\log n|^2 )$.
 \end{proof}
-This can be further extended to general continuous functions with \emph{modulus of continuity} $\omega(\frac{1}{n})\log n \to 0$, see the work of Dunham Jackson (1913).
+\begin{remark}
+    This can be further extended to general continuous functions with \emph{modulus of continuity} $\omega(\frac{1}{n})\log n \to 0$ as $n\to\infty$, see the work of Dunham Jackson (1913). More related topics are discussed in Chapter~\ref{Ch: 4-App}.
+\end{remark}
 
 \section{Spline Interpolation}
 \label{Sec: 2-Spl-Int}
@@ -618,7 +620,7 @@ It has been seen that increasing the number of interpolation nodes will not alwa
     \end{equation}
     The spline function $s_k$ is $(k-1)$-times continuously differentiable and piecewise polynomial of degree $k$.
 \end{definition}
-Then the space of splines $s_k$ will be $(n + k)$ dimension: each interval has $(k+1)$ dimensions, each interface imposes $k$ constraints, therefore $n (k+ 1) - (n-1) k = n + k$ dimensions. This shows that to uniquely determine a spline on the nodes, we will require $n+1$ interpolation values and $k-1$ additional constraints. Usual choices are
+Then the space of splines $s_k$ will be $(n + k)$ dimension: each interval has $(k+1)$ dimensions, each interface imposes $k$ constraints, therefore $n (k+ 1) - (n-1) k = n + k$ dimensions. This shows that to determine a spline on the nodes uniquely, we will require $n+1$ interpolation values and $k-1$ additional constraints. Usual choices are
 \begin{enumerate}
     \item periodic splines. $s_k^{(m)}(a) = s_k^{(m)}(b)$ for $m = 0, 1, \dots, k-1$.
     \item natural splines. $s_k^{(l+j)}(a) = s_k^{(l+j)}(b) = 0$, $j = 0, 1,\dots, l-2$ and $k = 2l-1$ with $l\ge 2$.
