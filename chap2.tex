@@ -606,7 +606,7 @@ The $L^2$ error estimate will be discussed at a later point. This part only focu
     Therefore $|f - f_n|=\cO( n^{-\alpha} |\log n|^2 )$.
 \end{proof}
 \begin{remark}
-    This can be further extended to general continuous functions with \emph{modulus of continuity} $\omega(\frac{1}{n})\log n \to 0$ as $n\to\infty$, see the work of Dunham Jackson (1913). More related topics are discussed in Chapter~\ref{Ch: 4-App}.
+    This can be further extended to general continuous functions with \emph{modulus of continuity} $\omega(f;\tau)$ satisfying $\omega(f;\frac{1}{n})\log n \to 0$ as $n\to\infty$, see the work of Dunham Jackson (1913). More related topics are discussed in Chapter~\ref{Ch: 4-App}.
 \end{remark}
 
 \section{Spline Interpolation}
@@ -645,7 +645,13 @@ The interpolation error can be derived directly from the previous theory for two
 \begin{equation}
     \frac{1}{2!}f''(\xi) (x - x_{j-1})(x - x_j) \le \frac{1}{8} \|f''\|_{\infty} |x_j - x_{j-1}|^2.
 \end{equation}
-Therefore, the interpolation error on $[a, b]$ is $\frac{1}{8} \|f''\|_{\infty} h^2$, where $h = \max|x_j - x_{j-1}|$.
+Therefore, the interpolation error on $[a, b]$ is $\frac{1}{8} \|f''\|_{\infty} h^2$, where $h = \max|x_j - x_{j-1}|$. Once $f''$ is not uniformly bounded or even $f'$ is not well-defined somewhere, e.g., $f\in C^{0,\alpha}[a, b]$, the interpolation error will be replaced by the modulus of continuity. On $x\in [x_j, x_{j+1}]$, we have 
+\begin{equation}
+\begin{aligned}
+    |s_1(x) - f(x)| &= \left| \frac{ (x_{j+1} - x) y_j+ (x - x_j) y_{j+1}}{x_{j+1} - x_j} - f(x) \right| \\   
+    &=  \left| \frac{ (x_{j+1} - x) (y_j - f(x)) + (x - x_j) (y_{j+1}-f(x))}{x_{j+1} - x_j}  \right| \\ &\le \omega(f; |x_{j+1} - x_j|).
+\end{aligned}
+\end{equation}
 \subsection{Cubic Splines}
 The cubic splines are particularly important in practice. Let $a = x_0 < x_1 <\dots < x_n = b$, and the corresponding values are $y_j$, $j = 0, \dots, n$. The constraints for cubic splines are: piecewise polynomial of degree 3 and continuous second derivative. Denote the interpolation spline as $s_3$, then $s_3''$ is a piecewise linear function. On the sub-interval $[x_{j-1}, x_j]$, it can be represented by 
 \begin{equation}
@@ -729,18 +735,18 @@ The error estimate for the cubic spline can be derived in a way similar to the L
 \begin{theorem}\label{THM: ERROR CUBIC SPLINE}
     Let $f\in C^4([a, b])$ and $a = x_0 < \dots < x_n = b$ is a set of nodes. Then the natural cubic spline $s_3$ interpolating $f$ satisfies 
     \begin{equation}
-        \|f - s_3\|_{\infty} \le \frac{5}{384}\|f^{(4)}\|_{\infty} h^4
+        \|f - s_3\|_{\infty} \le \frac{5}{384}\|f^{(4)}\|_{\infty} h^4,
     \end{equation}
     where $h = \max_j |x_j - x_{j-1}|$.
 \end{theorem}
 \begin{proof}
     Here we only state the rough idea to prove the error bound. Let $u(x)$ be the piecewise-defined Hermite interpolation polynomial that 
     \begin{equation}
-        u(x_j)=f(x_j), \quad u'(x_j) = f'(x_j).
+        u(x_j)=f(x_j), \quad u'(x_j) = f'(x_j),
     \end{equation}
     then one can estimate 
     \begin{equation}
-        \max_{x\in [x_j, x_{j+1}]} |u-f|\le  \frac{1}{24}\|f^{(4)}\|_{\infty} (x - x_j)^2 (x - x_{j+1})^2 \le \frac{1}{96}\|f^{(4)}\| h^4.
+        \max_{x\in [x_j, x_{j+1}]} |u-f|\le  \frac{1}{24}\|f^{(4)}\|_{\infty} (x - x_j)^2 (x - x_{j+1})^2 \le \frac{1}{384}\|f^{(4)}\|_{\infty} h^4.
     \end{equation}
     Then show that $\|s_3 - u\|_{\infty}$ is bounded by $\cO(\|f^{(4)}\|_{\infty} h^4)$. This step needs to analyze the error $\|s_3' - f'\|_{\infty}$. We leave this as an exercise for the readers.
 \end{proof}
@@ -769,7 +775,7 @@ The problems with $\ast$ tags are not required.
     Hint: {Construct the interpolation polynomial on nodes $x_0, \dots, x_n$ with Newton form first, then regard $x$ as the additional node by~\eqref{EQ: NEWTON}, finally recall the Theorem~\ref{Thm: 2-Int-err}.}
 \end{problem}
 \begin{problem}
-    Show that the divided difference $f[x_0, x_1,\dots, x_n] = f[x_{\pi(0)}, x_{\pi(1)},\dots, x_{\pi(n)}]$, where $\pi\in S_{n+1}$ is any permutation.
+    Show that the divided difference $$f[x_0, x_1,\dots, x_n] = f[x_{\pi(0)}, x_{\pi(1)},\dots, x_{\pi(n)}],$$ where $\pi\in S_{n+1}$ is any permutation.
 \end{problem}
 \begin{problem}
 \label{Prb: 2-Theo-6}
@@ -821,8 +827,8 @@ The coding part and test cases are available on GitHub.
     Implement the cubic spline interpolation with periodic and natural spline conditions. 
 \end{problem}
 
-\begin{problem}[$\ast$]
-     Implement discrete Fourier transform using a recursive approach (assume the total number of nodes is power of two).
+\begin{problem}
+     Implement discrete Fourier transform using a recursive approach (assume the total number of nodes is a power of two).
 \end{problem}
 
 % \bibliography{563}
