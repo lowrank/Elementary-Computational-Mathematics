@@ -198,13 +198,13 @@ Assume $n\in \bbN$ and $n\textup{u} < 1$, let $\{x_j\}_{j=1}^n$ be a sequence of
     A reduction $\Pi$ of the floating point summation 
     $$\fl{x_1} ~\boxed{+}~ \fl{x_2} ~\boxed{+}~\cdots ~\boxed{+}~ \fl{x_n}$$ is an evaluation order for the $~\boxed{+}~$ operations. For example, $n = 4$, then the reduction $\Pi = (3,1,2)$ is corresponding to the following calculation
 $$\fl{x_1} ~\boxed{+}~ \fl{x_2} + \underbrace{(\fl{x_3} ~\boxed{+}~ \fl{x_4})}_{=y_1}\to \underbrace{(\fl{x_1} ~\boxed{+}~ \fl{x_2})}_{=y_2} ~\boxed{+}~ y_1 \to \underbrace{(y_2 ~\boxed{+}~ y_1)}_{=y_3},$$
-where $y_i$ denotes the result of $i$-th $\boxed{+}$ operation in the reduction. Obviously the final summation will be $y_{n-1}$. We denote $T_n(\Pi)$ be the result of floating point summation with reduction order $\Pi$.
+where $y_i$ denotes the result of $i$-th $\boxed{+}$ operation in the reduction. The final summation will be $y_{n-1}$. We denote $T_n(\Pi)$ as the result of floating point summation with reduction order $\Pi$.
 \end{definition}
 
 
 \subsection{Theoretical Part}
 \begin{problem}
-    Prove that the native summation has following error bound
+    Prove that the native summation has the following error bound
     \begin{equation}
     |T_n(\Pi) - S_n|\le \left( \frac{\textup{u} n }{1 - \textup{u} n } \right)\sum_{j=1}^n |x_j|,
     \end{equation}
@@ -233,12 +233,12 @@ Please find an upper bound of the rounding error for this scheme.
 \subsection{Computational Part}
 
 \begin{problem}[Pairwise summation]
-    Based on theoretical part, implement an algorithm for the summation $\sum_{j=1}^n x_j$ which has $\cO(\textup{u}\log_2 n)$ rounding error.
+    Based on the theoretical part, implement an algorithm for the summation $\sum_{j=1}^n x_j$ which has $\cO(\textup{u}\log_2 n)$ rounding error.
 \end{problem}
 
 \begin{problem}[Kahan compensated summation] Suppose $a, b\in\mathbb{R}$, the rounding error for the sum $s = \fl{\fl{a}+\fl{b}}$ ($a\ge b$) can be computed using 
     $$\fl{\fl{s - \fl{a}}-\fl{b}}$$
-    Based on this property, one can keep tracking of the rounding error. 
+    Based on this property, one can keep track of the rounding error. 
 \begin{algorithm}[!htb]
     \SetAlgoLined
     \caption{Kahan compensated summation}\label{alg:1}
@@ -259,7 +259,7 @@ Please find an upper bound of the rounding error for this scheme.
 
 
 \begin{problem}
-    Suppose the inputs $\{x_j\}_{j=1}^n\subset \mathbb{R}$ are randomly distributed (say $x_j\sim U(0,1)$ i.i.d), what is growth of the expected rounding error with respect to total number of inputs $n$ for the naive summation and pairwise summation? Please provide an explanation of your result. You can use Algorithm~\ref{ALG: KAHAN} as the accurate result approximately. 
+    Suppose the inputs $\{x_j\}_{j=1}^n\subset \mathbb{R}$ are randomly distributed (say $x_j\sim U(0,1)$ i.i.d), what is the growth of the expected rounding error with respect to total number of inputs $n$ for the naive summation and pairwise summation? Please explain your result. You can use Algorithm~\ref{ALG: KAHAN} as the accurate result approximately. 
 \end{problem}
 \newpage
 % \section{Extended Reading}
