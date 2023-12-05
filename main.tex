@@ -15,6 +15,8 @@ UprightFont = *-Regular,
 \graphicspath{{./Figures/}}
 \usepackage{subfigure}
 
+\usepackage{titling}
+
 \usepackage{latexsym}
 \usepackage{xfrac}
 % \usepackage{amssymb}
@@ -281,6 +283,13 @@ plainpages=false,pdfpagelabels]{hyperref}
 {\noindent{\bf AMS subject classifications 2000.}\small}{\par}
 \newenvironment{PACS}{\noindent{\bf PACS number(s):}\small}{\par}
 
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
 
 \makeatletter
 \newcommand{\chapterauthor}[1]{%
@@ -291,6 +300,7 @@ plainpages=false,pdfpagelabels]{hyperref}
 }
 \makeatother
 \title{Elementary Computational Mathematics}
+\subtitle{}
 \author{Yimin Zhong}
 \date{\today}
 
@@ -307,9 +317,11 @@ plainpages=false,pdfpagelabels]{hyperref}
 \include{chap5}
 \include{chap6}
 \include{chap7}
+\part{Elementary Linear Algebra}
 \include{chap8}
 \part{Extended Stacks}
 \include{topic}
+\part{Topics in Optimization}
 \part{Miscellany}
 
 \end{document}

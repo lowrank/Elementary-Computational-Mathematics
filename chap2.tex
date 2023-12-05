@@ -804,10 +804,9 @@ where $h_0 = h_{n+1} = 0$ and $d_0 = d_1$, $d_{n} = d_{n-1}$ are assumed.
 \begin{remark}
 The Jacobi and Gauss-Seidel iterations are suitable for solving the system. The iteration will converge to system accuracy within $\cO(\log_2 \textup{u})$ iterations. Related topics are discussed in Chapter~\ref{Ch: 8-Mat-Com}.
 \end{remark}
-\subsection{Interpolation Error of Cubic Spline}
 The error estimate for the cubic spline can be derived in a way similar to the Lagrange polynomial interpolation. The following result is attributed to Charles Hall (1968).
 \begin{theorem}\label{THM: ERROR CUBIC SPLINE}
-    Let $f\in C^4([a, b])$ and $a = x_0 < \dots < x_n = b$ is a set of nodes. Then the natural cubic spline $s_3$ interpolating $f$ satisfies 
+    Let $f\in C^4([a, b])$ and $a = x_0 < \dots < x_n = b$ be a set of nodes. Then the natural cubic spline $s_3$ interpolating $f$ satisfies 
     \begin{equation}
         \|f - s_3\|_{\infty} \le \frac{5}{384}\|f^{(4)}\|_{\infty} h^4,
     \end{equation}
@@ -822,14 +821,15 @@ The error estimate for the cubic spline can be derived in a way similar to the L
     \begin{equation}
         \max_{x\in [x_j, x_{j+1}]} |u-f|\le  \frac{1}{24}\|f^{(4)}\|_{\infty} (x - x_j)^2 (x - x_{j+1})^2 \le \frac{1}{384}\|f^{(4)}\|_{\infty} h^4.
     \end{equation}
-    Then show that $\|s_3 - u\|_{\infty}$ is bounded by $\cO(\|f^{(4)}\|_{\infty} h^4)$. This step needs to analyze the error $\|s_3' - f'\|_{\infty}$. We leave this as an exercise for the readers.
+    Then show that $\|s_3 - u\|_{\infty}$ is bounded by $\cO(\|f^{(4)}\|_{\infty} h^4)$. This step needs to analyze the error $\|s_3' - f'\|_{\infty}$. Todo.
 \end{proof}
+\subsection{B-Spline Representation}
 
 \section{Reproduce Kernel Hilbert Space}
 
 
 \section{Exercises}
-The problems with $\ast$ tags are not required.
+The coding part and test cases are available on GitHub. 
 \subsection{Theoretical Part}
 \begin{problem}
     Prove Corollary~\ref{Cor: 2-Che-err-any}.
@@ -894,14 +894,15 @@ where $\circ$ is the Hadamard product or element-wise product.
     and denote $B = A - I$. Prove $\|B\|_{\infty} \le \frac{1}{2}$ and $\|A^{-1}\|_{\infty}\le 2$. 
 \end{problem}
 
-
-\begin{problem}[$\ast$]
-    Complete the proof of Theorem~\ref{THM: ERROR CUBIC SPLINE}.
-\end{problem}
+% \begin{problem}
+%     Complete the proof of Theorem~\ref{THM: ERROR CUBIC SPLINE}.
+% \end{problem}
 \subsection{Computational Part}
-The coding part and test cases are available on GitHub. 
 \begin{problem}
-    Implement the divided difference to compute the coefficients of the Newton form. You should call the Horner's scheme from the previous coding project. State the consequence when the length of $[a, b]$ is small. 
+    Implement the divided difference to compute the coefficients of the Newton form. You should call the Horner's scheme from the previous coding project. State the consequence when the length of $[a, b]$ is very small. 
+\end{problem}
+\begin{problem}
+    Implement the Lagrange interpolation schemes on equispaced nodes and (extended) Chebyshev nodes.
 \end{problem}
 \begin{problem}
     Implement a routine to compute Hermite interpolation with $m_j = 1$ for each $j = 0, \dots, n$. Estimate your routine's time complexity and space complexity. 
