@@ -320,8 +320,19 @@ Suppose there is some perturbation of the data $\tilde{y}_j = y_j + \eps_j$ at t
         &\le \left(\max_{j} |\eps_j|\right) \sum_{j=0}^n |L_j(x)|.
     \end{aligned}
 \end{equation}
-Here $\lambda_n(x) := \sum_{j=0}^n |L_j(x)|$ is the \emph{Lebesgue function}. It is a piecewise-defined polynomial. Its maximum $\Lambda_n$ is the \emph{Lebesgue constant} and it only depends on the choice of interpolation nodes. 
-For the equally spaced nodes, this Lebesgue constant grows exponentially,
+Here $\lambda_n(x) := \sum_{j=0}^n |L_j(x)|$ is the \emph{Lebesgue function}. It is a piecewise-defined polynomial. Its maximum $\Lambda_n$ is the \emph{Lebesgue constant} and only depends on the choice of interpolation nodes. 
+For the equally spaced nodes, this Lebesgue constant grows exponentially. 
+\begin{lemma}
+    \label{Lem: 2-Leb-Con}
+    Let $\{x_j\}_{j=0}^n$ be equispaced nodes on $[0, 1]$, then the  Lebesgue constant 
+    \begin{equation}
+        \frac{2^{n-2}}{n^2} \le \Lambda_n \le \frac{2^{n+3}}{n}.
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    Let $f(x) = e^{in\pi x}$,
+\end{proof}
+In fact,~\cite{turetskii1940bounding} proved a sharper estimate
 \begin{equation}
     \Lambda_{n, \textrm{equal}} \sim \frac{2^{n+1}}{en \log n}.
 \end{equation}
