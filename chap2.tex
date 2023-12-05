@@ -239,12 +239,12 @@ Define the unique set $\cU = \{u_1, u_2,\cdots, u_l\}$ that $u_1 < u_2<\cdots < 
 \end{equation}
 As $n\to\infty$, if any of the groups does not vanish, then the whole summation must blow up as $n\to\infty$ (why?). Otherwise, the limiting summation should vanish which violates the maximum modulus principle. 
 
-In Runge's example~\eqref{EQ: RUNGE-EXAMPLE}, the simple poles $\pm i$ are on the contour $C_{\rho}$ which intersects the real line at $x_c\approx 3.6334$. Therefore for $|x| < x_c$, the interpolation $f_n$ uniformly converges to $h$ and diverges once $|x| > x_c$. See Figure
+In Runge's example~\eqref{EQ: RUNGE-EXAMPLE}, the simple poles $\pm i$ are on the contour $C_{\rho}$ which intersects the real line at $x_c\approx 3.6334$. Therefore for $|x| < x_c$, the interpolation $f_n$ uniformly converges to $h$ and diverges once $|x| > x_c$. See Figure~\ref{fig:contour-curve}.
 \begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.65]{Figures/contour-curve.png}
-    \caption{Countour $C_{\rho}$ with $\rho \approx 2.46879$.}
-    \label{fig:enter-label}
+    \caption{Countour $C_{\rho}$ with $\rho \approx 2.46879$, which passes through the simple pole $i$.}
+    \label{fig:contour-curve}
 \end{figure}
 There exist better choices of interpolation nodes to prevent such a phenomenon. We will discuss this topic in Section~\ref{Sec: 2-Che-Int}. 
 
@@ -835,7 +835,7 @@ The problems with $\ast$ tags are not required.
     Prove Corollary~\ref{Cor: 2-Che-err-any}.
 \end{problem}
 \begin{problem}
-    If $n$ is sufficiently large, prove the following bound for~\eqref{EQ: MAX-OMEGA}.
+    If $n$ is sufficiently large, prove the following bound instead for~\eqref{EQ: MAX-OMEGA}.
     \begin{equation}
         |\omega(x)|\le \prod_{j=0}^n |x - x_j| \le \frac{n!}{1 + \log n} \left|\frac{b-a}{n}\right|^{n+1}.
     \end{equation}
@@ -845,12 +845,12 @@ The problems with $\ast$ tags are not required.
     Estimate the interpolation error for $e^x$ and $x^{-\sfrac{1}{2}}$ over the interval $[\frac{1}{2}, \frac{3}{2}]$ with equally spaced nodes and Chebyshev nodes, respectively.
 \end{problem}
 \begin{problem}
-    Prove the contour $C_{\rho}$ for Chebyshev nodes on $[-1, 1]$ is an ellipse with foci at $\pm 1$. 
-\end{problem}
-\begin{problem}
     Let $-1\le x_0 < x_1 <\dots < x_n \le 1$ be a set of interpolation nodes and $L_j(x)$ denotes the Lagrange basis polynomial at $x_j$. Prove if $x\in (x_i, x_{i+1})$, then 
     $$L_{i}(x) + L_{i+1}(x) \ge 1.$$
     Hint: Use Rolle's Theorem.
+\end{problem}
+\begin{problem}
+    Prove the contour $C_{\rho}$ for Chebyshev nodes on $[-1, 1]$ is an ellipse with foci at $\pm 1$. 
 \end{problem}
 \begin{problem}
 \label{Prb: 2-Theo-4}
