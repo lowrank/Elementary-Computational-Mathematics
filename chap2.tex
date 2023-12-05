@@ -145,27 +145,28 @@ It is interesting to think about the converse: under what condition does the int
 We can see that for the function $h(x) = x^{-\sfrac{1}{2}}$ on $[\sfrac{1}{2}, \sfrac{3}{2}]$, it is not trivial to show the interpolating polynomial could converge to $h$ anymore (although it is still true for certain choices of $x_j$, see Exercise~\ref{Prb: 2-Theo-2}). 
 
 Next, we try to provide a better estimate of $\omega$ for the special choice: equally spaced nodes.  Let the nodes $x_j = a + j\Delta$, where $\Delta = \frac{b-a}{n}$. It is not difficult (prove it) to see $\omega(x)$ will be the worst if $x$ is located on the end sub-intervals, $[x_0, x_1]$ and $[x_{n-1}, x_n]$. Without loss of generality, we assume $x$ is located on $[x_0, x_1]$, then 
-$$|x - x_j|\le (j+1)\Delta$$
-for $j = 0, 1, \dots, n$, which implies 
+$$|x - x_j|\le j \Delta$$
+for $j = 2, \dots, n$, which implies 
 \begin{equation}
-    |\omega(x)|\le \prod_{j=0}^n |x - x_j|\le (n+1)! \Delta^{n+1} = (n+1)! \frac{(b-a)^{n+1}}{n^{n+1}},
+\label{EQ: MAX-OMEGA}
+    |\omega(x)|\le \prod_{j=0}^n |x - x_j|\le n! \Delta^{n-1} \sup_{x\in [x_0, x_1]} |(x - x_0)(x-x_1)|= \frac{n!}{4} \frac{(b-a)^{n+1}}{n^{n+1}},
 \end{equation}
-use the Stirling approximation, $n!\sim \sqrt{2\pi n} \left( \frac{n}{e}\right)^n $, thus 
-$$  (n+1)! \frac{(b-a)^{n+1}}{n^{n+1}} \sim \sqrt{2\pi n} \left(\frac{b-a}{e} \right)^{n+1}.$$
-One should note that if the interval $[a, b]$ is shorter than $e$, then the above estimate is exponentially small (times $\sqrt{n}$), while it grows exponentially if $|b-a| > e$. Such an estimate is useful to derive uniform convergence. 
-
+Thus interpolation error is bounded by
+$$  \|h  - f\|_{\infty} \le  \frac{\sup_{x\in[a,b]}|h^{(n+1)}(x)|}{4(n+1)} \frac{(b-a)^{n+1}}{n^{n+1}}.$$
+Such an estimate is useful to derive uniform convergence. 
 \begin{example}
     Consider $h(x) = x^{-1}$ on $[\sfrac{1}{2}, \sfrac{3}{2}]$. Then $h^{(n+1)}(x) = \frac{(n+1)!(-1)^{n+1}}{x^{n+2}}$, hence 
     \begin{equation}
-        \frac{| h^{(n+1)}(x) |}{(n+1)!} \le \max_{x\in[\sfrac{1}{2}, \sfrac{3}{2}]} \left| \frac{1}{x^{n+2}} \right| = 2^{n+2}
+        \frac{| h^{(n+1)}(x) |}{4(n+1)}  \frac{(b-a)^{n+1}}{n^{n+1}} \le \frac{1}{4n^{n+1}}\max_{x\in[\sfrac{1}{2}, \sfrac{3}{2}]} \left| \frac{1}{x^{n+2}} \right| = \frac{1}{2} \left(\frac{2}{n}\right)^{n+1},
     \end{equation}
-    and the upper bound of $|\omega|$ is $\cO\left(\sqrt{n}\frac{1}{e^{n+1}}\right)$, therefore the interpolation error is $\cO\left( \sqrt{n} \left(\frac{2}{e}\right)^{n+1}\right)$ converges to zero exponentially. It is important to notice that the above method only works for short intervals, if $b-a > \frac{e}{2}$, then we require more sophisticated estimates. 
+    therefore the interpolation error converges to zero exponentially. It is important to notice that the above method only works for intervals away from the origin. 
 \end{example} 
 
 \subsection{Runge's Phenomenon}
 \label{SSec: 2-Run-Phe}
-From the above discussion, we can see there is a possibility that $\max_{x\in[a,b]}|h^{n+1}(x)|\omega(x)$ grows faster than $(n+1)!$, which would lead to divergence. Hence increasing the number of interpolation nodes (at least for equally spaced nodes) is not guaranteed for better approximation. The most famous example is the one made by Carl Runge. 
+From the above discussion, we can see there is a possibility that $\max_{x\in[a,b]}|h^{n+1}(x)|$ grows much faster than $n^{n+2}$, which would lead to divergence. Hence increasing the number of interpolation nodes (at least for equally spaced nodes) is not guaranteed for better approximation. The most famous example is the one made by Carl Runge. 
 \begin{equation}
+\label{EQ: RUNGE-EXAMPLE}
     h(x) = \frac{1}{1+x^2},\quad x\in [-5, 5].
 \end{equation} 
 \begin{figure}[!htb]
@@ -173,15 +174,87 @@ From the above discussion, we can see there is a possibility that $\max_{x\in[a,
     \includegraphics[scale=0.8]{runge.png}
     \caption{Runge's phenomenon. Interpolation with 11 equally spaced nodes. }
 \end{figure}
-It can be shown that the interpolation will diverge at around $3.6$ as $n\to \infty$ and the maximum error $\max_{x\in[-5, 5]} |f_n(x) - h(x) |$ grows exponentially, where $f_n$ is the interpolating polynomial with $n+1$ equally spaced nodes. There exist better choices of interpolation nodes to prevent such a phenomenon. We will discuss this topic in Section~\ref{Sec: 2-Che-Int}. 
+It can be shown that the interpolation will diverge at around $3.63$ as $n\to \infty$ and the maximum error $\max_{x\in[-5, 5]} |f_n(x) - h(x) |$ grows exponentially, where $f_n$ is the interpolating polynomial with $n+1$ equally spaced nodes. In the next section, we outline the idea explaining the phenomenon briefly. 
+\subsection{Interpolation Remainder Theory}
+\label{SSec: 2-Int-Rem-The}
+Let $f_n$ be the degree-$n$ polynomial interpolates $h$ at nodes $\{x_j\}_{j=0}^n$. If $h$ is analytic in a domain $T$ (possibly contains holes),  then the interpolation (Lagrange interpolant) can be written as 
+\begin{eqnarray}
+    f_n(z) = \sum_{j=0}^n \frac{\omega(z) h(x_j)}{(z - x_j) \omega'(x_j)}
+\end{eqnarray}
+Let $\psi(\xi; z) = \frac{(\omega(\xi) - \omega(z)) h(\xi)}{(\xi - z) \omega(\xi)}$, then by the Residue theorem for simple poles, if $z \neq x_j$,  
+\begin{equation}
+    \frac{1}{2\pi i}\int_{\partial T} \psi(\xi; z) d\xi = \sum_{j=0}^n \mathrm{Res}(\psi, x_j) = \sum_{j=0}^n \frac{(\omega(x_j) - \omega(z)) h(x_j)}{(x_j - z)\omega'(x_j)} = f_n(z),
+\end{equation}
+which implies that 
+\begin{equation}
+    h(z) - f_n(z) = \frac{1}{2\pi i}\int_{\partial T} \frac{\omega(z) h(\xi)}{(\xi - z)\omega(\xi)} d\xi.
+\end{equation}
+The error analysis is mainly studying the behavior of $|\omega(z)|$ as $n\to \infty$.
+\begin{lemma}
+\label{Lem: 2-Ome-Lim}
+    If $\{x_j\}_{j=0}^n$ are equispaced nodes over $[a, b]$, then 
+    \begin{equation}
+        \lim_{n\to\infty} |\omega(z)|^{\frac{1}{n+1}} = \exp\left(\frac{1}{b - a}\int_a^b \log|z-\xi| d\xi \right).
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    Taking $\log$ on $|\omega|^{\frac{1}{n+1}}$, then 
+    \begin{equation}
+        \log |\omega|^{\frac{1}{n+1}} = \frac{1}{n+1}\sum_{j=0}^n \log |z - x_j|\to \frac{1}{b-a}\int_a^b \log|z - \xi| d\xi. 
+    \end{equation}
+\end{proof}
+Let $\sigma_n(z):= |\omega(z)|^{\frac{1}{n+1}}$ and define the contour $C_{\rho} = \{z\in \bbC\mid \sigma_n(z) = \rho\}$. These level sets are concentric closed curves about the midpoint of $[a,b]$.
+\begin{lemma}
+\label{Lem: 2-Ana-Uni-Con}
+    Suppose the interpolation nodes $\{x_j\}_{j=0}^n$ are enclosed by $C_{\rho}$ and $h$ is analytic inside $C_{\rho}$. Let $z\in C_{\rho'}$ be such that $\rho'<\rho$, then $f_n\to h$ uniformly as $n\to\infty$. 
+\end{lemma}
+\begin{proof}
+    Using the maximum modulus principle, the analytic function $h - f_n$ must attain its maximum modulus at the boundary $C_{\rho}$, thus 
+    \begin{equation}
+        |h(z) - f_n(z)| = \frac{1}{2\pi}\sup_{z\in C_{\rho'}} \left|\int_{C_{\rho}} \frac{\omega(z)}{\omega(\xi)} \frac{h(\xi)}{(\xi - z)} d\xi\right| \le C(\rho, \rho') \sup_{\xi\in C_{\rho}} \frac{|\omega(z)|}{|\omega(\xi)|},
+    \end{equation}
+    where $C(\rho, \rho')$ is a positive constant independent of $n$. For $n$ sufficiently large, we can find $0 < \delta < \frac{1}{3}(\rho - \rho')$ sufficiently small such that 
+    \begin{equation}
+        \sup_{\xi\in C_{\rho}} \frac{|\omega(z)|}{|\omega(\xi)|} \le \left|\frac{\rho' + \delta}{\rho - \delta}\right|^{n+1} \to 0\; \text{ as }n\to \infty. 
+    \end{equation}
+\end{proof}
+When $h$ is not analytic inside $C_{\rho}$, let us consider a generic situation in which there exist isolated simple poles $z_k\in C_{\rho_k}$, $k\in [m]$ with $\rho_k < \rho$, then we select a contour $C_{\rho'}$ that $\rho_k <\rho'<\rho$ for all $k$. For $z\in C_{\rho'}$, we have
+\begin{equation}
+\begin{aligned}
+    h(z) - f_n(z) &= \frac{1}{2\pi i} \int_{C_{\rho} - \bigcup_{k=1}^m \Gamma_k} \frac{\omega(z)h(\xi)}{(\xi - z) \omega(\xi)} d\xi \\
+    &= \frac{1}{2\pi i} \int_{C_{\rho}} \frac{\omega(z)h(\xi)}{(\xi - z) \omega(\xi)} d\xi - \frac{1}{2\pi i}\sum_{k=1}^m \int_{\Gamma_k}  \frac{\omega(z)h(\xi)}{(\xi - z) \omega(\xi)} d\xi, 
+\end{aligned}
+\end{equation}
+where $\Gamma_k$ is a small path surrounding $z_k$. The first term can be estimated using the lemma~\ref{Lem: 2-Ana-Uni-Con} whose limit goes to zero as $n\to \infty$. The second term is the summation
+\begin{equation}
+    \sum_{k=1}^m \frac{\omega(z)}{\omega(z_k)}\frac{\mathrm{Res}(h, z_k)}{z_k - z}.
+\end{equation}
+Since for sufficiently large $n$, we can find $0<\delta<\min_{k\in[m]}\frac{1}{3}(\rho'-\rho_k)$, 
+\begin{equation}
+    \left|\frac{\omega(z)}{\omega(z_k)}\right|^{\frac{1}{n+1}} = \frac{\sigma_n(z)}{\sigma_n(z_k)} > \min_{k\in [m]}\frac{\rho'-\delta}{\rho_k + \delta} > 1.
+\end{equation}
+Define the unique set $\cU = \{u_1, u_2,\cdots, u_l\}$ that $u_1 < u_2<\cdots < u_l$ which consists of all distinct values from $\{ \rho_1, \rho_2, \cdots,  \rho_m\}$, then the summation can be decomposed into $l$ groups:
+\begin{equation}
+ \sum_{k=1}^m \frac{\omega(z)}{\omega(z_k)}\frac{\mathrm{Res}(h, z_k)}{z_k - z} = \sum_{s=1}^l \sum_{\substack{k\in [m] \\ \rho_k = u_s}} \frac{\omega(z)}{\omega(z_k)}\frac{\mathrm{Res}(h, z_k)}{z_k - z}.
+\end{equation}
+As $n\to\infty$, if any of the groups does not vanish, then the whole summation must blow up as $n\to\infty$ (why?). Otherwise, the limiting summation should vanish which violates the maximum modulus principle. 
+
+In Runge's example~\eqref{EQ: RUNGE-EXAMPLE}, the simple poles $\pm i$ are on the contour $C_{\rho}$ which intersects the real line at $x_c\approx 3.6334$. Therefore for $|x| < x_c$, the interpolation $f_n$ uniformly converges to $h$ and diverges once $|x| > x_c$. See Figure
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.65]{Figures/contour-curve.png}
+    \caption{Countour $C_{\rho}$ with $\rho \approx 2.46879$.}
+    \label{fig:enter-label}
+\end{figure}
+There exist better choices of interpolation nodes to prevent such a phenomenon. We will discuss this topic in Section~\ref{Sec: 2-Che-Int}. 
 
 \subsection{Chebyshev Interpolation}
 \label{Sec: 2-Che-Int}
-The Chebyshev interpolation aims to minimize the bound of the interpolation error. The bound of $\omega(x)$ only depends on the choice of the nodes, so a natural question is: what kind of interpolation nodes will \emph{minimize} 
+The Chebyshev interpolation aims to minimize the bound of the interpolation error. The bound of $\omega(x)$ depends only on the choice of the nodes, so a natural question is: What kind of interpolation nodes will \emph{minimize} 
 $\max_{x\in [a, b]} \prod_{j=0}^n |x-x_j|$. We first restrict our analysis to the interval $[a, b] = [-1,1]$ for simplicity, the general case will be discussed later.
  
 \begin{example}
-    When $n = 1$, $\omega(x) = (x - x_0)(x - x_1)$, this function changes sign over the sub-intervals $[-1, x_0)$, $(x_0, x_1)$, $(x_1, 1]$, thenthe  we can compute the maximum of $|\omega(x)|$ on these sub-intervals. Therefore we need to solve 
+    When $n = 1$, $\omega(x) = (x - x_0)(x - x_1)$, this function changes sign over the subintervals $[-1, x_0)$, $(x_0, x_1)$, $(x_1, 1]$, then we can compute the maximum of $|\omega(x)|$ on these subintervals. Therefore we need to solve 
     \begin{equation}
         \min_{x_0, x_1\in [-1,1]}\max((1 + x_0)(1 + x_1), \frac{(x_1-x_0)^2}{4}, (1 - x_0)(1 - x_1) ),
     \end{equation}
@@ -649,15 +722,16 @@ Therefore, the interpolation error on $[a, b]$ is $\frac{1}{8} \|f''\|_{\infty} 
 \begin{equation}
 \begin{aligned}
     |s_1(x) - f(x)| &= \left| \frac{ (x_{j+1} - x) y_j+ (x - x_j) y_{j+1}}{x_{j+1} - x_j} - f(x) \right| \\   
-    &=  \left| \frac{ (x_{j+1} - x) (y_j - f(x)) + (x - x_j) (y_{j+1}-f(x))}{x_{j+1} - x_j}  \right| \\ &\le \omega(f; |x_{j+1} - x_j|).
+    &=  \left| \frac{ (x_{j+1} - x) (y_j - f(x)) + (x - x_j) (y_{j+1}-f(x))}{x_{j+1} - x_j}  \right| \\ &\le \omega(f; |x_{j+1} - x_j|),
 \end{aligned}
 \end{equation}
+where $\omega(f;\tau)$ is the modulus of continuity of $f$.
 \subsection{Cubic Splines}
-The cubic splines are particularly important in practice. Let $a = x_0 < x_1 <\dots < x_n = b$, and the corresponding values are $y_j$, $j = 0, \dots, n$. The constraints for cubic splines are: piecewise polynomial of degree 3 and continuous second derivative. Denote the interpolation spline as $s_3$, then $s_3''$ is a piecewise linear function. On the sub-interval $[x_{j-1}, x_j]$, it can be represented by 
+The cubic splines are particularly important in practice. Let $a = x_0 < x_1 <\dots < x_n = b$, and the corresponding values are $y_j$, $j = 0, \dots, n$. The constraints for cubic splines are: piecewise polynomial of degree 3 and continuous second derivative.a Denote the interpolation spline as $s_3$, then $\dd{s_3}$ is a piecewise linear function. On the sub-interval $[x_{j-1}, x_j]$, it can be represented by 
 \begin{equation}
-    s_3''(x) = M_{j-1} \frac{x_j - x}{h_j} + M_j \frac{x - x_{j-1}}{h_j},\quad j = 1,\dots, n,
+    \dd{s_3}(x) = M_{j-1} \frac{x_j - x}{h_j} + M_j \frac{x - x_{j-1}}{h_j},\quad j = 1,\dots, n,
 \end{equation}
-where $h_j = x_j - x_{j-1}$, $M_j = s_3''(x_j)$. Integrating the above formula twice, 
+where $h_j = x_j - x_{j-1}$, $M_j = \dd{s_3}(x_j)$. Integrating the above formula twice, 
 \begin{equation}
     s_3(x) = M_{j-1} \frac{(x_j - x)^3}{6 h_j} + M_j \frac{(x - x_{j-1})^3}{6h_j} + A_j (x - x_{j-1}) + B_j
 \end{equation}
@@ -712,7 +786,7 @@ In practice, the system will be rescaled for numerical stability.
     \end{pmatrix}
 \end{equation}
 where $d_j = \frac{3}{h_{j-1} + h_{j}}\left[ \frac{y_{j} - y_{j-1}}{h_{j}} - \frac{y_{j-1} - y_{j-2}}{h_{j-1}}\right]$. 
-The above system still lacks 2 more constraints since the matrix is of size $(n-1)\times (n+1)$. Then we can apply the periodic spline or natural spline conditions. For example, if the natural constraint is applied: $s_3''(a) = s_3''(b) = 0$. We should have two more equations: 
+The above system still lacks 2 more constraints since the matrix is of size $(n-1)\times (n+1)$. Then we can apply the periodic spline or natural spline conditions. For example, if the natural constraint is applied: $\dd{s_3}(a) = \dd{s_3}(b) = 0$. We should have two more equations: 
 \begin{equation}
     M_{0} = M_{n} = 0.
 \end{equation} 
@@ -761,8 +835,17 @@ The problems with $\ast$ tags are not required.
     Prove Corollary~\ref{Cor: 2-Che-err-any}.
 \end{problem}
 \begin{problem}
+    If $n$ is sufficiently large, prove the following bound for~\eqref{EQ: MAX-OMEGA}.
+    \begin{equation}
+        |\omega(x)|\le \prod_{j=0}^n |x - x_j| \le \frac{n!}{1 + \log n} \left|\frac{b-a}{n}\right|^{n+1}.
+    \end{equation}
+\end{problem}
+\begin{problem}
 \label{Prb: 2-Theo-2}
     Estimate the interpolation error for $e^x$ and $x^{-\sfrac{1}{2}}$ over the interval $[\frac{1}{2}, \frac{3}{2}]$ with equally spaced nodes and Chebyshev nodes, respectively.
+\end{problem}
+\begin{problem}
+    Prove the contour $C_{\rho}$ for Chebyshev nodes on $[-1, 1]$ is an ellipse with foci at $\pm 1$. 
 \end{problem}
 \begin{problem}
     Let $-1\le x_0 < x_1 <\dots < x_n \le 1$ be a set of interpolation nodes and $L_j(x)$ denotes the Lagrange basis polynomial at $x_j$. Prove if $x\in (x_i, x_{i+1})$, then 
@@ -790,12 +873,12 @@ where $\circ$ is the Hadamard product or element-wise product.
 \end{problem}
 \begin{problem}[Minimimum norm property] Let $f\in C^2([a, b])$ and $s_3$ be the \underline{natural} cubic spline with interpolating $f$. Prove 
     \begin{equation}
-        \int_a^b |s_3''(x)|^2 dx \le \int_{a}^b |f''(x)|^2 dx 
+        \int_a^b |\dd{s_3}(x)|^2 dx \le \int_{a}^b |f''(x)|^2 dx 
     \end{equation}
     The equality holds only when $f(x) = s_3(x)$ everywhere.
     Hint: One needs to prove 
     \begin{equation}
-        \int_a^b (f''(x) - s_3''(x)) s_3''(x) dx = 0,
+        \int_a^b (f''(x) - \dd{s_3}(x)) \dd{s_3}(x) dx = 0,
     \end{equation}
     then simply use the AM-GM inequality. The above equality can be proved using integration-by-parts twice (remember the interpolation conditions).
 \end{problem}
@@ -832,6 +915,6 @@ The coding part and test cases are available on GitHub.
 \end{problem}
 
 % \bibliography{563}
-\nocite{jackson1912approximation, jackson1913accuracy, erdHos1964problems,erdos1958problems}
+\nocite{jackson1912approximation, jackson1913accuracy, erdHos1964problems,erdos1958problems,de1978practical,prenter2008splines}
 \bibliographystyle{apalike}
 \bibliography{chap2}
