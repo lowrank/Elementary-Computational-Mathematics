@@ -321,53 +321,78 @@ Suppose there is some perturbation of the data $\tilde{y}_j = y_j + \eps_j$ at t
     \end{aligned}
 \end{equation}
 Here $\lambda_n(x) := \sum_{j=0}^n |L_j(x)|$ is the \emph{Lebesgue function}. It is a piecewise-defined polynomial. Its maximum $\Lambda_n$ is the \emph{Lebesgue constant} and only depends on the choice of interpolation nodes. 
-For the equally spaced nodes, this Lebesgue constant grows exponentially. 
+For the equally spaced nodes, this Lebesgue constant grows exponentially. In fact,~\cite{turetskii1940bounding} proved the following sharp result.
 \begin{lemma}
     \label{Lem: 2-Leb-Con}
     Let $\{x_j\}_{j=0}^n$ be equispaced nodes on $[0, 1]$, then the Lebesgue constant 
     \begin{equation}
-       \frac{2^{n+1}}{e n \log n} \left(1 + o(1)\right) \le \Lambda_n \le \frac{2^{n+3}}{n},\quad n\to\infty. 
+      \Lambda_n  =  \frac{2^{n+1}}{e n \log n} \left(1 + o(1)\right), \quad n\to\infty. 
     \end{equation}
 \end{lemma}
 \begin{proof}
-    Assume $n\ge 3$. Let $f(x) = e^{i n\pi x}$. We define $p_n(x) = \sum_{j=0}^{n} f(x_j) L_j(x)$ as the interpolation polynomial at nodes $x_j = j \Delta$, $\Delta = \sfrac{1}{n}$, then $$|p_n(x)| = \left| \sum_{j=0}^{n} (-1)^j L_j(x) \right| \le \Lambda_n.$$
+    Assume $n\ge 3$, we prove the lower bound by construction. Let $f(x) = e^{i n\pi x}$ and define $p_n(x) = \sum_{j=0}^{n} f(x_j) L_j(x)$ as the interpolation polynomial at nodes $x_j = j \Delta$, $\Delta = \sfrac{1}{n}$, then $$|p_n(x)| = \left| \sum_{j=0}^{n} (-1)^j L_j(x) \right| \le \Lambda_n.$$
     Let $\delta_{+}$ be the forward difference operator
     \begin{equation}
        \delta_{+} p_n(x) := p_n(x+\sfrac{1}{n}) - p_n(x),
     \end{equation}
     then $ p_n(x_j) =  (1+\delta_{+})^j p_n(0)$ for $j=0,1,\cdots, n$, which means the interpolation polynomial is
     \begin{equation}
+    \label{EQ: NEWTON-FORM-EQUI}
        p_n(x) = \sum_{k=0}^n \binom{nx}{k} \delta_+^k p_n(0) = \sum_{k=0}^n \binom{nx}{k} \delta_+^k f(0),
     \end{equation}
     which is exactly the Newton form at the equispaced nodes. See Section~\ref{SSec: 2-New-For}. Because $\delta_+ f(x) = (e^{i\pi} - 1)f(x) = -2 f(x)$ acts as a multiplicative operator, therefore 
     \begin{equation}
         p_n(x) = \sum_{k=0}^n \binom{nx}{k}  (-2)^k.
     \end{equation}
-    Let $x_{\ast} = \frac{1}{n \log n}$ and set $\mu = n x_{\ast}\in(0, \sfrac{1}{\log(3)})$. Then for $k\ge 1$, we have 
+    Let $x_{\ast} = \frac{1}{n \log n}$ and set $\mu = n x_{\ast}\in(0, \sfrac{1}{\log(3)})$. Then, for $k\ge 1$, we have 
     \begin{equation}
         \frac{ \binom{\mu}{k}  (-2)^k  }{ \binom{\mu}{k + 1}  (-2)^{k + 1} } = \frac{k+1}{2(k - \mu)} > \frac{1}{2}.
     \end{equation}
     Therefore, 
     \begin{equation}
     \begin{aligned}
-         \Lambda_n &\ge  |p_n(x_{\ast})| \ge \binom{\mu}{n}  (-2)^n \left(2 - \frac{1}{2^n}\right) + 1 \\
-         &=\exp\left( \log\mu - \log n + \sum_{k=1}^{n-1} \log\left(1 - \frac{\mu}{k}\right) \right) (2^{n+1} - 1) + 1.
+         \Lambda_n &\ge  |p_n(x_{\ast})| \ge \binom{\mu}{n}  (-2)^n \left(2 - \frac{1}{2^n}\right) - 1 \\
+         &=\exp\left( \log\mu - \log n + \sum_{k=1}^{n-1} \log\left(1 - \frac{\mu}{k}\right) \right) (2^{n+1} - 1) - 1.
     \end{aligned}
     \end{equation}
     Denote the positive constant $C = 2(1 - \sfrac{1}{\log(3)})$ and notice $\log(1 - x) \ge -x - \frac{x^2}{C}$ for all $x\in (0, \sfrac{1}{\log(3)})$, then 
     \begin{equation}
     \begin{aligned}
-        \Lambda_n &\ge \frac{\mu}{n} \exp\left(- \mu\sum_{k=1}^{n-1}\frac{1}{k}\right) \exp\left(-\frac{\mu^2}{C} \sum_{k=1}^{n-1}\frac{1}{k^2}\right)(2^{n+1} - 1) + 1 \\
-        & \ge \frac{\mu}{n} \exp(-\mu (\log n + \gamma))\exp\left(-\frac{\pi^2\mu^2}{6C}\right)(2^{n+1} - 1) + 1 \\
+        \Lambda_n &\ge \frac{\mu}{n} \exp\left(- \mu\sum_{k=1}^{n-1}\frac{1}{k}\right) \exp\left(-\frac{\mu^2}{C} \sum_{k=1}^{n-1}\frac{1}{k^2}\right)(2^{n+1} - 1) - 1 \\
+        & \ge \frac{\mu}{n} \exp(-\mu (\log n + \gamma))\exp\left(-\frac{\pi^2\mu^2}{6C}\right)(2^{n+1} - 1) - 1 \\
         & =\frac{2^{n+1}}{e n \log n} \left(1 + o(1)\right).
     \end{aligned}
     \end{equation}
-    For the upper bound, we note that if $\|f\|_{\infty}\le 1$, then $\|\delta_{+} f\|_{\infty}\le 2$, 
+    We notice that if $\|f\|_{\infty}\le 1$,  then $\|\delta_{+} f\|_{\infty}\le 2$, using~\eqref{EQ: NEWTON-FORM-EQUI}, the upper bound of $\Lambda_n$ can be estimated by
+    \begin{equation}
+        \Lambda_n \le \sup_{x\in (0, 1)}\sum_{k=0}^n \left|\binom{nx}{k}\right| 2^k.
+    \end{equation}
+    By symmetry, it is sufficient to consider $x\le \sfrac{1}{2}$, otherwise, a similar bound can be derived with the backward difference operator $\delta_{-}$. Hence, 
+    \begin{equation}
+    \begin{aligned}
+        \Lambda_n &\le \sum_{k=0}^{\lceil \sfrac{n}{2} \rceil} \binom{\lceil \sfrac{n}{2} \rceil}{k} 2^k + \sup_{z\in (0, \sfrac{n}{2})}  \sum_{k=\lceil \sfrac{n}{2} \rceil + 1}^{n} \binom{z}{k} 2^k \\
+        &= 3^{ \lceil \sfrac{n}{2} \rceil } + \sum_{k = \lceil\sfrac{n}{2} \rceil + 1}^n  \frac{2^k}{e k \log k}\left(1 + o(1)\right),
+    \end{aligned}
+    \end{equation}
+    where the following inequalities are applied:  
+    \begin{equation}
+        \begin{aligned}
+            &\left|\binom{z}{k}\right|\le \binom{\lceil \sfrac{n}{2} \rceil}{k},\quad \forall z,k\le \lceil \sfrac{n}{2} \rceil
+        \end{aligned}
+    \end{equation} 
+    and $\forall k \ge \lceil\sfrac{n}{2} \rceil + 1$, 
+    \begin{equation}
+        \begin{aligned}
+            \sup_{z\in (0, \sfrac{n}{2})}\left|\binom{z}{k}\right| &=  \sup_{z\in (0, \sfrac{n}{2})} \frac{\sin(\pi(z - l))}{\pi k!} \Gamma(z+1)\Gamma(k - z) \\
+            &=\sup_{z\in (0, 1)} \frac{\sin(\pi(z - l))}{\pi k!} \Gamma(z+1)\Gamma(k - z) \quad (\text{by comparison})\\&\le \sup_{z\in (0, 1)}\frac{z}{k}\left(\frac{z+1}{k - z}\right)^z \quad (\text{by Gautschi's inequality})\\
+            &= \frac{1}{e k \log k}\left(1 + o(1)\right).
+        \end{aligned}
+    \end{equation}
+    Therefore, 
+    \begin{equation}
+        \Lambda_n \le \frac{1}{e \log n} \left( \sum_{k=\lceil \sfrac{n}{2}\rceil+1}^n \frac{2^k}{k}\right) (1 + o(1)) =  \frac{2^{n+1}}{e n \log n}  (1 + o(1)).
+    \end{equation}
 \end{proof}
-In fact,~\cite{turetskii1940bounding} proved the following sharp result:
-\begin{equation}
-    \Lambda_{n, \textrm{equal}} \sim \frac{2^{n+1}}{en \log n}.
-\end{equation}
 For the general case, it has been proved by Paul Erd\"os (1964) that there exists a constant $C > 0$
 \begin{equation}
     \Lambda_n > \frac{2}{\pi}\log(n+1) - C,\quad  n\ge 0.
@@ -382,9 +407,9 @@ The set of nodes that minimizes $\Lambda_n$ is difficult to compute. A slightly 
 \end{equation}
 \subsection{Newton Form}
 \label{SSec: 2-New-For}
-The Newton form is useful when we dynamically add interpolation nodes. Consider the following scenario: we already have found an interpolation polynomial $f_k$ through the data $(x_0, y_0)$, $(x_1, y_1)$,$\dots$, $(x_k, y_k)$, then if an addition pair $(x_{k+1}, y_{k+1})$ is provided, how to effectively transform $f_k$ to $f_{k+1}$? If we write 
+The Newton form is useful when we dynamically add interpolation nodes. Consider the following scenario: we already have found an interpolation polynomial $f_k$ through the data $(x_0, y_0)$, $(x_1, y_1)$,$\dots$, $(x_k, y_k)$, then if an addition pair $(x_{k+1}, y_{k+1})$ is provided, how can we effectively transform $f_k$ to $f_{k+1}$? If we write 
 $$f_{k+1}(x) = f_k(x) + c_{k+1} (x - x_0)(x - x_1)\dots (x - x_{k}), $$
-then $f_{k+1}(x_j) = f_k(x_j)$, $j = 0, 1,\dots, k$. Therefore we only need to take care of the equality $f_{k+1}(x_{k+1}) = y_{k+1}$, which means 
+then $f_{k+1}(x_j) = f_k(x_j)$, $j = 0, 1,\dots, k$. Therefore, we only need to take care of the equality $f_{k+1}(x_{k+1}) = y_{k+1}$, which means that 
 \begin{equation}\label{EQ: CK}
     c_{k+1} = \frac{y_{k+1} - f_k(x_{k+1})}{\prod_{j=0}^k (x_{k+1} - x_j)}.
 \end{equation}
@@ -392,7 +417,7 @@ Such an inductive procedure produces the Newton form:
 \begin{equation}\label{EQ: NEWTON}
     f_n(x) = c_0 + c_1 ( x - x_0) + c_2 (x - x_0)(x - x_1)+\dots+c_{n}(x-x_0)\dots (x - x_{n-1}).
 \end{equation}
-where the constant $c_j$ depends on $x_0, x_1, \dots, x_{j}$ only. The polynomials $\prod_{j=0}^k (x - x_j)$ are called \emph{Newton polynomials}. When the coefficients $c_k$ are known, the Newton form~\eqref{EQ: NEWTON} can be evaluated by the famous ``Horner's scheme'' (see Exercise~\ref{Prb: 1-Theo-3}), which is
+where the constant $c_j$ depends on $x_0, x_1, \dots, x_{j}$ only. Polynomials $\prod_{j=0}^k (x - x_j)$ are called \emph{Newton polynomials}. When the coefficients $c_k$ are known, the Newton form~\eqref{EQ: NEWTON} can be evaluated by the famous ``Horner's scheme'' (see Exercise~\ref{Prb: 1-Theo-3}), which is
 \begin{equation}\label{EQ: HORNER}
     f_n(x) = c_0 + (x-x_0)(c_1 + (x-x_1)(c_2 + (x-x_2)(c_3 + \dots))),
 \end{equation}
@@ -402,7 +427,7 @@ the evaluation order starts from the innermost part $c_n (x -x_{n-1})$. This for
     The computation of $c_k$ is not cheap from~\eqref{EQ: CK}. A naive algorithm with Horner's scheme roughly takes $\sfrac{5n^2}{2}+\cO(n)$ flops to compute all coefficients. The ``divided differences'' is a better way to compute $c_k$.
 \end{remark}
 \begin{definition}
-    Let the interpolation nodes be $\{x_0, x_1, \dots, x_n\}$, the ``{divided differences}'' are defined recursively as follows (the square bracket is used to distinguish from the usual bracket): 
+    Let the interpolation nodes be $\{x_0, x_1, \dots, x_n\}$, the ``divided differences'' are defined recursively as follows (the square bracket is used to distinguish from the usual bracket): 
     \begin{equation}
         \begin{aligned}
             f[x_j] &:= f(x_j),\\
@@ -411,7 +436,7 @@ the evaluation order starts from the innermost part $c_n (x -x_{n-1})$. This for
     \end{equation}
     where $0\le j, k\le n$ and $j+k\le n$.
 \end{definition}
-The following example graph helps understand the relationships among the divided differences. 
+The following example graph helps to understand the relationships among the divided differences. 
 
 \begin{tcolorbox}
     \begin{equation}\label{EQ: ALG NEWTON}
@@ -428,7 +453,7 @@ The following example graph helps understand the relationships among the divided
     \end{aligned}
 \end{equation}
 \end{tcolorbox}
-Computing all of the divided differences requires $\sfrac{3n^2}{2} +\cO(n)$ flops. The following theorem is the main statement for the Newton form.
+Calculating all the divided differences requires $\sfrac{3n^2}{2} +\cO(n)$ flops. The following theorem is the main statement for the Newton form.
 \begin{theorem}
 \label{Thm: 2-New-for}
     The interpolation polynomial $f_n$ in Newton form is given by 
@@ -438,9 +463,9 @@ Computing all of the divided differences requires $\sfrac{3n^2}{2} +\cO(n)$ flop
     In other words, $c_k = f[x_0, \dots, x_k]$.
 \end{theorem}
 \begin{proof}
-    We prove this by induction. Assume the statement is true for $n$ and interpolation node and corresponding values $(x_0, f[x_0]), (x_1, f[x_1]), \dots, (x_n, f[x_n])$. For a new node and value $(x_{n+1}, f[x_{n+1}])$, it is known from~\eqref{EQ: CK} that $c_{n+1}$ is the coefficient of leading power. Let $g_n$ be the interpolation polynomial in Newton form through nodes $(x_1, f[x_1]), \dots, (x_{n+1}, f[x_{n+1}])$, then 
+    We prove this by induction. Assume that the statement is true for $n$ and the interpolation node and the corresponding values  $(x_i, f[x_i])$, $i=0,1,\dots, n$. For a new node and value $(x_{n+1}, f[x_{n+1}])$, it is known from~\eqref{EQ: CK} that $c_{n+1}$ is the coefficient of the leading power. Let $g_n$ be the interpolation polynomial in Newton form through nodes $(x_i, f[x_i])$, $i=1,2,\dots, n+1$, then 
     $$\psi(x)  := g_n(x)(x - x_0) - f_n(x)(x - x_{n+1})$$
-    satisfies that $\psi(x_j) = f[x_j](x_{n+1} - x_0)$ for $0\le j\le {n+1}$. Therefore 
+    satisfies that $\psi(x_j) = f[x_j](x_{n+1} - x_0)$ for $0\le j\le {n+1}$. Therefore,
     \begin{equation}
         f_{n+1}(x) = \frac{g_n(x)(x - x_0) - f_n(x)(x - x_{n+1})}{x_{n+1} - x_0}.
     \end{equation}
@@ -554,7 +579,7 @@ A direct corollary is the linear independence of the functions $1$, $\cos k x$ a
 \label{Cor: 2-Fou-bas-ind}
     The functions $1, \cos kx, \sin kx$, $k=1,\dots, n$ are linearly independent on $C [0, 2\pi]$, hence $F_n$ is a $(2n+1)$ dimensional space.
 \end{corollary}
-To determine the coefficients $a_k, b_k$ from $(2n+1)$ data pairs $(x_j, y_j)$, $j=0, \dots, 2n$. We simply follow the idea of Lagrange polynomials by creating the basis polynomial $l_k(x)$ such that
+To determine the coefficients $a_k, b_k$ from $(2n+1)$ data pairs $(x_j, y_j)$, $j=0, \dots, 2n$. We follow the idea of Lagrange polynomials by creating the basis polynomial $l_k(x)$ such that
 \begin{eqnarray}
     l_k(x_j) = \begin{cases}
         1, &j = k,\\
