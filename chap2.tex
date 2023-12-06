@@ -321,7 +321,7 @@ Suppose there is some perturbation of the data $\tilde{y}_j = y_j + \eps_j$ at t
     \end{aligned}
 \end{equation}
 Here $\lambda_n(x) := \sum_{j=0}^n |L_j(x)|$ is the \emph{Lebesgue function}. It is a piecewise-defined polynomial. Its maximum $\Lambda_n$ is the \emph{Lebesgue constant} and only depends on the choice of interpolation nodes. 
-For the equally spaced nodes, this Lebesgue constant grows exponentially. In fact,~\cite{turetskii1940bounding} proved the following sharp result.
+For the equally spaced nodes, this Lebesgue constant grows exponentially. In fact,~\cite{turetskii1940bounding} proved the following sharp result. 
 \begin{lemma}
     \label{Lem: 2-Leb-Con}
     Let $\{x_j\}_{j=0}^n$ be equispaced nodes on $[0, 1]$, then the Lebesgue constant 
@@ -388,14 +388,14 @@ For the equally spaced nodes, this Lebesgue constant grows exponentially. In fac
             &= \frac{1}{e k \log k}\left(1 + o(1)\right).
         \end{aligned}
     \end{equation}
-    Therefore, 
+    Therefore,  
     \begin{equation}
-        \Lambda_n \le \frac{1}{e \log n} \left( \sum_{k=\lceil \sfrac{n}{2}\rceil+1}^n \frac{2^k}{k}\right) (1 + o(1)) =  \frac{2^{n+1}}{e n \log n}  (1 + o(1)).
+        \Lambda_n \le 3^{\lceil \sfrac{n}{2}\rceil}+  \frac{1}{e \log n} \left( \sum_{k=\lceil \sfrac{n}{2}\rceil+1}^n \frac{2^k}{k}\right) (1 + o(1)) =  \frac{2^{n+1}}{e n \log n}  (1 + o(1)).
     \end{equation}
 \end{proof}
-For the general case, it has been proved by Paul Erd\"os (1964) that there exists a constant $C > 0$
+For the general case, it has been proved by Paul Erd\"os (1964) that for any set of interpolation nodes, 
 \begin{equation}
-    \Lambda_n > \frac{2}{\pi}\log(n+1) - C,\quad  n\ge 0.
+    \Lambda_n > \frac{2}{\pi}\log(n+1) + \frac{1}{2},\quad  n\ge 0.
 \end{equation}
 As the number of nodes $n\to \infty$, $\Lambda_n \to \infty$. This leads to the result of Faber that for any choice of nodes, there exists a continuous function not able to be approximated by the interpolating polynomial. The Chebyshev nodes are almost optimal in the sense that 
 \begin{equation}
@@ -985,6 +985,6 @@ where $\circ$ is the Hadamard product or element-wise product.
 \end{problem}
 
 % \bibliography{563}
-\nocite{jackson1912approximation, jackson1913accuracy, erdHos1964problems,erdos1958problems,de1978practical,prenter2008splines}
+\nocite{jackson1912approximation, jackson1913accuracy, erdHos1964problems,erdos1958problems,de1978practical,prenter2008splines,trefethen1991two}
 \bibliographystyle{apalike}
 \bibliography{chap2}
