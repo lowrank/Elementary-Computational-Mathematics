@@ -324,15 +324,47 @@ Here $\lambda_n(x) := \sum_{j=0}^n |L_j(x)|$ is the \emph{Lebesgue function}. It
 For the equally spaced nodes, this Lebesgue constant grows exponentially. 
 \begin{lemma}
     \label{Lem: 2-Leb-Con}
-    Let $\{x_j\}_{j=0}^n$ be equispaced nodes on $[0, 1]$, then the  Lebesgue constant 
+    Let $\{x_j\}_{j=0}^n$ be equispaced nodes on $[0, 1]$, then the Lebesgue constant 
     \begin{equation}
-        \frac{2^{n-2}}{n^2} \le \Lambda_n \le \frac{2^{n+3}}{n}.
+       \frac{2^{n+1}}{e n \log n} \left(1 + o(1)\right) \le \Lambda_n \le \frac{2^{n+3}}{n},\quad n\to\infty. 
     \end{equation}
 \end{lemma}
 \begin{proof}
-    Let $f(x) = e^{in\pi x}$,
+    Assume $n\ge 3$. Let $f(x) = e^{i n\pi x}$. We define $p_n(x) = \sum_{j=0}^{n} f(x_j) L_j(x)$ as the interpolation polynomial at nodes $x_j = j \Delta$, $\Delta = \sfrac{1}{n}$, then $$|p_n(x)| = \left| \sum_{j=0}^{n} (-1)^j L_j(x) \right| \le \Lambda_n.$$
+    Let $\delta_{+}$ be the forward difference operator
+    \begin{equation}
+       \delta_{+} p_n(x) := p_n(x+\sfrac{1}{n}) - p_n(x),
+    \end{equation}
+    then $ p_n(x_j) =  (1+\delta_{+})^j p_n(0)$ for $j=0,1,\cdots, n$, which means the interpolation polynomial is
+    \begin{equation}
+       p_n(x) = \sum_{k=0}^n \binom{nx}{k} \delta_+^k p_n(0) = \sum_{k=0}^n \binom{nx}{k} \delta_+^k f(0),
+    \end{equation}
+    which is exactly the Newton form at the equispaced nodes. See Section~\ref{SSec: 2-New-For}. Because $\delta_+ f(x) = (e^{i\pi} - 1)f(x) = -2 f(x)$ acts as a multiplicative operator, therefore 
+    \begin{equation}
+        p_n(x) = \sum_{k=0}^n \binom{nx}{k}  (-2)^k.
+    \end{equation}
+    Let $x_{\ast} = \frac{1}{n \log n}$ and set $\mu = n x_{\ast}\in(0, \sfrac{1}{\log(3)})$. Then for $k\ge 1$, we have 
+    \begin{equation}
+        \frac{ \binom{\mu}{k}  (-2)^k  }{ \binom{\mu}{k + 1}  (-2)^{k + 1} } = \frac{k+1}{2(k - \mu)} > \frac{1}{2}.
+    \end{equation}
+    Therefore, 
+    \begin{equation}
+    \begin{aligned}
+         \Lambda_n &\ge  |p_n(x_{\ast})| \ge \binom{\mu}{n}  (-2)^n \left(2 - \frac{1}{2^n}\right) + 1 \\
+         &=\exp\left( \log\mu - \log n + \sum_{k=1}^{n-1} \log\left(1 - \frac{\mu}{k}\right) \right) (2^{n+1} - 1) + 1.
+    \end{aligned}
+    \end{equation}
+    Denote the positive constant $C = 2(1 - \sfrac{1}{\log(3)})$ and notice $\log(1 - x) \ge -x - \frac{x^2}{C}$ for all $x\in (0, \sfrac{1}{\log(3)})$, then 
+    \begin{equation}
+    \begin{aligned}
+        \Lambda_n &\ge \frac{\mu}{n} \exp\left(- \mu\sum_{k=1}^{n-1}\frac{1}{k}\right) \exp\left(-\frac{\mu^2}{C} \sum_{k=1}^{n-1}\frac{1}{k^2}\right)(2^{n+1} - 1) + 1 \\
+        & \ge \frac{\mu}{n} \exp(-\mu (\log n + \gamma))\exp\left(-\frac{\pi^2\mu^2}{6C}\right)(2^{n+1} - 1) + 1 \\
+        & =\frac{2^{n+1}}{e n \log n} \left(1 + o(1)\right).
+    \end{aligned}
+    \end{equation}
+    For the upper bound, we note that if $\|f\|_{\infty}\le 1$, then $\|\delta_{+} f\|_{\infty}\le 2$, 
 \end{proof}
-In fact,~\cite{turetskii1940bounding} proved a sharper estimate
+In fact,~\cite{turetskii1940bounding} proved the following sharp result:
 \begin{equation}
     \Lambda_{n, \textrm{equal}} \sim \frac{2^{n+1}}{en \log n}.
 \end{equation}
@@ -344,11 +376,12 @@ As the number of nodes $n\to \infty$, $\Lambda_n \to \infty$. This leads to the 
 \begin{equation}
     \Lambda_{n, \textrm{Chebyshev}} < \frac{2}{\pi}\log(n+1) + 1.
 \end{equation}
-The set of nodes that minimizes $\Lambda_n$ is difficult to compute. A slightly better set of nodes than Chebyshev nodes is the \emph{extended Chebyshev nodes}:
+The set of nodes that minimizes $\Lambda_n$ is difficult to compute. A slightly better set of nodes than Chebyshev nodes are the \emph{ extended Chebyshev nodes}:
 \begin{equation}
     \tilde{x}_j = \frac{\cos\left(\frac{2j+1}{2(n+1)\pi}\right)}{\cos\left(\frac{\pi}{2(n+1)}\right)}.
 \end{equation}
 \subsection{Newton Form}
+\label{SSec: 2-New-For}
 The Newton form is useful when we dynamically add interpolation nodes. Consider the following scenario: we already have found an interpolation polynomial $f_k$ through the data $(x_0, y_0)$, $(x_1, y_1)$,$\dots$, $(x_k, y_k)$, then if an addition pair $(x_{k+1}, y_{k+1})$ is provided, how to effectively transform $f_k$ to $f_{k+1}$? If we write 
 $$f_{k+1}(x) = f_k(x) + c_{k+1} (x - x_0)(x - x_1)\dots (x - x_{k}), $$
 then $f_{k+1}(x_j) = f_k(x_j)$, $j = 0, 1,\dots, k$. Therefore we only need to take care of the equality $f_{k+1}(x_{k+1}) = y_{k+1}$, which means 
