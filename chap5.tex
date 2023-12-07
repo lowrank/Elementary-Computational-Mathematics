@@ -441,22 +441,22 @@ and
 \begin{equation}
    c_m  D Y_m + \sum_{j=0}^{m-1} c_j Y_j = f(x, Y_0,\dots, Y_{m-1}).
 \end{equation}
-Among all kinds of ODE, the second order ODE is mostly considered (e.g. Sturm-Liouville). We state some properties for these ODEs. 
+Among all kinds of ODE, the second-order ODE is mostly considered (e.g. Sturm-Liouville). We state some properties for these ODEs. 
 \begin{theorem}
     The Sturm-Liouville problem 
     \begin{equation}
         \begin{aligned}
-            &-y''(x) + r(x) y(x) = f(x), \\ 
-            &y(a) = y(b ) = 0,
+            -y''(x) + r(x) y(x) &= f(x), \\ 
+            y(a) = y(b ) &= 0,
         \end{aligned}
     \end{equation}
-    where $f$ is a continuous functions. This problem permits a unique solution $y\in C^2([a, b])$ when $r$ is a non-negative continuous function.
+    where $f$ is a continuous function. This problem permits a unique solution $y\in C^2([a, b])$ when $r$ is a non-negative continuous function.
 \end{theorem}
 \begin{remark}
     One can show there exists a unique weak solution $y\in H^1([a, b])$ which is H\"older continuous by embedding, therefore it is a strong solution due to $y'' = r y -f\in C^0([a, b])$.
 \end{remark} 
 \subsection{Finite Difference Method}
-The finite difference method is to discretize the derivatives by finite difference. Let us recall the central scheme for first derivative and second derivative of $y$ by 
+The finite difference method is to discretize the derivatives by finite difference. Let us recall the central scheme for the first derivative and second derivative of $y$ by 
 \begin{equation}
     \begin{aligned}
         \frac{y(x + h) - y(x - h)}{2h} &= y'(x) + y'''(\xi)\frac{h^2}{6} \\

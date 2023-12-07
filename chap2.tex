@@ -171,7 +171,7 @@ From the above discussion, we can see there is a possibility that $\max_{x\in[a,
 \end{equation} 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[scale=0.8]{runge.png}
+    \includegraphics[scale=0.7]{runge.png}
     \caption{Runge's phenomenon. Interpolation with 11 equally spaced nodes. }
 \end{figure}
 It can be shown that the interpolation will diverge at around $3.63$ as $n\to \infty$ and the maximum error $\max_{x\in[-5, 5]} |f_n(x) - h(x) |$ grows exponentially, where $f_n$ is the interpolating polynomial with $n+1$ equally spaced nodes. In the next section, we outline the idea explaining the phenomenon briefly. 
@@ -393,7 +393,7 @@ For the equally spaced nodes, this Lebesgue constant grows exponentially. In fac
         \Lambda_n \le 3^{\lceil \sfrac{n}{2}\rceil}+  \frac{1}{e \log n} \left( \sum_{k=\lceil \sfrac{n}{2}\rceil+1}^n \frac{2^k}{k}\right) (1 + o(1)) =  \frac{2^{n+1}}{e n \log n}  (1 + o(1)).
     \end{equation}
 \end{proof}
-For the general case, it has been proved by Paul Erd\"os (1964) that for any set of interpolation nodes, 
+For the general case, it has been proved by Paul Erd{\"{o}}s (1964) that for any set of interpolation nodes, 
 \begin{equation}
     \Lambda_n > \frac{2}{\pi}\log(n+1) + \frac{1}{2},\quad  n\ge 0.
 \end{equation}
@@ -491,10 +491,10 @@ Calculating all the divided differences requires $\sfrac{3n^2}{2} +\cO(n)$ flops
     \begin{equation}
         f[x_0, x_0] = \lim_{x_1 \to x_0} \frac{f[x_1] - f[x_0]}{x_1 - x_0} = f'(x_0).
     \end{equation}
-    Moreover, using Taylor expansion, $f[\underbrace{x_0,\dots, x_0}_{(k+1)\,\text{times}}] = \frac{1}{k!}f^{(k)}(x_0)$. However, in such cases, the divided differences are not possible to be computed if the derivative values are not provided. We will discuss this scenario later in Hermite interpolation polynomial, see Section~\ref{SSec: 2-Her-Pol-Int}.
+    Moreover, using the Taylor expansion, $f[\underbrace{x_0,\dots, x_0}_{(k+1)\,\text{times}}] = \frac{1}{k!}f^{(k)}(x_0)$. However, in such cases, the divided differences cannot be computed if the derivative values are not provided. We will discuss this scenario later in the Hermite interpolation polynomial; see Section~\ref{SSec: 2-Her-Pol-Int}.
 \end{remark}
 \begin{remark}
-    The algorithm to compute the divided difference can be made more efficient with a single column to store the diagonal elements. $\leadsto$ represents the number that is not changing.
+    The algorithm to compute the divided difference can be more efficient with a single column to store diagonal elements. $\leadsto$ represents the number that is not changing.
     \begin{tcolorbox}
         \begin{equation}
         \begin{aligned}
@@ -689,7 +689,7 @@ The $L^2$ error estimate will be discussed at a later point. This part only focu
     If $f\in C^{0,\alpha}(\bbR)$ is a $2\pi$-period function, then the trigonometric interpolation polynomial with $2n+1$ equally spaced nodes converges uniformly as the number of nodes tends to infinity.
 \end{theorem}
 \begin{proof}
-    Let $g(x)$ be the truncated Fourier series
+    Since $f\in C^{0,\alpha}(\bbR)$, there exists a constant $K > 0$ that $|f(x) - f(y) |\le K |x - y|^{\alpha}$. Let $g(x)$ be the truncated Fourier series
     $$g(x) = \sum_{s = -n}^n \gamma_s e^{is x},\quad \gamma_s = \frac{1}{2\pi}\int_{0}^{2\pi} f(x) e^{-isx} dx$$
    and denote $h(x) = f(x)- g(x) = \sum_{|s| > n} \gamma_s e^{isx}$ the reminder. The interpolation polynomial satisfies
     \begin{equation}
@@ -701,13 +701,13 @@ The $L^2$ error estimate will be discussed at a later point. This part only focu
              &=g(x)+ \frac{1}{2n+1} \sum_{j=0}^{2n} h(x_j) \frac{\sin((2n+1)(x-x_j)/2)}{\sin((x-x_j)/2)}
         \end{aligned}
     \end{equation}
-    Therefore 
+    Therefore,
     \begin{equation}\label{EQ: DIFF}
         |f - f_n| \le \|h\|_{\infty} \left( 1 + \frac{1}{2n+1} \sum_{j=0}^{2n} \left|\frac{\sin((2n+1)(x-x_j)/2)}{\sin((x-x_j)/2)}\right|\right).
     \end{equation}
     We first estimate 
     $$\sum_{j=0}^{2n} \left|\frac{\sin((2n+1)(x-x_j)/2)}{\sin((x-x_j)/2)}\right|$$
-    Separate the nodes into two groups: The first group with $|x - x_j| < \frac{2\pi}{2n+1}$, the absolute value is bounded by $(2n+1)$, there are at most $3$ nodes lying in this region, thus the contribution from the first group is at most $\cO(n)$. The second group is $\pi\ge |x - x_j| \ge \frac{2\pi}{2n+1}$, then one can estimate 
+    Separate the nodes into two groups: The first group with $|x - x_j| < \frac{2\pi}{2n+1}$, the absolute value is bounded by $(2n+1)$, there are at most $3$ nodes lying in this region, thus the contribution of the first group is at most $\cO(n)$. The second group is $\pi\ge |x - x_j| \ge \frac{2\pi}{2n+1}$, and then one can estimate 
     \begin{equation}
         \left|\frac{\sin((2n+1)(x-x_j)/2)}{\sin((x-x_j)/2)}\right| \le \frac{\pi}{|x - x_j|},
     \end{equation}
@@ -734,7 +734,7 @@ The $L^2$ error estimate will be discussed at a later point. This part only focu
     &= \left| \int_{\frac{(2k-1)\pi}{2n+1}}^{\frac{(2k+1)\pi}{2n+1}} \sin((2n+1) y/2)  \left( \frac{(f(x) - f(x - y) )}{\sin(y/2)} - \frac{(f(x) - f(x - y') )}{\sin(y'/2)} \right) dy \right| \\
     &\le \frac{4}{2n+1}\sup_{y,y'\in \cI_k} \left| \frac{(f(x) - f(x - y) )}{\sin(y/2)} - \frac{(f(x) - f(x - y') )}{\sin(y'/2)} \right|\\
     &\le \frac{4K}{2n+1}\left(\frac{\frac{\pi}{2n+1}\left|\frac{(2|k|+1)\pi}{2n+1}\right|^{\alpha}+ \frac{(2|k|+1)\pi}{4n+2}\left|\frac{2\pi}{2n+1}\right|^{\alpha}}{\left|\frac{(2|k|-1)\pi}{4n+2}\right|^2}\right)\\
-    &=\frac{8K\pi^{\alpha-1}}{(2n+1)^{\alpha}} \left( \frac{2(2|k|+1)^{\alpha}}{(2|k|-1)^2}+ 2^{\alpha}\frac{2|k|+1}{(2|k|-1)^2} \right).
+    &=\frac{8K\pi^{\alpha-1}}{(2n+1)^{\alpha}} \left( \frac{2(2|k|+1)^{\alpha}}{(2|k|-1)^2}+ 2^{\alpha}\frac{2|k|+1}{(2|k|-1)^2} \right),
     \end{aligned}
     \end{equation}
     Because $\left|\frac{2|k|-1}{2|k|+1}\right|\ge \frac{1}{3}$ for all $k\in\bbN$, we obtain the bound for $h$:
@@ -748,7 +748,7 @@ The $L^2$ error estimate will be discussed at a later point. This part only focu
     Therefore $|f - f_n|=\cO( n^{-\alpha} |\log n|^2 )$.
 \end{proof}
 \begin{remark}
-    This can be further extended to general continuous functions with \emph{modulus of continuity} $\omega(f;\tau)$ satisfying $\omega(f;\frac{1}{n})\log n \to 0$ as $n\to\infty$, see the work of Dunham Jackson (1913). More related topics are discussed in Chapter~\ref{Ch: 4-App}.
+    The uniform convergence of  trigonometric polynomial interpolation be further extended to general continuous functions with \emph{modulus of continuity} $\omega(f;\tau)$ satisfying $$\omega(f;\frac{1}{n})|\log n|^2 \to 0$$ as $n\to\infty$. The estimate of $\|h\|_{\infty}$ matches the work of Dunham Jackson (1913). More related topics are discussed in Chapter~\ref{Ch: 4-App}.
 \end{remark}
 
 \section{Spline Interpolation}
@@ -815,6 +815,7 @@ Now we will determine the constants $M_j$ using the first derivative's continuit
 \end{equation}
 That is equivalent to $j=1,\dots, n-1$, 
 \begin{equation}
+\label{EQ: CUB-SPL-DER}
     \begin{aligned}
         s_3'(x_{j}^{-})  &= M_j\frac{h_j}{3} + M_{j-1}\frac{h_{j}}{6} + \frac{y_j - y_{j-1}}{h_j}  \\
         &= -M_j \frac{h_{j+1}}{3}  - M_{j+1}\frac{h_{j+1}}{6} + \frac{y_{j+1} - y_j}{h_{j+1}} = s_3'(x_j^{+}). 
@@ -890,10 +891,39 @@ The error estimate for the cubic spline can be derived in a way similar to the L
     \begin{equation}
         \max_{x\in [x_j, x_{j+1}]} |u-f|\le  \frac{1}{24}\|f^{(4)}\|_{\infty} (x - x_j)^2 (x - x_{j+1})^2 \le \frac{1}{384}\|f^{(4)}\|_{\infty} h^4.
     \end{equation}
-    Then show that $\|s_3 - u\|_{\infty}$ is bounded by $\cO(\|f^{(4)}\|_{\infty} h^4)$. This step needs to analyze the error $\|s_3' - f'\|_{\infty}$. Todo.
+    On the subinterval $[x_i, x_{i+1}]$, $s_3$ and $u$ are both cubic polynomial interpolations, thus 
+    \begin{equation}
+         u(x) - s_3(x) = \frac{(x - x_i)(x_{i+1} - x)}{(x_{i+1} - x_i)^2} \left( e'(x_i) (x_{i+1} - x)  - e'(x_{i+1})(x - x_i)\right)
+    \end{equation}
+    where $e(x) = f(x) - s_3(x)$. 
+    Therefore, 
+    \begin{equation}
+    \begin{aligned}
+        \|f - s_3\|_{\infty} &\le  \|u - s_3\|_{\infty}  +  \|f - u\|_{\infty} \\
+        &\le \frac{h}{4} \|e'\|_{\infty} + \frac{1}{384}\|f^{(4)}\|_{\infty} h^4. 
+    \end{aligned}
+    \end{equation}
+    Using~\eqref{EQ: CUB-SPL-DER}, we find that 
 \end{proof}
 \subsection{B-Spline Representation}
-
+The definition of B-spline (short for basis spline) was initially proposed by~\cite{curry1947spline}. Let $\{t_j\}_{j\in \cJ}$ be a non-decreasing sequence, the index set $\cJ$ may be finite or infinite. The sequence is called ``knots''. The B-splines are defined in the following recurrence relation. 
+\begin{definition}[Cox–de Boor]
+The B-spline of order one $B_{j, 1}$ consists of the characteristic functions of the knot intervals:
+\begin{equation*}
+    B_{j, 1}(x) = \begin{cases}
+        1,\quad x\in [t_j, t_{j+1}]\\
+        0,\quad \text{ otherwise }
+    \end{cases}
+\end{equation*}
+and for $k > 1$, the B-spline of order $k$ satisfies
+    $$B_{j,k}(x) = \frac{x - t_j}{t_{j+k-1} - t_j} B_{j, k-1}(x) + \frac{t_{j+1} - x}{t_{j+k} - t_{j+1}} B_{j+1, k-1}(x).$$
+    Each spline $B_{j,k}$ is a non-negative piecewise polynomial of degree $k-1$ supported on $[t_j, t_{j+k}]$.
+\end{definition}
+\begin{lemma}
+\label{Lem: 2-B-SPL-PAR-UNI}
+   For any order $k\ge 1$, the B-spline of order $k$ is a partition of unity:
+   $$\sum_{j\in\cJ} B_{j, k}(x) = 1.$$
+\end{lemma}
 \section{Reproduce Kernel Hilbert Space}
 
 \section{Exercises}
