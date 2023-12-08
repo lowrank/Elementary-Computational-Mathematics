@@ -906,25 +906,34 @@ The error estimate for the cubic spline can be derived in a way similar to the L
     Using~\eqref{EQ: CUB-SPL-DER}, we find that 
 \end{proof}
 \subsection{B-Spline Representation}
-The definition of B-spline (short for basis spline) was initially proposed by~\cite{curry1947spline}. Let $\{t_j\}_{j\in \cJ}$ be a non-decreasing sequence, the index set $\cJ$ may be finite or infinite. The sequence is called ``knots''. The B-splines are defined in the following recurrence relation. 
+The definition of B-spline (short for basis spline) was initially proposed by~\cite{curry1947spline}. Let $\{t_j\}_{j\in \cJ}$ be a nondecreasing sequence; the index set $\cJ$ consists of consecutive integers which may be finite or infinite. The sequence is called ``knots''. The B-splines are defined in the following recurrence relation. 
 \begin{definition}[Cox–de Boor]
 The B-spline of order one $B_{j, 1}$ consists of the characteristic functions of the knot intervals:
 \begin{equation*}
     B_{j, 1}(x) = \begin{cases}
-        1,\quad x\in [t_j, t_{j+1}]\\
+        1,\quad x\in [t_j, t_{j+1})\\
         0,\quad \text{ otherwise }
     \end{cases}
 \end{equation*}
 and for $k > 1$, the B-spline of order $k$ satisfies
-    $$B_{j,k}(x) = \frac{x - t_j}{t_{j+k-1} - t_j} B_{j, k-1}(x) + \frac{t_{j+1} - x}{t_{j+k} - t_{j+1}} B_{j+1, k-1}(x).$$
-    Each spline $B_{j,k}$ is a non-negative piecewise polynomial of degree $k-1$ supported on $[t_j, t_{j+k}]$.
+    $$B_{j,k}(x) = \frac{x - t_j}{t_{j+k-1} - t_j} B_{j, k-1}(x) + \frac{t_{j+k} - x}{t_{j+k} - t_{j+1}} B_{j+1, k-1}(x).$$
+    Each spline $B_{j,k}$ is a non-negative piecewise polynomial of degree $k-1$ supported on $(t_j, t_{j+k})$.
 \end{definition}
 \begin{lemma}
 \label{Lem: 2-B-SPL-PAR-UNI}
    For any order $k\ge 1$, the B-spline of order $k$ is a partition of unity:
-   $$\sum_{j\in (\cJ + \{k\})\bigcap (\cJ -  \{k\})} B_{j, k}(x) = 1.$$
+   $$\sum_{j = r}^s B_{j, k}(x) = 1,\quad x\in (t_{r + k - 1}, t_{s+1}).$$
 \end{lemma}
 \begin{proof}
+    Let us prove this by induction. For $k=1$, this is exactly the definition. Assume the conclusion for $k = l$, then for $x\in (t_{r + l}, t_{s+1})\subset (t_{r + l - 1}, t_{s+1})$, since $(t_{r + l}, t_{s+1})\bigcap \supp B_{r, l} = \emptyset$ and $(t_{r + l}, t_{s+1}) \bigcap \supp B_{s+1, l} = \emptyset$, we have 
+    \begin{equation}
+    \begin{aligned}
+        \sum_{j=r}^s B_{j, l+1}(x) &=   \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j} B_{j, l}(x) +   \sum_{j=r}^s\frac{t_{j+l+1} - x}{t_{j+l+1} - t_{j+1}} B_{j+1, l}(x) \\
+        &=  \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j} B_{j, l}(x) +  \sum_{j=r+1}^{s+1} \frac{t_{j+l} - x}{t_{j+l} - t_{j}} B_{j, l}(x) \\
+        &= \sum_{j = r}^{s} B_{j, l}(x) + \frac{t_{r+l} - x}{t_{r+l} - t_r} B_{r, l}(x) +  \frac{t_{s+l +1} - x}{t_{s+l + 1} - t_{s+1}} B_{s+1, l}(x) \\
+        &=1. 
+    \end{aligned}
+    \end{equation}
     
 \end{proof}
 \section{Reproduce Kernel Hilbert Space}
