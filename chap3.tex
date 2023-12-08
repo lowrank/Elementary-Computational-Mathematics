@@ -549,15 +549,15 @@ Other advanced tools (e.g. complex analysis) and examples will be discussed in l
 \section{Gauss Quadrature}
 The Gauss quadrature maximizes the exactness of quadrature rules. Let $x_0,\dots, x_n$ the nodes on $[-1,1]$, in the following we will discuss the numerical quadrature for the weighted integral 
 $$\cI_w(f) = \int_{-1}^1 w(x) f(x) dx\simeq \cI_{n, w}(f):= \sum_{j=0}^n c_j f(x_j),$$
-where the coefficients are determined later. We can also borrow the same accuracy concept from previous chapter ($w(x) = 1$). It is clear that with $n+1$ nodes, the accuracy is at least degree $n$, in the later derivation we will see that Gauss quadrature has an accuracy of $r = n + m$ for $ m > 0$. 
+where the coefficients are determined later. We can also borrow the same accuracy concept from the previous chapter ($w(x) = 1$). It is clear that with $n+1$ nodes, the accuracy is at least degree $n$, in the later derivation we will see that Gauss quadrature has an accuracy of $r = n + m$ for $ m > 0$. 
 
 \begin{theorem}
     Let $\omega(x) = \prod_{j=0}^{n}(x - x_j)$, then
     $$\aver{\omega(x), p_{k}}_w = 0,\quad 0\le k\le {m-1}$$
-    if and only if the associated quadrature rule has accuracy of $n + m$.
+    if and only if the associated quadrature rule has an order of $n + m$.
 \end{theorem}
 \begin{proof}
-    The key idea is represent any polynomial $q$ of $\Pi_{n+m}$ by 
+    The key idea is to represent any polynomial $q$ of $\Pi_{n+m}$ by 
     \begin{equation}
         q(x) = \omega(x) s(x) + t(x)
     \end{equation}
@@ -566,7 +566,7 @@ where the coefficients are determined later. We can also borrow the same accurac
         \sum_{j=0}^n c_j t(x_j) =  \int_{-1}^1 t(x) w(x) dx = \int_{-1}^1 q(x) w(x)dx - \underline{\int_{-1}^1 \omega(x) s(x) w(x) dx}.
     \end{equation}
 \end{proof}
-It is clear that the maximum of $m \le n+1$, otherwise we can choose $ s(x) = \omega(x)$, then $\aver{\omega(x), \omega(x)}_w > 0$ violates the above theorem.
+It is clear that the maximum of $m \le n+1$, otherwise, we can choose $ s(x) = \omega(x)$, then $\aver{\omega(x), \omega(x)}_w > 0$ violates the above theorem.
 \begin{corollary}
     The quadrature rule 
     $$\cI_{n, w}(f)=\sum_{j=0}^n c_j f(x_j)$$
@@ -581,28 +581,27 @@ This formula indicates that $\omega(x) = p_{n+1}(x)$.
     The only choice of $\omega$ satisfying~\eqref{EQ: ORTHO} is $p_{n+1}$.
 \end{theorem}
 \begin{proof}
-    Without loss of generality, we assume $p_{n+1}$'s leading power's coefficient is one (for example, the recursive formula~\eqref{EQ: RECUR}). Since $p_{n+1}$ also satisfies the orthogonal relation. Therefore 
+    Without loss of generality, we assume $p_{n+1}$'s leading power's coefficient is one (for example, the recursive formula~\eqref{EQ: RECUR}). Since $p_{n+1}$ also satisfies the orthogonal relation. Therefore,
     \begin{equation}
         \int_{-1}^1 (\omega(x) - p_{n+1}(x)) s(x) w(x)dx = 0,\quad s\in\Pi_n
     \end{equation}
     while $\omega - p_{n+1}\in\Pi_n$, then we have a contradiction if we take $s(x) = \omega -  p_{n+1}\neq 0$. 
 \end{proof}
-The above theorem implies that the  nodes $x_j$ are the zeros of $p_{n+1}$ (we still need to show they are simple roots). The corresponding quadrature rule is called Gauss quadrature, the accuracy is of degree $2n+1$.
+The above theorem implies that the nodes $x_j$ are the zeros of $p_{n+1}$ (we still need to show that they are simple roots). The corresponding quadrature rule is called the Gauss quadrature, and the accuracy is of degree $2n+1$.
 
-For $w = 1$, the Legendre polynomial's roots are not at the end points, while sometimes the end points $\pm 1$ are useful to be included in the quadrature nodes, therefore we may want to generate a similar  Gauss quadrature with the end nodes as well. Following the same idea, in order to make $\pm 1$ as the roots of $\omega(x)$ but also keep $\omega$ concentrated on $p_{k}$ for large $k$, we can define
+For $w = 1$, the Legendre polynomial's roots are not at the endpoints, while sometimes the endpoints $\pm 1$ are useful to be included in the quadrature nodes, therefore we may want to generate a similar  Gauss quadrature with the end nodes as well. Following the same idea, in order to make $\pm 1$ as the roots of $\omega(x)$ but also keep $\omega$ concentrated on $p_{k}$ for large $k$, we can define
 \begin{equation}
     \bar{\omega}(x) := p_{n+1}(x) + A p_n(x)+Bp_{n-1}(x)
  \end{equation}
-the constants $A, B$ are used to control $\bar{\omega}(\pm 1) = 0$. The corresponding $\bar{\omega}$ has the similar property as $\omega$ but only provides an accuracy of degree $2n - 1$. The nodes are roots of $\bar{\omega}$, they are called Gauss-Lobatto nodes. In the following, we prove some of the properties of Gauss quadrature. 
+the constants $A, B$ are used to control $\bar{\omega}(\pm 1) = 0$. The corresponding $\bar{\omega}$ has a similar property as $\omega$ but only provides an accuracy of degree $2n - 1$. The nodes are roots of $\bar{\omega}$, they are called Gauss-Lobatto nodes. In the following, we prove some of the properties of Gauss quadrature. 
 \begin{theorem}
     All roots $x_j$ of $p_{n+1}$ are distinct.
 \end{theorem}
 \begin{proof}
-    Pick out all roots that are having odd multiplicity, say $z_0 < z_1 <\cdots < z_M$, then 
+    Pick out all roots with odd multiplicity, say $z_0 < z_1 <\cdots < z_M$, then 
     \begin{equation}
         q(x) = (x - z_0)\cdots (x - z_M)
-    \end{equation}
-    should satisfy that $q(x)p_{n+1}(x) w(x) > 0$ except on the roots. However if $M\neq n$, we would have an issue since 
+\end{equation} should satisfy $q(x)p_{n+1}(x) w(x) > 0$ except for the roots. However, if $M\neq n$, we would have an issue since 
     \begin{equation}
         \int_{-1}^1 q(x) p_{n+1}(x)w(x) dx = 0.
     \end{equation}
@@ -615,7 +614,7 @@ the constants $A, B$ are used to control $\bar{\omega}(\pm 1) = 0$. The correspo
     are all positive. 
 \end{theorem}
 \begin{proof}
-   The polynomials $p_k$ satisfies the recursive formula 
+   The polynomials $p_k$ satisfy the recursive formula 
    $$p_{k+1}(x) = (x - \alpha_k) p_k(x) - \beta_k p_{k-1}(x)$$
    then 
    \begin{equation}
@@ -632,7 +631,7 @@ the constants $A, B$ are used to control $\bar{\omega}(\pm 1) = 0$. The correspo
         p_0(x_l) \\ p_1(x_l) \\  p_2(x_l) \\ \vdots \\ p_{n-1}(x_l) \\ p_n(x_l)
     \end{pmatrix}
    \end{equation}
-   which means the matrix $A$ on left-hand-side has $(n+1)$ eigen-pairs $\{ x_l, (p_j(x_l))_{j=0}^n\} $. The tridiagonal matrix has a similar transform to a symmetric matrix, denoted by $S = D^{-1}A D$ with $D$ as a diagonal matrix, then $S$ has the same set of eigen-pairs, which means the transformed vectors 
+   which means the matrix $A$ on the left side has $(n+1)$ eigenpairs $\{ x_l, (p_j(x_l))_{j=0}^n\} $. The tridiagonal matrix has a similar transform to a symmetric matrix, denoted by $S = D^{-1}A D$ with $D$ as a diagonal matrix; then $S$ has the same set of eigen pairs, which means that the transformed vectors 
    \begin{equation}
        D^{-1} \begin{pmatrix}
         p_0(x_l) \\ p_1(x_l) \\  p_2(x_l) \\ \vdots \\ p_{n-1}(x_l) \\ p_n(x_l)
@@ -642,12 +641,12 @@ the constants $A, B$ are used to control $\bar{\omega}(\pm 1) = 0$. The correspo
    \begin{equation}
        v_k^T  D^{-2} v_j = r_j \delta_{jk}\quad r_j > 0.
    \end{equation}
-   where $v_{j} = (p_i(x_j))_{i=0}^n $. Take $f = p_k$ into the quadrature rule, 
+   where $v_{j} = (p_i(x_j))_{i=0}^n $. Take $f = p_k$ in the quadrature rule, 
    \begin{equation}
        \sum_{j = 0}^n c_j v_{jk} 
  = \delta_{0k}
    \end{equation}
-   Combine the two equations, we have 
+   Combined with the two equations, we have 
    \begin{equation}
     \begin{aligned}
         \sum_{k=0}^{n}\sum_{j = 0}^n c_j v_{jk} v_{lk} D_{kk}^{-2} &=   \sum_{k=0}^{n} v_{lk} D_{kk}^{-2} \sum_{j = 0}^n c_j v_{jk} =  D_{00}^{-2} > 0 \\
@@ -655,8 +654,8 @@ the constants $A, B$ are used to control $\bar{\omega}(\pm 1) = 0$. The correspo
     \end{aligned}
    \end{equation}
 \end{proof}
-This result should be compared with Newton-Cotes formula, where the weights are not all positive if $n$ is large, hence Gauss quadrature has better numerical stability. 
-At last, we briefly state the error estimate for the Gauss quadrature using the previous proved theorem~\ref{THM: ERROR QUAD RULE}, where $r = 2n+1$.
+This result should be compared with the Newton-Cotes formula, where the weights are not all positive if $n$ is large; hence, the Gauss quadrature has better numerical stability. 
+Finally, we briefly state the error estimate for the Gauss quadrature using the previously proved theorem~\ref{THM: ERROR QUAD RULE}, where $r = 2n+1$.
 \begin{corollary}
     For $f \in C^{2n+2}[-1,1]$, the error of Gauss quadrature satisfies 
     \begin{equation}
@@ -665,14 +664,14 @@ At last, we briefly state the error estimate for the Gauss quadrature using the 
 \end{corollary}
 \begin{remark}
     For Chebyshev polynomials. the weight $w(x) = (1- x^2)^{-1/2}$, the Gauss quadrature nodes are roots of $T_{n+1}(x) = \cos((n+1)\arccos x)$,
-$$x_j = \cos\left(\frac{2j+1}{2(n+1)}\pi\right), \quad c_j = \frac{\pi}{n+1}.$$
+$$x_j = \cos\left(\frac{2j+1}{2(n+1)}\pi\right), \quad c_j = \frac{\pi}{n+1}.$$ 
 which is exactly the set of Chebyshev interpolation nodes. For Gauss-Lobatto nodes, they are 
 $$\tilde{x}_j = \cos\left(   \frac{j \pi}{n}\right),\quad c_j = \frac{\pi}{d_jn}$$
 where $d_j = 2$ if $j = 0$ or $j = n$, otherwise $d_j = 1$. This is exactly the composite trapezoid rule. 
 \end{remark}
 
-\section{Gauss Quadrature on Unbounded Domain}
-For the integral over infinite interval $[0, \infty)$ or $(-\infty, \infty)$ using the Gauss quadrature, the weight needs to be decaying faster than polynomial growth. Usual choices are $w(x) = e^{-x}$ and $w(x) = e^{-x^2}$. The corresponding orthogonal polynomials are called Laguerre polynomials and Hermite polynomials (not interpolating polynomial), respectively.
+\subsection{Gauss Quadrature on Unbounded Domain}
+For the integral over an infinite interval $[0, \infty)$ or $(-\infty, \infty)$ using the Gauss quadrature, the weight needs to be decaying faster than polynomial growth. Usual choices are $w(x) = e^{-x}$ and $w(x) = e^{-x^2}$. The corresponding orthogonal polynomials are called Laguerre polynomials and Hermite polynomials (not the interpolation polynomials), respectively.
 
 \subsubsection{Laguerre polynomial} The domain is $[0,\infty)$ and the Laguerre polynomials are defined by 
 \begin{equation}

@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% ARTICLE TEMPLATE LATEX %%%%%%%%%%%%%%%%
-\documentclass[12pt,letterpaper,final]{book}
+\documentclass[12pt,a4paper,final]{book}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{fontspec}
@@ -16,6 +16,8 @@ UprightFont = *-Regular,
 \usepackage{subfigure}
 
 \usepackage{titling}
+
+\usepackage[Conny]{fncychap}
 
 \usepackage{latexsym}
 \usepackage{xfrac}
@@ -263,7 +265,7 @@ plainpages=false,pdfpagelabels]{hyperref}
 % cm - centimeters 
 % letter paper: 8.5 inch x 11.0 inch
 \setlength\textwidth{39pc}
-\setlength\textheight{50pc}
+\setlength\textheight{52pc}
 \setlength\hoffset{0pc}
 \setlength\voffset{0pc}
 \setlength\topmargin{0pt}
@@ -323,6 +325,7 @@ plainpages=false,pdfpagelabels]{hyperref}
 \include{chap8}
 \include{chap9}
 \part{Concise Optimization}
+\include{chap10}
 \part{Extended Topics}
 \include{topic}
 \part{Miscellany}

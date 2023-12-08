@@ -69,7 +69,7 @@ $$\begin{pmatrix}
 However, it is generally easier to compute the polynomial $f$ with the \emph{Lagrange polynomial interpolation} (which is somewhat equivalent to computing the inverse of $V$).
 \subsection{Lagrange Polynomial}
 \begin{definition}
-    For the given distinct $x_j$, $j = 0, 1, \dots, n$, the $(n+1)$ Lagrange polynomials $L_0, L_1,\dots, L_n\in\Pi_n$ are defined by 
+    For the given distinct $x_j$, $j = 0, 1, \dots, n$, the Lagrange polynomials $L_j\in\Pi_n$, $j=0,1,\dots, n$ are defined by 
     \begin{equation}
         L_j(x) = \prod_{s = 0, s\neq j}^n \frac{x - x_s}{x_j - x_s}, \quad j = 0, 1,\dots , n.
     \end{equation}
@@ -922,8 +922,11 @@ and for $k > 1$, the B-spline of order $k$ satisfies
 \begin{lemma}
 \label{Lem: 2-B-SPL-PAR-UNI}
    For any order $k\ge 1$, the B-spline of order $k$ is a partition of unity:
-   $$\sum_{j\in\cJ} B_{j, k}(x) = 1.$$
+   $$\sum_{j\in (\cJ + \{k\})\bigcap (\cJ -  \{k\})} B_{j, k}(x) = 1.$$
 \end{lemma}
+\begin{proof}
+    
+\end{proof}
 \section{Reproduce Kernel Hilbert Space}
 
 \section{Exercises}
