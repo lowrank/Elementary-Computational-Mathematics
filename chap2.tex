@@ -629,7 +629,7 @@ Therefore, we can compute
 \begin{equation}\label{EQ: GAMMA}
     \gamma_m = \frac{1}{2n+1}  \sum_{j = 0}^{2n} y_j e^{-im x_j}.
 \end{equation}
-When the coefficients $\gamma_m$ are known, Horner's scheme can be employed to evaluate the trigonometric polynomial in $\cO(n)$ time complexity.  However, naive computing of all of the coefficients $\gamma_k$ will cost $\cO(n^2)$ flops. The fast Fourier transform can reduce the time complexity to $\cO(n\log n)$.
+When the coefficients $\gamma_m$ are known, Horner's scheme can be employed to evaluate the trigonometric polynomial in $\cO(n)$ time complexity.  However, naive computing of all the coefficients $\gamma_k$ will cost $\cO(n^2)$ flops. The fast Fourier transform can reduce the time complexity to $\cO(n\log n)$.
 \begin{remark}
     For even number of equally spaced nodes $x_j = \frac{j\pi}{n}$, $0\le j\le 2n-1$, the basis $\sin( n x)$ equals to zero constantly. There are $2n$ coefficients to be determined only. We can derive a similar formula as~\eqref{EQ: GAMMA} by replacing $(2n+1)$ with $2n$.
 \end{remark}
@@ -748,7 +748,7 @@ The $L^2$ error estimate will be discussed at a later point. This part only focu
     Therefore $|f - f_n|=\cO( n^{-\alpha} |\log n|^2 )$.
 \end{proof}
 \begin{remark}
-    The uniform convergence of  trigonometric polynomial interpolation be further extended to general continuous functions with \emph{modulus of continuity} $\omega(f;\tau)$ satisfying $$\omega(f;\frac{1}{n})|\log n|^2 \to 0$$ as $n\to\infty$. The estimate of $\|h\|_{\infty}$ matches the work of Dunham Jackson (1913). More related topics are discussed in Chapter~\ref{Ch: 4-App}.
+    The uniform convergence of trigonometric polynomial interpolation be further extended to general continuous functions with \emph{modulus of continuity} $\omega(f;\tau)$ satisfying $$\omega(f;\frac{1}{n})|\log n|^2 \to 0$$ as $n\to\infty$. The estimate of $\|h\|_{\infty}$ matches the work of Dunham Jackson (1913). More related topics are discussed in Chapter~\ref{Ch: 4-App}.
 \end{remark}
 
 \section{Spline Interpolation}
@@ -893,22 +893,40 @@ The error estimate for the cubic spline can be derived in a way similar to the L
     \end{equation}
     On the subinterval $[x_i, x_{i+1}]$, $s_3$ and $u$ are both cubic polynomial interpolations, thus 
     \begin{equation}
-         u(x) - s_3(x) = \frac{(x - x_i)(x_{i+1} - x)}{(x_{i+1} - x_i)^2} \left( e'(x_i) (x_{i+1} - x)  - e'(x_{i+1})(x - x_i)\right)
+         u(x) - s_3(x) = \frac{(x - x_i)(x_{i+1} - x)}{(x_{i+1} - x_i)} \left( e'(x_i) \frac{x_{i+1} - x}{x_{i+1} - x_i}  - e'(x_{i+1})\frac{x - x_i}{x_{i+1} - x_i}\right), 
     \end{equation}
     where $e(x) = f(x) - s_3(x)$. 
     Therefore, 
     \begin{equation}
+    \label{EQ: CUB-SPL-ERR-EST-KEY}
     \begin{aligned}
         \|f - s_3\|_{\infty} &\le  \|u - s_3\|_{\infty}  +  \|f - u\|_{\infty} \\
-        &\le \frac{h}{4} \|e'\|_{\infty} + \frac{1}{384}\|f^{(4)}\|_{\infty} h^4. 
+        &\le \frac{h}{4} \max_{0\le i\le n} |e'(x_i)| + \frac{1}{384}\|f^{(4)}\|_{\infty} h^4. 
     \end{aligned}
     \end{equation}
-    Using~\eqref{EQ: CUB-SPL-DER}, we find that 
+    Using~\eqref{EQ: CUB-SPL-DER}, we find that
+\begin{equation}
+    \frac{1}{h_j}\left[ 2 s'_3(x_j) + s'_3(x_{j-1}) \right] + \frac{1}{h_{j+1}}\left[2 s'_3(x_j) + s'_3(x_{j+1})\right] =\frac{3(y_j - y_{j-1})}{h_j^2} + \frac{3(y_{j+1} - y_j)}{h_{j+1}^2}, 
+\end{equation}
+Using Taylor expansion locally at $x_j$, there exist $\zeta\in (x_{j-1}, x_j)$ and $\xi\in (x_j, x_{j+1})$ that
+\begin{equation}
+    \frac{2 e'(x_j) + e'(x_{j-1})}{h_j} + \frac{2 e'(x_j) + e'(x_{j+1})}{h_{j+1}}= \frac{1}{24}\left[-h_j^2 f^{(4)}(\zeta)+ h_{j+1}^2 f^{(4)}(\xi)\right].
+\end{equation}
+Suppose 
+$\max_{0 \le i\le n}|e'(x_i)|$ attains its maximum at node $x_{k}$, then 
+\begin{equation}
+    \left| \frac{2 e'(x_k) + e'(x_{k-1})}{h_j} + \frac{2 e'(x_k) + e'(x_{k+1})}{h_{k+1}} \right| \ge \frac{h_j+h_{j+1}}{h_j h_{j+1}} |e'(x_k)|.
+\end{equation}
+Therefore, by AM-GM inequality,
+\begin{equation}
+    \max_{0 \le i\le n}|e'(x_i)| \le \frac{h_{j}h_{j+1}}{24 (h_j + h_{j+1}) } (h_j^2 + h_{j+1}^2) \|f^{(4)}\|_{\infty} \le \frac{1}{24}h^3 \|f^{(4)}\|_{\infty}. 
+\end{equation}
+Finally, combined with the estimate~\eqref{EQ: CUB-SPL-ERR-EST-KEY} will arrive at the desired bound.
 \end{proof}
 \subsection{B-Spline Representation}
-The definition of B-spline (short for basis spline) was initially proposed by~\cite{curry1947spline}. Let $\{t_j\}_{j\in \cJ}$ be a nondecreasing sequence; the index set $\cJ$ consists of consecutive integers which may be finite or infinite. The sequence is called ``knots''. The B-splines are defined in the following recurrence relation. 
+The definition of B-spline (short for basis spline) was initially proposed by~\cite{curry1947spline}. Let $\bt:= \{t_j\}_{j\in \cJ}$ be a nondecreasing sequence; the index set $\cJ$ consists of consecutive integers which may be finite or infinite. The sequence is called ``knots''. The B-splines are defined in the following recurrence relation. 
 \begin{definition}[Cox–de Boor]
-The B-spline of order one $B_{j, 1}$ consists of the characteristic functions of the knot intervals:
+The B-splines of order one $B_{j, 1}$ consist of the characteristic functions of the knot intervals:
 \begin{equation*}
     B_{j, 1}(x) = \begin{cases}
         1,\quad x\in [t_j, t_{j+1})\\
@@ -917,11 +935,15 @@ The B-spline of order one $B_{j, 1}$ consists of the characteristic functions of
 \end{equation*}
 and for $k > 1$, the B-spline of order $k$ satisfies
     $$B_{j,k}(x) = \frac{x - t_j}{t_{j+k-1} - t_j} B_{j, k-1}(x) + \frac{t_{j+k} - x}{t_{j+k} - t_{j+1}} B_{j+1, k-1}(x).$$
-    Each spline $B_{j,k}$ is a non-negative piecewise polynomial of degree $k-1$ supported on $(t_j, t_{j+k})$.
 \end{definition}
-\begin{lemma}
+Using a simple induction, we can show the following property of the B-spline (see Exercise~\ref{Prb: 2-B-SPL-NON-SUP}).
+\begin{lemma}[Property I]
+\label{Lem: 2-B-SPL-NON-SUP}
+    Each spline $B_{j,k}$ is a non-negative piecewise polynomial of degree $k-1$ supported on $(t_j, t_{j+k})$.
+\end{lemma}
+\begin{lemma}[Property II]
 \label{Lem: 2-B-SPL-PAR-UNI}
-   For any order $k\ge 1$, the B-spline of order $k$ is a partition of unity:
+   For any order $k\ge 1$, the B-splines of order $k$ form a partition of unity:
    $$\sum_{j = r}^s B_{j, k}(x) = 1,\quad x\in (t_{r + k - 1}, t_{s+1}).$$
 \end{lemma}
 \begin{proof}
@@ -934,9 +956,52 @@ and for $k > 1$, the B-spline of order $k$ satisfies
         &=1. 
     \end{aligned}
     \end{equation}
-    
+    The B-splines of order $k$ naturally define a linear subspace $\cS_k$:
+    \begin{equation}
+        \cS_k = \text{span} \left\{ B_{jk}(x) \mid j\in \cJ\right\}.
+    \end{equation}
+    Then $\cS$ is equivalent to piecewise polynomial function space $\Pi_{k, \bt, \bm}$ that 
+    \begin{definition}
+        $\Pi_{k, \bt, \bm}$ is the 
+    \end{definition}
+    \begin{theorem}[Curry-Schoenberg]
+        \label{Thm: 2-B-SPL-EQU-PP-SPA}
+    \end{theorem}
 \end{proof}
-\section{Reproduce Kernel Hilbert Space}
+\section{Reproducing Kernel Hilbert Space}
+Let $H$ be a Hilbert space of functions defined on $\cX$, with inner product $\aver{\cdot, \cdot}$ such that the \emph{point evaluation map} $x: H\mapsto \bbC$ is bounded $\forall x\in \cX$. Then $H$ is called \emph{reproducing kernel Hibert space} or RKHS for short. By Riesz's representation Theorem, there exists $\psi_x\in H$ that 
+\begin{equation}
+    f(x) = \aver{f, \psi_x},\quad \forall f\in H.
+\end{equation}
+The function $\cK(x, y):=\psi_x(y)$ is the \emph{reproducing kernel}. 
+\begin{example}
+    $L^2[0, 1]$ with the usual inner product is not an RKHS. However, the Sobolev space $W^{1, 2}[0, 1]$ with its usual norm is a RKHS by the embedding theorems.
+\end{example}
+The kernel $\cK(x, y):\cX\times \cX\to\bbC$ satisfies 
+\begin{equation}
+    \cK(x, y) = \aver{\psi_x, \psi_y}, 
+\end{equation}
+and the kernel is Hermitian and positive definite. Its converse is also true.
+\begin{theorem}[Moore-Aronszajn]
+    \label{Thm: 2-MOO-ARO}
+    If $\cK:\cX\times \cX\to\bbC$ is a Hermitian, positive definite kernel, then there is a unique RKHS with $\cK$ as its reproducing kernel.
+\end{theorem}
+\begin{proof}
+    We prove the RKHS is $H=\overline{\text{span}\{\cK(x, \cdot) \mid x\in \cX\}}$ equipped with the induced inner product $\aver{\cK(x, \cdot), \cK(y,\cdot)}_H = k(x, y)$. The verification is straightforward. For uniqueness, let us assume $H'\supset H$ is another RKHS with kernel $\cK$ and inner product $\aver{\cdot, \cdot}_{H'}$. Then 
+    \begin{equation}
+        \cK(x, y) = \aver{\cK(x, \cdot), \cK(y,\cdot)}_H = \aver{\cK(x, \cdot), \cK(y,\cdot)}_{H'},
+    \end{equation}
+    which implies the inner products are identical on $H$. Finally, $\forall f\in H'$, write $f = f_H + f_{H^{\perp}}$, then 
+    \begin{equation}
+        f(x) = \aver{f, \cK(x, \cdot)}_{H'} = \aver{f_H, \cK(x, \cdot)}_{H'}  + \aver{f_{H^\perp}, \cK(x, \cdot)}_{H'} = f_H(x).
+    \end{equation}
+    Therefore, $H' = H$.
+\end{proof}
+\subsection{Interpolation in RKHS}
+Let $H$ be a RKHS with inner product $\aver{\cdot, \cdot}_H$. Suppose the data $\{(\ell_j, z_j)\}_{j=1}^m$ is generated by  $  z_j = \aver{\ell_j, f}_H $ such that  $\ell_j\in H^{\ast}$ and $f\in H$ is an \emph{unknown} function. The interpolation finds a function $f^{\ast}$ such that 
+\begin{equation}
+    \aver{\ell_j, f^{\ast}} = z_j,\quad j=1,\cdots, m.
+\end{equation}
 
 \section{Exercises}
 The coding part and test cases are available on GitHub. 
@@ -1003,16 +1068,16 @@ where $\circ$ is the Hadamard product or element-wise product.
     \end{pmatrix} $$
     and denote $B = A - I$. Prove $\|B\|_{\infty} \le \frac{1}{2}$ and $\|A^{-1}\|_{\infty}\le 2$. 
 \end{problem}
-
-% \begin{problem}
-%     Complete the proof of Theorem~\ref{THM: ERROR CUBIC SPLINE}.
-% \end{problem}
+\begin{problem}
+\label{Prb: 2-B-SPL-NON-SUP}
+    Prove the Lemma~\ref{Lem: 2-B-SPL-NON-SUP}.
+\end{problem}
 \subsection{Computational Part}
 \begin{problem}
     Implement the divided difference to compute the coefficients of the Newton form. You should call the Horner's scheme from the previous coding project. State the consequence when the length of $[a, b]$ is very small. 
 \end{problem}
 \begin{problem}
-    Implement the Lagrange interpolation schemes on equispaced nodes and (extended) Chebyshev nodes.
+    Implement the Lagrange interpolation schemes on equispaced and (extended) Chebyshev nodes.
 \end{problem}
 \begin{problem}
     Implement a routine to compute Hermite interpolation with $m_j = 1$ for each $j = 0, \dots, n$. Estimate your routine's time complexity and space complexity. 
