@@ -1,13 +1,13 @@
 \chapter{Differentiation and Quadrature}
-
-Numerous applications such as calculation of tangent vectors or areas lead to the problem of computing 
+\label{Ch: 3-Dif-Qua}
+A vast number of applications such as the calculation of tangent vectors or areas lead to the problem of computing 
 \begin{equation}
     \cD(f) := \frac{d}{dx} f(x),\quad \cI(f) := \int_a^b f(x) dx, 
 \end{equation}
-for certain function $f(x)\in C^k([a, b])$. The accurate evaluations would be sometimes difficult if the analytic expression is absent. Especially when the function values of $f$ are only accessible at a finite number of nodes. Therefore, it is important to find simple yet effective methods to approximate the derivatives and integrals. 
-
+for certain function $f(x)\in C^k([a, b])$. Accurate evaluations would be sometimes difficult if the analytic expression is absent. Especially when the function values of $f$ are only accessible at a finite number of nodes. Therefore, it is important to find simple yet effective methods to approximate the derivatives and integrals. 
 
 \section{Extrapolation}
+\label{Sec: 2-Ext}
 From the previous discussion, we already know that interpolation is to provide an estimate \emph{within} the original observation range. The extrapolation is similar but aims to produce estimates outside the observation range. However, extrapolation may be subject to a greater uncertainty (Fig~\ref{FIG: EXTRAPO}), one should use it only when overestimate is hardly occurring.
 \begin{figure}[!htb]
     \centering
@@ -17,6 +17,7 @@ From the previous discussion, we already know that interpolation is to provide a
 \end{figure}
 
 \subsection{Richardson Extrapolation}
+\label{SSec: 3-Ric-Ext}
 Suppose there is a sequence of estimates $A(h)$ depending the parameter $h$, the limit $A^{\ast} = \lim_{h\to 0^{+}} A(h)$ is the quantity to be computed. In practice, we only have access to $A(h)$ for a few values of $h$. Using these values to estimate $A^{\ast}$ is a typical problem in extrapolation. 
 
 The basic idea is to use polynomial interpolation with a sequence of nodes $h_j\to 0$. Suppose the function $A(h)$ admits the following asymptotic expansion:

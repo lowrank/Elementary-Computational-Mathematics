@@ -952,15 +952,35 @@ Using a simple induction, we can show the following property of the B-spline (se
     \begin{aligned}
         \sum_{j=r}^s B_{j, l+1}(x) &=   \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j} B_{j, l}(x) +   \sum_{j=r}^s\frac{t_{j+l+1} - x}{t_{j+l+1} - t_{j+1}} B_{j+1, l}(x) \\
         &=  \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j} B_{j, l}(x) +  \sum_{j=r+1}^{s+1} \frac{t_{j+l} - x}{t_{j+l} - t_{j}} B_{j, l}(x) \\
-        &= \sum_{j = r}^{s} B_{j, l}(x) + \frac{t_{r+l} - x}{t_{r+l} - t_r} B_{r, l}(x) +  \frac{t_{s+l +1} - x}{t_{s+l + 1} - t_{s+1}} B_{s+1, l}(x) \\
+        &= \sum_{j = r}^{s} B_{j, l}(x) - \frac{t_{r+l} - x}{t_{r+l} - t_r} B_{r, l}(x) +  \frac{t_{s+l +1} - x}{t_{s+l + 1} - t_{s+1}} B_{s+1, l}(x) \\
         &=1. 
     \end{aligned}
     \end{equation}
+    As an extension of Lemma~\ref{Lem: 2-B-SPL-PAR-UNI}, we actually can show B-spline can represent any polynomials.
+    \begin{lemma}[Marsden]
+    For $k \ge 1$, the B-splines of order $k$ can represent the polynomial
+        $$(x - \mu)^{k-1} = \sum_{j=r}^s \phi_{jk}(\mu) B_{jk}(x),\quad x\in (t_{r+k-1}, t_{s+1}), $$
+    where $\phi_{jk}(\mu) = \prod_{l=j+1}^{j+k-1} (t_{l} - \mu)$ if $k > 1$, otherwise $\phi_{jk}(\mu) = 1$.
+    \end{lemma}
+    \begin{proof}
+    The equality can be proved by induction as well. For the induction step, by the recursive definition, we have
+        \begin{equation}\nonumber
+        \begin{aligned}
+            \sum_{j=r}^s \phi_{j,l+1}(\mu) B_{j, l+1}(x) &= \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j} \phi_{j,l+1}(\mu) B_{j, l}(x) +   \sum_{j=r}^s\frac{t_{j+l+1} - x}{t_{j+l+1} - t_{j+1}} \phi_{j,l+1}(\mu) B_{j+1, l}(x)\\
+            &=  \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j}(t_{j+l}-\mu) \phi_{j,l}(\mu) B_{j, l}(x) \\&\quad +  \sum_{j=r+1}^{s+1} \frac{t_{j+l} - x}{t_{j+l} - t_{j}} (t_{j-1+l}-\mu)\phi_{j-1, l}(\mu)  B_{j, l}(x) \\
+            &=  \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j}(t_{j+l}-\mu) \phi_{j,l}(\mu) B_{j, l}(x) \\&\quad +  \sum_{j=r+1}^{s+1} \frac{t_{j+l} - x}{t_{j+l} - t_{j}} (t_{j}-\mu)\phi_{j, l}(\mu)  B_{j, l}(x)\\
+            &=  (x - \mu)  \sum_{j=r}^s\phi_{r,l}(\mu) B_{r, l}(x),\quad x\in (t_{r+l}, t_{s+1}). 
+        \end{aligned}
+        \end{equation}
+    \end{proof}
     The B-splines of order $k$ naturally define a linear subspace $\cS_k$:
     \begin{equation}
         \cS_k = \text{span} \left\{ B_{jk}(x) \mid j\in \cJ\right\}.
     \end{equation}
-    Then $\cS$ is equivalent to piecewise polynomial function space $\Pi_{k, \bt, \bm}$ that 
+    Then $\cS$ contains all polynomials of degree $\le k-1$. Furthermore, 
+    
+    
+    is equivalent to piecewise polynomial function space $\Pi_{k, \bt, \bm}$ that 
     \begin{definition}
         $\Pi_{k, \bt, \bm}$ is the 
     \end{definition}
@@ -968,6 +988,7 @@ Using a simple induction, we can show the following property of the B-spline (se
         \label{Thm: 2-B-SPL-EQU-PP-SPA}
     \end{theorem}
 \end{proof}
+\subsection{B-spline Interpolation}
 \section{Reproducing Kernel Hilbert Space}
 Let $H$ be a Hilbert space of functions defined on $\cX$, with inner product $\aver{\cdot, \cdot}$ such that the \emph{point evaluation map} $x: H\mapsto \bbC$ is bounded $\forall x\in \cX$. Then $H$ is called \emph{reproducing kernel Hibert space} or RKHS for short. By Riesz's representation Theorem, there exists $\psi_x\in H$ that 
 \begin{equation}
