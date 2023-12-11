@@ -101,7 +101,7 @@ Therefore these polynomials are linearly independent, which form a basis of the 
     \begin{equation}
         f(x) = \sum_{j=0}^n y_j L_j(x) = q(x)  \sum_{j=0}^n k_j y_j \frac{1}{x - x_j}.
     \end{equation}
-    One can first compute $k_j$ with $\cO(n^2)$ flops, then $f(x)$ can be computed with $\cO(n)$ flops. The advantage of the above scheme is the constants $k_j$ are independent of $y_j$, therefore evaluating another instance of the interpolating polynomial will not need to re-compute them. The disadvantage is that if we add a new node, the constants $k_j$ must be updated with an additional cost of $\cO(n)$ flops. Later we will see the Newton's form can overcome this issue.
+    One can first compute $k_j$ with $\cO(n^2)$ flops, then $f(x)$ can be computed with $\cO(n)$ flops. The advantage of the above scheme is the constants $k_j$ are independent of $y_j$, therefore evaluating another instance of the interpolating polynomial will not need to re-compute them. The disadvantage is that if we add a new node, the constants $k_j$ must be updated with an additional cost of $\cO(n)$ flops. Later we will see if Newton's form can overcome this issue.
 \end{remark}
 \subsection{Interpolation Error}
 \label{SSec: 2-Int-Err}
@@ -491,7 +491,7 @@ Calculating all the divided differences requires $\sfrac{3n^2}{2} +\cO(n)$ flops
     \begin{equation}
         f[x_0, x_0] = \lim_{x_1 \to x_0} \frac{f[x_1] - f[x_0]}{x_1 - x_0} = f'(x_0).
     \end{equation}
-    Moreover, using the Taylor expansion, $f[\underbrace{x_0,\dots, x_0}_{(k+1)\,\text{times}}] = \frac{1}{k!}f^{(k)}(x_0)$. However, in such cases, the divided differences cannot be computed if the derivative values are not provided. We will discuss this scenario later in the Hermite interpolation polynomial; see Section~\ref{SSec: 2-Her-Pol-Int}.
+    Moreover, using the Taylor expansion, $f[\underbrace{x_0,\dots, x_0}_{(k+1)\,\text{times}}] = \frac{1}{k!}f^{(k)}(x_0)$. However, the divided differences cannot be computed in such cases if the derivative values are not provided. We will discuss this scenario later in the Hermite interpolation polynomial; see Section~\ref{SSec: 2-Her-Pol-Int}.
 \end{remark}
 \begin{remark}
     The algorithm to compute the divided difference can be more efficient with a single column to store diagonal elements. $\leadsto$ represents the number that is not changing.
@@ -936,7 +936,7 @@ The B-splines of order one $B_{j, 1}$ consist of the characteristic functions of
 and for $k > 1$, the B-spline of order $k$ satisfies
     $$B_{j,k}(x) = \frac{x - t_j}{t_{j+k-1} - t_j} B_{j, k-1}(x) + \frac{t_{j+k} - x}{t_{j+k} - t_{j+1}} B_{j+1, k-1}(x).$$
 \end{definition}
-Using a simple induction, we can show the following property of the B-spline (see Exercise~\ref{Prb: 2-B-SPL-NON-SUP}).
+Using induction, we can show the following property of the B-spline (see Exercise~\ref{Prb: 2-B-SPL-NON-SUP}).
 \begin{lemma}[Property I]
 \label{Lem: 2-B-SPL-NON-SUP}
     Each spline $B_{j,k}$ is a non-negative piecewise polynomial of degree $k-1$ supported on $(t_j, t_{j+k})$.
@@ -959,7 +959,10 @@ Using a simple induction, we can show the following property of the B-spline (se
     As an extension of Lemma~\ref{Lem: 2-B-SPL-PAR-UNI}, we actually can show B-spline can represent any polynomials.
     \begin{lemma}[Marsden]
     For $k \ge 1$, the B-splines of order $k$ can represent the polynomial
-        $$(x - \mu)^{k-1} = \sum_{j=r}^s \phi_{jk}(\mu) B_{jk}(x),\quad x\in (t_{r+k-1}, t_{s+1}), $$
+    \begin{equation}
+    \label{EQ: MARSDEN}
+        (x - \mu)^{k-1} = \sum_{j=r}^s \phi_{jk}(\mu) B_{jk}(x),\quad x\in (t_{r+k-1}, t_{s+1}), 
+    \end{equation}
     where $\phi_{jk}(\mu) = \prod_{l=j+1}^{j+k-1} (t_{l} - \mu)$ if $k > 1$, otherwise $\phi_{jk}(\mu) = 1$.
     \end{lemma}
     \begin{proof}
@@ -969,27 +972,73 @@ Using a simple induction, we can show the following property of the B-spline (se
             \sum_{j=r}^s \phi_{j,l+1}(\mu) B_{j, l+1}(x) &= \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j} \phi_{j,l+1}(\mu) B_{j, l}(x) +   \sum_{j=r}^s\frac{t_{j+l+1} - x}{t_{j+l+1} - t_{j+1}} \phi_{j,l+1}(\mu) B_{j+1, l}(x)\\
             &=  \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j}(t_{j+l}-\mu) \phi_{j,l}(\mu) B_{j, l}(x) \\&\quad +  \sum_{j=r+1}^{s+1} \frac{t_{j+l} - x}{t_{j+l} - t_{j}} (t_{j-1+l}-\mu)\phi_{j-1, l}(\mu)  B_{j, l}(x) \\
             &=  \sum_{j=r}^s  \frac{x - t_j}{t_{j+l} - t_j}(t_{j+l}-\mu) \phi_{j,l}(\mu) B_{j, l}(x) \\&\quad +  \sum_{j=r+1}^{s+1} \frac{t_{j+l} - x}{t_{j+l} - t_{j}} (t_{j}-\mu)\phi_{j, l}(\mu)  B_{j, l}(x)\\
-            &=  (x - \mu)  \sum_{j=r}^s\phi_{r,l}(\mu) B_{r, l}(x),\quad x\in (t_{r+l}, t_{s+1}). 
+            &=  (x - \mu)  \sum_{j=r}^s\phi_{j,l}(\mu) B_{j, l}(x),\quad x\in (t_{r+l}, t_{s+1})\subset (t_{r+l-1}, t_{s+1}). 
         \end{aligned}
         \end{equation}
     \end{proof}
-    The B-splines of order $k$ naturally define a linear subspace $\cS_k$:
+    The B-splines of order $k$ naturally define a linear subspace $\cS_{k,\bt}$:
     \begin{equation}
-        \cS_k = \text{span} \left\{ B_{jk}(x) \mid j\in \cJ\right\}.
+        \cS_{k,\bt} = \text{span} \left\{ B_{jk}(x) \mid j\in \cJ\right\}.
     \end{equation}
-    Then $\cS$ contains all polynomials of degree $\le k-1$. Furthermore, 
-    
-    
-    is equivalent to piecewise polynomial function space $\Pi_{k, \bt, \bm}$ that 
+    Then $\cS$ contains all polynomials of degree $\le k-1$. Indeed, differentiating~\eqref{EQ: MARSDEN} in $\mu$, one gets
+    \begin{equation}
+        \frac{(x - \mu)^{k - \nu}}{(k - \nu)!} = \sum_{j=r}^s\frac{(-1)^{\nu}\partial_{\mu}^{\nu} \phi_{jk}(\mu) B_{jk}(x)}{(k-1)!}, \quad x\in (t_{r+k-1}, t_{s+1}). 
+    \end{equation}
+    If a knot $t_i$ has a multiplicity of $m_i > 1$, that is, 
+    $$t_{i-1} < \underbrace{t_i = t_{i+1} = \cdots = t_{i + m_{i} - 1} }_{\text{multiplicity } = m_i}< t_{i + m_i}, $$
+    then for any $1\le \nu \le m_i$, we take $r = i - (k - \nu)$ and $\mu = t_i$, which leads to 
+    \begin{equation}
+        \frac{(x - t_i)^{k - \nu}}{(k - \nu)!} = \sum_{j= i - ( k -\nu)}^s \frac{(-1)^{\nu}\partial_{\mu}^{\nu} \phi_{jk}(t_i) B_{jk}(x)}{(k-1)!}, \quad x\in (t_{i + \nu-1}, t_{s+1}) = (t_i, t_{s+1}). 
+    \end{equation}
+    However, $\partial_{\mu}^{\nu} \phi_{jk}(t_i) = 0$ for $i-1 \ge j \ge i - (k-\nu)$, thus 
+    \begin{equation}
+         \frac{(x - t_i)^{k - \nu}}{(k - \nu)!} = \sum_{j= i}^s \frac{(-1)^{\nu}\partial_{\mu}^{\nu} \phi_{jk}(t_i) B_{jk}(x)}{(k-1)!}, \quad x\in (t_i, t_{s+1}). 
+    \end{equation}
+    We also notice $B_{jk}(x) = 0$ if $x\le t_i$ for all $j\ge i$, therefore 
+    \begin{equation}
+        \frac{(x - t_i)^{k - \nu}_{+}}{(k - \nu)!} = \sum_{j= i}^s \frac{(-1)^{\nu}\partial_{\mu}^{\nu} \phi_{jk}(t_i) B_{jk}(x)}{(k-1)!}, \quad x\le t_{s+1}.
+    \end{equation}
+    \end{proof}
     \begin{definition}
-        $\Pi_{k, \bt, \bm}$ is the 
+        Suppose $\bzeta = \{\zeta_i\}_{j=1}^{n+1}$ is an increasing sequence and denote $\bm = \{m_j\}_{j=2}^n$ be an nonnegative integer sequence that $m_j \le k$. Define $\Pi_{k, \bt, \bm}$ as the space of piecewise polynomials of degree at most $k-1$ with knots $\{t_i\}_{j=1}^n$ and satisfying the additional jump condition $\forall f\in \Pi_{k, \bzeta, \bm}$ 
+        \begin{equation}
+            \partial^{\nu-1} f(t_i^{+}) = \partial^{\nu-1} f(t_i^{-}),\quad 1 \le \nu \le m_i.
+        \end{equation}
     \end{definition}
     \begin{theorem}[Curry-Schoenberg]
         \label{Thm: 2-B-SPL-EQU-PP-SPA}
+        Let the non-decreasing sequence $\bt$ be 
+        \begin{equation}
+            \underbrace{\zeta_1, \cdots, \zeta_1}_{\text{multiplicity } = k}, \underbrace{\zeta_2, \cdots, \zeta_2}_{\text{multiplicity } = k - m_2},\cdots, \underbrace{\zeta_{n}, \cdots, \zeta_n}_{\text{multiplicity } = k - m_n}, \underbrace{\zeta_{n+1}, \cdots, \zeta_{n+1}}_{\text{multiplicity } = k} 
+        \end{equation}
+        then on the interval $[t_{r+k-1}, t_{s+1}]$,
+        $$\Pi_{k, \bzeta, \bm} = \cS_{k, \bt}.$$
     \end{theorem}
-\end{proof}
+    \begin{proof}
+        $\Pi_{k,\bzeta, \bm}$ is spanned by the basis functions 
+        \begin{equation*}
+            \begin{aligned}
+                &(x - \mu)^{k-\nu}, \quad \nu = 1,\cdots, k; \\
+                &(x - t_i)^{k - \nu}_{+},\quad i=2,\cdots, n,\quad 1\le \nu \le k - m_i.
+            \end{aligned}
+        \end{equation*}
+       Therefore, $\Pi_{k,\bzeta, \bm}\subset \cS_{k, \bt}$. The dimension of $\cS_{k, \bt}$ is the number of B-splines $B_{jk}$, which is $|\bt| - k = n k - \sum_{i=2}^n m_i$ which matches to the total number of basis of $\Pi_{k,\bzeta, \bm}$. 
+    \end{proof}
 \subsection{B-spline Interpolation}
+\label{SSec: 2-B-SPL-INT}
+Let $n = \dim(\cS_{k, \bt})$ for the knots $\bt$. Since the B-splines $B_{jk}$ are linearly independent, then for the observation data $\{(x_i, y_i)\}_{i=1}^n$, the B-spline interpolation finds a spline $f(x) = \sum_{j=1}^n c_j B_{jk}$ that 
+\begin{equation}
+    \sum_{j=1}^n c_j B_{jk}(x_i) = y_i, i = 1,\cdots, n.
+\end{equation}
+Similar to polynomial interpolation, we carry out the criteria for existence and uniqueness first.
+\begin{theorem}[Existence and Uniqueness]
+Let $\{x_j\}_{j=1}^n$ be strictly increasing. The matrix $A:= (B_{jk}(x_i))_{ij}$ is non-singular if and only if $B_{ik}(x_i) \neq 0$ or equivalently $t_i < x_i < t_{i+k}$.
+\end{theorem}
+\begin{proof}
+    The ``only if'' part is trivial. For the ``if'' part, 
+\end{proof}
 \section{Reproducing Kernel Hilbert Space}
+\label{Sec: 2-Rep-Ker-Hil-Spa}
 Let $H$ be a Hilbert space of functions defined on $\cX$, with inner product $\aver{\cdot, \cdot}$ such that the \emph{point evaluation map} $x: H\mapsto \bbC$ is bounded $\forall x\in \cX$. Then $H$ is called \emph{reproducing kernel Hibert space} or RKHS for short. By Riesz's representation Theorem, there exists $\psi_x\in H$ that 
 \begin{equation}
     f(x) = \aver{f, \psi_x},\quad \forall f\in H.
