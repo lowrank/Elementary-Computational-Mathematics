@@ -1024,7 +1024,7 @@ Using induction, we can show the following property of the B-spline (see Exercis
         \end{equation*}
        Therefore, $\Pi_{k,\bzeta, \bm}\subset \cS_{k, \bt}$. The dimension of $\cS_{k, \bt}$ is the number of B-splines $B_{jk}$, which is, $\text{card}(\bt) - k = q k - \sum_{i=2}^n m_i$ which corresponds to the total number of bases of $\Pi_{k,\bzeta, \bm}$. 
     \end{proof}
-From now on, we assume the knot sequence $\bt$ is defined as Theorem~\ref{Thm: 2-B-SPL-EQU-PP-SPA}, then the basic interval $[t_k, t_{n+1}]$ coincides with the range of knots. Using the partition of unity property, the spline function in $\cS_{k,\bt}$ is a strictly convex combination of the coefficients. In other words, the spline function is bounded from below and above by the coefficients nearby.
+From now on, we assume the knot sequence $\bt$ is defined as Theorem~\ref{Thm: 2-B-SPL-EQU-PP-SPA}, where the first and last knots are repeated $k$ times, then the basic interval $[t_k, t_{n+1}]$ coincides with the range of knots. Using the partition of unity property, the spline function in $\cS_{k,\bt}$ is a strictly convex combination of the coefficients. In other words, the spline function is bounded from below and above by the coefficients nearby.
 \begin{theorem}[Convex Hull]
     \label{Thm: 2-B-SPL-CON-NUM}
     Suppose $x \in (t_i, t_{i+1})$, then 
@@ -1180,6 +1180,10 @@ where $\circ$ is the Hadamard product or element-wise product.
 
 \begin{problem}
      Implement discrete Fourier transform using a recursive approach (assume the total number of nodes is a power of two).
+\end{problem}
+
+\begin{problem}
+    Implement the B-splines $B_{jk}$ for the knots mentioned in Theorem~\ref{Thm: 2-B-SPL-EQU-PP-SPA}.
 \end{problem}
 
 % \bibliography{563}
