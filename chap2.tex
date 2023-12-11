@@ -1046,12 +1046,15 @@ Let $\{x_j\}_{j=1}^n$ be strictly increasing. The matrix $A:= (B_{jk}(x_i))_{ij}
 
 \begin{theorem}[Well Conditioned]
     \label{Thm: 2-B-SPL-WEL-CON}
-    Let $f = \sum_{j} c_j B_{jk}$ on $(t_k, t_{n+1})$, then 
+    Let $f = \sum_{j=1}^n c_j B_{jk}$ on $[t_k, t_{n+1}]$, then 
     \begin{equation}
-        \frac{1}{D_{k,\infty}} \max_{} |c_j| \le \|f\|_{\infty} \le \max_{} |c_{j}|
+        \frac{1}{D_{k,\infty}} \max_{1\le j\le n} |c_j| \le \|f\|_{\infty} \le \max_{1\le j \le n} |c_{j}|,
     \end{equation}
+    where the condition number $D_{k,\infty} \le k 2^{k - 1}$. 
 \end{theorem}
-
+\begin{proof}
+    
+\end{proof}
 
 
 
