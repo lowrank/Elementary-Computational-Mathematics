@@ -1043,10 +1043,10 @@ Let $\{x_j\}_{j=1}^n$ be strictly increasing. The matrix $A:= (B_{jk}(x_i))_{ij}
 \begin{proof}
     The ``only if'' part is trivial.
 \end{proof}
-
-\begin{theorem}[Well Conditioned]
-    \label{Thm: 2-B-SPL-WEL-CON}
-    Let $f = \sum_{j=1}^n c_j B_{jk}$ on $[t_k, t_{n+1}]$, then 
+The following theorem shows that the B-spline representation is relatively stable for lower degrees. 
+\begin{theorem}[Good Condition]
+    \label{Thm: 2-B-SPL-GOO-CON}
+    Given any knot sequence, let $f = \sum_{j=1}^n c_j B_{jk}$ on $[t_k, t_{n+1}]$, then 
     \begin{equation}
         \frac{1}{D_{k,\infty}} \max_{1\le j\le n} |c_j| \le \|f\|_{\infty} \le \max_{1\le j \le n} |c_{j}|,
     \end{equation}
@@ -1055,7 +1055,7 @@ Let $\{x_j\}_{j=1}^n$ be strictly increasing. The matrix $A:= (B_{jk}(x_i))_{ij}
 \begin{proof}
     
 \end{proof}
-
+A precision characterization of the constant is conjectured as $D_{k,\infty} < c 2^{k}$, this is known as the ``De Boor's $2^k$ conjecture''~\cite{de1990exact}. Currently, the best-known result is $D_{k,\infty} \le k 2^{k-1}$ by~\cite{scherer1999new}. 
 
 
 
