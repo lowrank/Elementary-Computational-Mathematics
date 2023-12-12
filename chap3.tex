@@ -297,7 +297,9 @@ where $x_j$ are the nodes and $w_j$ are the weights. Similar to the numerical de
         \cI(x^{k+1}) &\neq \cI_n(x^{k+1}) .   
     \end{aligned}
 \end{equation}
+
 \subsection{Interpolation Based Rules}
+\label{SSec: 3-Int-Bas-Rul}
 The interpolation-based idea is intuitive. Let $q_n(x)$ be the interpolation polynomial on the nodes $x_j$ with values $f(x_j)$, $j=0,1,\dots, n$, respectively. We define the quadrature by interpolation formula as 
 \begin{equation}
     \cI_n(f):= \int_a^b q_n(x) dx 
@@ -322,15 +324,18 @@ therefore the weights $w_j =  \int_0^1 \prod_{k=0, k\neq j }^n \frac{t - t_k}{t_
 \begin{example}[rectangle rule]
    The rectangle rule is the simplest one, where we choose $x_0 = \frac{a+b}{2}$ as the middle point. Then the quadrature rule writes
    $$\cI_{0, rectangle}(f)  = (b-a) f(x_0). $$
-  Such a rule is exact for any linear functions, therefore it has a degree $1$ accuracy. We can see that the degree of exactness could exceed $n$. Later we will see the maximum degree of exactness for such a form is $2n+1$ in the next chapter.
+  Such a rule is exact for any linear functions, therefore it has a degree one accuracy. We can see that the degree of exactness could exceed $n$. Later we will see the maximum degree of exactness for such a form is $2n+1$ in the next chapter.
 \end{example}
 
 \begin{example}[trapezoid rule]
 The trapezoid rule takes $x_0 = a$ and $x_1= b$. 
 $$\cI_{1,trapezoid} (f) = (b-a)\left( \frac{1}{2} f(x_0) + \frac{1}{2} f(x_1) \right).$$
-One can check that this rule is exact for $f(x) = 1, x$. It also have a degree $1$ accuracy. It actually has a slightly larger constant in error estimate than the rectangle rule.
+One can check that this rule is exact for $f(x) = 1, x$. It also has a degree one accuracy. It has a slightly larger constant in error estimate than the rectangle rule.
 \end{example}
+
+
 \subsection{Numerical Error of Interpolation Based Rules}
+\label{SSec: 3-Num-Err-Int-Bas-Rul}
 Now we try to estimate $|\cI(f) - \cI_n(f)|$ from above derivation. 
 \begin{theorem}\label{THM: ERROR QUAD RULE}Suppose the quadrature rule $\cI_n$ has at least degree $r$ accuracy that $r\ge n$ and $f\in C^{r+1}([a, b])$. 
     Then 
@@ -400,7 +405,7 @@ The computations of the weights can be efficient by noticing the symmetry.
 
 The weights $w_j$ are only relevant to $n$ and $j$. In practice, these values are tabulated \emph{a priori}. When $n\ge 2$, the weights include negative terms for \underline{open forms}, and when $n\ge 8$, the weights include negative terms for \underline{closed forms}, which could introduce numerical instability from rounding errors. Therefore one should only limit to small values of $n$.
 \begin{remark}
-    We can derive the error estimate for Newton-Cotes formula using the result from last section. 
+    We can derive the error estimate for the Newton-Cotes formula using the result from the previous section. 
     \begin{equation}
         \begin{aligned}
             |\cI(f) - \cI_{n,NC}(f)| &\le \Omega_r \frac{(b-a)^{r+2}}{(r+1)!}\\
@@ -425,7 +430,7 @@ The weights $w_j$ are only relevant to $n$ and $j$. In practice, these values ar
             \hline
            \end{tabular}
     \end{table}
-    From the above table, we can notice that when $n$ is even, the exactness is at $r = n+1$ for closed forms. This actually is a general statement. 
+    From the above table, we can notice that when $n$ is even, the exactness is at $r = n+1$ for closed forms. This is a general statement. 
 \begin{lemma}
     For $n\ge 2$ even, the closed forms of Newton-Cotes formula have degree $r = n+1$ accuracy.
 \end{lemma}
@@ -438,7 +443,7 @@ The weights $w_j$ are only relevant to $n$ and $j$. In practice, these values ar
     \begin{equation}
         p(x) = b_{n+1} (x - \frac{a+b}{2})^{n+1} + \sum_{j=0}^n b'_j x^j 
     \end{equation}
-    with another set of coefficients $b_j'$. The first term will have the integral as zero on the interval $[a, b]$. Numerically, using Newton-Cotes formula, 
+    with another set of coefficients $b_j'$. The first term will have the integral as zero on the interval $[a, b]$. Numerically, using the Newton-Cotes formula, 
     \begin{equation}
         \cI_{n, NC}( (x - \frac{a+b}{2})^{n+1}  ) = (b-a)\sum_{j=0}^n w_j  (x_j - \frac{a+b}{2})^{n+1}
     \end{equation}
@@ -454,13 +459,13 @@ The weights $w_j$ are only relevant to $n$ and $j$. In practice, these values ar
     where $F(x)$ is defined by 
     $$F(x) := \int_a^x \omega_{n}(t) dt. $$ Then it is simple to derive that $F(a) = F(b) = 0$ using the symmetry. Now we only have to show that 
     $$\int_a^b F(x)dx \neq 0.$$
-    In fact, we can show a stronger claim: $F(x)>  0$ over $(a, b)$. This is left as an exercise.
+    We can show a stronger claim: $F(x)>  0$ over $(a, b)$. This is left as an exercise.
 \end{proof}
-Since the Newton-Cotes formula definitely will fail on evaluating the integral of Runge function $f(x) = \frac{1}{1+x^2}$ on the interval $[-5,5]$. It is more practical to combine the piecewise integral technique, which is called composite Newton-Cotes formula. In the following, we discretize the interval $[a, b]$ into $m$ sub-intervals of the same size $H = \frac{b-a}{m}$, then on each sub-interval, we apply the Newton-Cotes formula (say closed form) with $(n+1)$ equally spaced nodes. Then the numerical integral would have an error bounded by 
+Since the Newton-Cotes formula definitely will fail when evaluating the integral of Runge function $f(x) = \frac{1}{1+x^2}$ on the interval $[-5,5]$. It is more practical to combine the piecewise integral technique, which is called the composite Newton-Cotes formula. In the following, we discretize the interval $[a, b]$ into $m$ sub-intervals of the same size $H = \frac{b-a}{m}$, then on each sub-interval, we apply the Newton-Cotes formula (say closed form) with $(n+1)$ equally spaced nodes. Then the numerical integral would have an error bounded by 
 \begin{equation}
     m M_n \left(\frac{H}{n}\right)^{r+2} \max_{x\in[a, b]}|f^{(r+1)}(x)| =     (b-a) \frac{M_n}{n} \left(\frac{H}{n}\right)^{r+1} \max_{x\in[a, b]}|f^{(r+1)}(x)|
 \end{equation}
-where $r = n$ for odd $n$ and $r = n+1$ for even $n$, see last section for a quick derivation.
+where $r = n$ for odd $n$ and $r = n+1$ for even $n$, see the previous section for a quick derivation.
 
 \begin{example}[composite trapezoid rule]
     The composite trapezoid rule is often used for practical integration especially when $f$ is periodic. Let $x_j = a + j H$, $j=0,\dots, m$, 
