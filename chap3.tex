@@ -4,11 +4,11 @@ A vast number of applications such as the calculation of tangent vectors or area
 \begin{equation}
     \cD(f) := \frac{d}{dx} f(x),\quad \cI(f) := \int_a^b f(x) dx, 
 \end{equation}
-for certain function $f(x)\in C^k([a, b])$. Accurate evaluations would be sometimes difficult if the analytic expression is absent. Especially when the function values of $f$ are only accessible at a finite number of nodes. Therefore, it is important to find simple yet effective methods to approximate the derivatives and integrals. 
+for certain function $f(x)\in C^k([a, b])$. Accurate evaluations would sometimes be difficult if analytic expression is absent. Especially when the function values of $f$ are only accessible at a finite number of nodes. Therefore, it is important to find simple yet effective methods to approximate the derivatives and integrals. 
 
 \section{Extrapolation}
-\label{Sec: 2-Ext}
-From the previous discussion, we already know that interpolation is to provide an estimate \emph{within} the original observation range. The extrapolation is similar but aims to produce estimates outside the observation range. However, extrapolation may be subject to a greater uncertainty (Fig~\ref{FIG: EXTRAPO}), one should use it only when overestimate is hardly occurring.
+\label{Sec: 3-Ext}
+From the previous discussion, we already know that interpolation provides an estimate \emph{within} the original observation range. The extrapolation is similar but aims to produce estimates outside the observation range. However, extrapolation may be subject to a greater uncertainty (Fig~\ref{FIG: EXTRAPO}), one should use it only when an overestimate is hardly occurring.
 \begin{figure}[!htb]
     \centering
     \includegraphics[scale=0.7]{extrapolate}
@@ -20,20 +20,21 @@ From the previous discussion, we already know that interpolation is to provide a
 \label{SSec: 3-Ric-Ext}
 Suppose there is a sequence of estimates $A(h)$ depending on the parameter $h$ smoothly, the limit $A^{\ast} = \lim_{h\to 0^{+}} A(h)$ is the quantity to be computed. In practice, we only have access to $A(h)$ for a few values of $h$. Using these values to estimate $A^{\ast}$ is a typical problem in extrapolation. 
 
-The basic idea behind ``Richardson Extrapolation'' is to use polynomial interpolation with a sequence of nodes $h_j\to 0$. Suppose the function $A(h)$ admits the following asymptotic expansion:
+The basic idea behind \emph{Richardson extrapolation} is to use polynomial interpolation with a sequence of nodes $h_j\to 0$. Suppose that the function $A(h)$ admits the following asymptotic expansion:
 \begin{equation}
     A(h) = a_0 + a_1 h^{\gamma} + a_2 h^{2\gamma} + \dots + a_k h^{k\gamma} + \cO(h^{(k+1)\gamma})
 \end{equation}
-for any $h > 0$ and $k\ge 0$. Then $A^{\ast} = a_0$ and $A(h) = A^{\ast} + \cO(h^{\gamma})$. Suppose we have access to the values $A(h_0),\dots, A(h_n)$, then this uniquely determines a polynomial $f_n\in\Pi_n$ and 
-$f_n(h_j^{\gamma}) = A(h_j)$. We will approximate $A(0)\approx f_n(0)$. The computation of $f_n$ follows the construction of the Newton form. 
+for any $h > 0$ and $k\ge 0$. Then $A^{\ast} = a_0$ and $A(h) = A^{\ast} + \cO(h^{\gamma})$. Suppose we have access to the values $A(h_0),\dots, A(h_n)$, then this uniquely determines a polynomial $f_n\in\Pi_n$ and
+$f_n(h_j^{\gamma}) = A(h_j)$. We will approximate $A(0)\approx f_n(0)$. The computation of $f_n$ follows the construction of Newton form. 
 \begin{lemma}
+\label{Lem: 3-Ric-Ext-Exp}
     Suppose $h_j$ can be represented as 
     $$h_j = \frac{\hbar}{t_j}$$
     for some adjustable parameter $\hbar$ and scaling constants $ 1 < t_0 < t_1<\dots < t_{n-1}$. Then 
     $$f_n(0) = A^{\ast} + (-1)^n \frac{a_{n+1}}{\prod_{j=0}^n t_j^{\gamma}} \hbar^{(n+1)\gamma} + \cO(\hbar^{(n+2)\gamma}),\quad \text{as }\hbar\to 0.$$
 \end{lemma} 
 \begin{proof}
-    We view $A(h)$ as a polynomial with respect to $h^{\gamma}$ of degree $(n+1)$ with an addition perturbation $\cO(h^{(n+2)\gamma})$. Then we have 
+    We view $A(h)$ as a polynomial with respect to $h^{\gamma}$ of degree $(n+1)$ with an addition perturbation $\cO(h^{(n+2)\gamma})$. Then we have the following. 
     \begin{equation}
         A(h) = p_{n+1}(h^{\gamma}) + \cO(h^{(n+2)\gamma}).
     \end{equation}
@@ -41,11 +42,11 @@ $f_n(h_j^{\gamma}) = A(h_j)$. We will approximate $A(0)\approx f_n(0)$. The comp
     \begin{equation}
         p_{n+1}(x) \equiv \tilde{f}_n(x) + p[x, x_0, x_1, \dots, x_n] \prod_{j=0}(x - h_j^{\gamma}). 
     \end{equation}
-    where $p[x, x_0, x_1, \dots, x_n]$ is the coefficient of $p_{n+1}$'s leading power, $a_{n+1}$. Thus 
+    where $p[x, x_0, x_1, \dots, x_n]$ is the coefficient of the leading power in $p_{n+1}$, $a_{n+1}$. Thus, 
     \begin{equation}
         A^{\ast} = p_{n+1}(0) = \tilde{f}_n(0) +a_{n+1} \prod_{j=0}(0 - h_j^{\gamma}). 
     \end{equation} 
-    Use the result we have discussed in the stability of polynomial interpolation, see Chapter~\ref{SSec: 2-Sta-Pol-Int}. Therefore 
+    Use the result we have discussed in the stability of polynomial interpolation, see Chapter~\ref{SSec: 2-Sta-Pol-Int}. Therefore, 
     \begin{equation}
         |\tilde{f}_n(0) - f_n(0)|\le \lambda_n(0) \cdot \cO(\hbar^{(n+2)\gamma})
     \end{equation}
@@ -55,11 +56,11 @@ $f_n(h_j^{\gamma}) = A(h_j)$. We will approximate $A(0)\approx f_n(0)$. The comp
     \end{equation}
     which is independent of $\hbar$.
 \end{proof}
-The {Richardson extrapolation} considers the special choice of $t_j = t^j$ for some $t > 1$. The error estimate then is 
+The Richardson extrapolation considers the special choice of $t_j = t^j$ for some $t > 1$. The error estimate then is 
 \begin{equation}
     f_n(0) = A^{\ast} + \left(\frac{(-1)^n}{t^{n(n+1)\gamma/2}} a_{n+1}\right) \hbar^{(n+1)\gamma} + \cO(\hbar^{(n+2)\gamma}).
 \end{equation}
-In fact, there are easier ways to calculate the Richardson extrapolation. Consider the following
+There are easier ways to calculate the Richardson extrapolation using the following expansion.
 \begin{equation}
     A(h) - t^{\gamma} A\left(\frac{h}{t}\right) = (1 - t^{\gamma}) A^{\ast} + \cancel{a_1 \left(h^{\gamma} - t^{\gamma} \left(\frac{h}{t}\right)^{\gamma}\right)} + a_2\left(h^{2\gamma} - t^{\gamma}\left(\frac{h}{t}\right)^{2\gamma}\right) +\dots
 \end{equation}
@@ -75,9 +76,10 @@ Therefore by taking $A_2(h) = \frac{A_1(h)- t^{2\gamma} A_1(\frac{h}{t^{2\gamma}
 \begin{equation}
     A^{\ast}\approx A_2(h) + \cO(h^{3\gamma}).
 \end{equation}
-However, it is not guaranteed that such a process can constantly refine the approximation due to the potentially fast-growing constant in the $\cO$ notation.
+However, such a process can constantly refine the approximation due to the potentially fast-growing constant in the $\cO$ notation.
 
 \subsection{Wynn's epsilon method}
+\label{SSec: 3-Wynn-Eps-Met}
 Wynn's $\eps$ method is another kind of extrapolation algorithm that is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
 
 The algorithm is stated as follows. Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity.
@@ -99,10 +101,10 @@ The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1,
     \end{equation}
     Then we can approximation error is $\cO(h)$, which is very slow. Taking $h=10^{-3}$ has around $2\times 10^{-4}$ error.  We test with two extrapolation algorithms.
     \begin{enumerate}
-        \item [$\circ$] Richardson Extrapolation. We take $1/h = 250, 500, 1000, 2000$ and calculate the Richardson extrapolation three times would result in almost machine accuracy.
+        \item [$\circ$] Richardson Extrapolation. We take $1/h = 250, 500, 1000, 2000$ and calculate that the Richardson extrapolation three times would result in almost machine precision.
         \item [$\circ$] Wynn's $\eps$ method. We take the sequence 
         $$s_k = \sum_{j=0}^k \frac{(-1)^j}{2 j + 1}$$
-        as the truncated series at $z = 1$. With about 20 terms, we already reached the machine accuracy.
+        as the truncated series at $z = 1$. With about 20 terms, we already reached the machine precision.
     \end{enumerate}
 
 \end{example}
@@ -115,18 +117,18 @@ where $\xi = \xi(x)\in [a, b]$, therefore we can compute the derivative by
 \begin{equation}
     f'(x)  = \frac{f(x + h) - f(x)}{h} - \frac{h}{2} f''(\xi).
 \end{equation}
-This approximation offers a way to evaluate the derivative $f'(x)$ with the error term $\cO(h)$. Also, the above formula is \emph{exact} when $f$ is a polynomial of degree $1$. We say an approximation has ``degree $k$ accuracy'' if the approximation is \emph{exact} for any polynomial of degree $k$. 
+This approximation offers a way to evaluate the derivative $f'(x)$ with the error term $\cO(h)$. In addition, the above formula is \emph{exact} when $f$ is a polynomial of degree $1$. We say that an approximation has degree $k$ accuracy if the approximation is \emph{exact} for any polynomial of degree $k$. 
 
-Another important terminology is the ``order''. It describes the error term of the approximation. In the above case, the error term scales like $\cO(h)$ as $h\to 0$, then the approximation is ``of order $1$'' or ``first order''. In general, if the error term behaves like $\cO(h^p)$, then we can say it is $p$-th order approximation. 
+Another important terminology is the \emph{order}. It describes the error term of the approximation. In the above case, the error term scales like $\cO(h)$ as $h\to 0$, then the approximation is of order $1$ or first order. In general, if the error term behaves like $\cO(h^p)$, then we can say that it is the $p$-th order approximation. 
 
-The ``stencil'' refers to a set of nodes used in the approximation. In the above example, we have used $x, x+h$. We can of course create its sibling
+The \emph{stencil} refers to a set of nodes used in the approximation. In the above example, we have used $x, x+h$. We can of course create its sibling
 \begin{equation}
     f'(x) = \frac{f(x) - f(x - h)}{h} + \frac{h}{2} f''(\zeta),
 \end{equation}
 which uses the nodes $x-h, x$. When all nodes are $\ge x$ or $\le x$, we say the scheme is forward or backward, respectively.
 
 \subsection{Finite Difference from Taylor Expansion}
-All results related to finite difference can be easily derived from Taylor expansion. Suppose we would like to approximate a high order derivative $f^{(m)}(x)$ with some nodes scattered around $x$ in the following form. 
+All results related to finite difference can be easily derived from the Taylor expansion. Suppose we would like to approximate a high-order derivative $f^{(m)}(x)$ with some nodes scattered around $x$ in the following form. 
 \begin{equation}
     \frac{1}{h^m} \sum_{j = 0}^n c_j f(x + a_j h) = f^{(m)}(x) + E(x, h),
 \end{equation}
@@ -140,20 +142,20 @@ We need all lower (and maybe higher than $m$-th) order derivatives of $f$ cancel
         \sum_{j=0}^n c_j a_j^p &= {m!} \cdot \delta_{pm}, \quad 0\le p \le m.
     \end{aligned}
 \end{equation}
-It is straightforward that $n \ge m$ is necessary, otherwise, the first equation system (Vandermonde matrix) must have a zero solution.  Suppose we have found a solution $(c_j, a_j)$, $j=0,\dots, n$,  to the above system, then in the sequel, we try to estimate the error term $E(x, h)$. Especially, when $n = m$, there are two cases. Let the constant $C =  \sum_{j=0}^n c_j a_j^{m+1}$, then  
+It is straightforward that $n \ge m$ is necessary; otherwise, the first equation system (Vandermonde matrix) must have a zero solution.  Suppose that we have found a solution $(c_j, a_j)$, $j=0,\dots, n$,  to the above system, then in the sequel, we try to estimate the error term $E(x, h)$. Especially, when $n = m$, there are two cases. Let the constant $C =  \sum_{j=0}^n c_j a_j^{m+1}$, then  
 \begin{enumerate}
     \item If $C = 0$, then the error term can be estimated by expanding to $(m+2)$-th derivative. 
     \begin{equation}\label{EQ: ERROR FD}
         E(x, h) = \frac{1}{h^m}\sum_{j=0}^n c_j \frac{f^{(m+2)}(\xi_j)}{(m+2)!} a_j^{m+2} h^{m+2} = h^2 \left(\sum_{j=0}^n c_j  a_j^{m+2}\frac{f^{(m+2)}(\xi_j)}{(m+2)!}\right)\,.
     \end{equation}
-    One can expect higher order accuracy when more terms are involved. 
+    One can expect higher-order accuracy when more terms are involved. 
     \item If $C\neq 0$, then the error term is 
     \begin{equation}\label{EQ: ERROR FD NZERO}
         E(x, h) = \frac{1}{h^m}\sum_{j=0}^n c_j \frac{f^{(m+1)}(\xi_j)}{(m+1)!} a_j^{m+1} h^{m+1} = h \left(\sum_{j=0}^n c_j  a_j^{m+1}\frac{f^{(m+1)}(\xi_j)}{(m+1)!}\right)\,.
     \end{equation}
 \end{enumerate}
 \begin{remark}
-    The abscissa $\xi_j$, $j=0,\dots,n$ are in general distinct but possible to choose a single $\xi$ to simplify the representation through the intermediate value theorem. 
+    The abscissa $\xi_j$, $j=0,\dots,n$ are in general distinct, but it is possible to choose a single $\xi$ to simplify the representation through the intermediate value theorem. 
 \end{remark}
 \begin{lemma}\label{LEM: FD COEF}
     If $f\in C^{m+1}(\cI)$, where $\xi_j\in\cI$, then there exists $\xi\in \cI$ such that 
@@ -168,8 +170,7 @@ It is straightforward that $n \ge m$ is necessary, otherwise, the first equation
 \end{proof}
 
 \begin{example}
-    Let $n = 2, m = 2$ for an example. Then the equation system becomes 
-    \begin{equation}\label{EQ: EXAM FD}
+    Let $n = 2, m = 2$ for an example. Then the equation system becomes \begin{equation}\label{EQ: EXAM FD}
         \begin{aligned}
             c_0  + c_1  + c_2  &= 0, \\
             c_0 a_0 + c_1 a_1 + c_2 a_2 &= 0, \\
@@ -182,12 +183,12 @@ It is straightforward that $n \ge m$ is necessary, otherwise, the first equation
     \begin{enumerate}
         \item $(a_0, a_1, a_2) = (-1, 0, 1)$, $c_2 = 1$. Then $c_0 = 1$ and $c_1 = -2$ are derived. In this case $C = 0$. We will have the error term 
         $$E(x, h) = \frac{h^2}{24}\left(f^{(4)}(\xi_0) + f^{(4)}(\xi_2)\right) \underbrace{\Longrightarrow }_{\ref{LEM: FD COEF}} \frac{h^2}{12} f^{(4)}(\xi).$$
-        This is called central difference scheme.
+        This is called the central difference scheme.
         \item $(a_0, a_1, a_2) = (0, 1, 2)$, $c_2 = 1$. Then $c_1 = -2$, $c_0 = 1$,  $C \neq 0$. The error is 
         $$E(x, h) = \frac{h}{6} (f^{(4)}(\xi_1) + 8 f^{(4)}(\xi_2)) \underbrace{\Longrightarrow }_{\ref{LEM: FD COEF}} \frac{3h}{2} f^{(4)}(\xi).$$
         This is the forward difference scheme.
     \end{enumerate}
-    The combination of the coefficients is not unique. The central scheme has better approximation due to its symmetry. In fact any combination satisfying $a_0 + a_1 + a_2 = 0$ should have the same order of error.
+    The combination of the coefficients is not unique. The central scheme has better approximation due to its symmetry. Any combination satisfying $a_0 + a_1 + a_2 = 0$ should have the same order of error.
 \end{example}
 The general scheme with $a_j = j$ (or $-j$) can be derived from the following theorem.
 \begin{theorem}\label{THM: FWD DIFF}
@@ -200,23 +201,23 @@ The general scheme with $a_j = j$ (or $-j$) can be derived from the following th
     \end{equation}
 \end{theorem}
 \begin{proof}
-    It is the easiest to prove by binomial transform. It can be also proved through the induction easily. Let 
+    It is the easiest to prove by a binomial transform. It can also be proved through induction easily. Let 
     $$P_0(x) = (x - 1)^n,\quad P_k(x) =  x P'_{k-1}(x) ,$$
     then one can show inductively that $P_k$, $k\ge 1$, has following form
     \begin{equation}\label{EQ: BINOM}
         P_k(x) = n(n-1)\cdots (n-k+1) (x - 1)^{n-k} x^k  + (x-1)^{n-k+1} F(x)
     \end{equation}
-    with $F(x)$ as a polynomial of at most degree $k-1$. This can be easily proved since 
+    with $F(x)$ as a polynomial of the highest degree $k-1$. This can be easily proved since 
     \begin{equation}
         \begin{aligned}
-           P_{k+1} =  x P_k'(x) &= n(n-1)\cdots (n-k)(x-1)^{n-k-1} x^{k+1} + \\&\quad +   (x-1)^{n-k} { n(n-1)\cdots (n-k+1) k x^k}  \\
+           P_{k+1}(x) =  x P_k'(x) &= n(n-1)\cdots (n-k)(x-1)^{n-k-1} x^{k+1} + \\&\quad +   (x-1)^{n-k} { n(n-1)\cdots (n-k+1) k x^k}  \\
            &\quad + (x-1)^{n-k} {(n-k+1)  F(x)}\\
            &\quad+(x-1)^{n-k} {(x-1)F'(x)}.
         \end{aligned}
     \end{equation}
-    It is clear the last three terms can merge into the form as~\eqref{EQ: BINOM}. Therefore $P_k(1) = 0$ unless $k = n$ and $P_n(1) = n!$ is immediately obtained. 
+    The last three terms can merge into the form~\eqref{EQ: BINOM}. Therefore, $P_k(1) = 0$ unless $k = n$ and $P_n(1) = n!$ are immediately obtained. 
 
-    Now if we expand the polynomial $P_0$ as monomial, 
+    Now if we expand the polynomial $P_0$ as a monomial, 
     \begin{equation}
         P_0(x)=\sum_{j=0}^n \binom{n}{j} x^j (-1)^{n-j}, 
     \end{equation}
@@ -226,15 +227,16 @@ The general scheme with $a_j = j$ (or $-j$) can be derived from the following th
 \end{proof}
 \begin{theorem}[forward difference]\label{THM: FORWARD FD}
     $$f^{(n)}(x) = \frac{1}{h^n}\sum_{j=0}^n (-1)^{n-j} \binom{n}{j} f(x + j h) + \cO(h).$$
-    The corresponding schemes of backward difference and central difference can be derived similarly (see the exercise).
+    The corresponding schemes of backward and central differences can be derived similarly (see Exercise~\ref{Prb: 3-Bac-Dif}).
 \end{theorem}
 \subsection{Rounding Error Issue}
-The finite difference formula provides a simple and effective way to evaluate the derivatives, however its formulation would be sensitive to rounding errors. Take the central difference scheme for $f''(x)$ as an example, one can derive a similar estimate for higher order derivatives.
+\label{SSec: 3-Rou-Err-Iss}
+The finite difference formula provides a simple and effective way to evaluate the derivatives, however, its formulation would be sensitive to rounding errors. Take the central difference scheme for $f''(x)$ as an example, one can derive a similar estimate for higher-order derivatives.
 \begin{example}
     \begin{equation}
         f''(x) = \frac{f(x + h) - 2 f(x) + f(x - h)}{h^2} + \frac{h^2}{12}f^{(4)} (\xi)
     \end{equation}
-    The error comes from two sources. The truncation error term from $\frac{h^2}{12} f^{(4)}(\xi)$ and the rounding error from the evaluation of the first term by the basic arithmetic operations.  Suppose the addition/subtraction are implemented by Kahan sum (see exercises of Chapter 1) which almost does not introduce errors in the arithmetic operations. Then the rounding error of $f(x + h) - 2 f(x) + f(x - h)$ is at most $4 \max_{x\in \cI} |f(x) | \textup{u}$.  Therefore the total error
+    The error comes from two sources. The truncation error term from $\frac{h^2}{12} f^{(4)}(\xi)$ and the rounding error from the evaluation of the first term by the basic arithmetic operations.  Suppose the addition/subtraction is implemented by Kahan sum (see Exercise~\ref{Prb: 1-Kahan-Sum}) which almost does not introduce errors in the arithmetic operations. Then the rounding error of $f(x + h) - 2 f(x) + f(x - h)$ is at most $4 \max_{x\in \cI} |f(x) | \textup{u}$.  Therefore the total error
     \begin{equation}\label{EQ: RD ERR}
         |E_{total}|\le \frac{4 \max_{x\in \cI} |f(x) | \textup{u}}{h^2} + \frac{h^2}{12} \max_{x\in \cI} |f^{(4)} (x)|
     \end{equation}
@@ -242,9 +244,11 @@ The finite difference formula provides a simple and effective way to evaluate th
     $$\min_{h\in\bbR} |E_{total}| \le \sqrt{\frac{4}{3}\textup{u} M }.$$
     The optimal achieves at $h^{\ast} = \sqrt[4]{48\textup{u}M}$. For example, if $f(x) = \exp(x)$ and evaluate its second derivative around $x = 0$, then $\cM\sim 1$, the error is around $1.3\times 10^{-8}$ for $h^{\ast}\sim 2.5\times 10^{-4}$. 
 \end{example}
-For higher order derivatives, the rounding error would have even greater impact for the finite difference schemes. Then it is much more important to avoid $h$ being too small. 
+For higher-order derivatives, the rounding error would have an even greater impact on the finite difference schemes. Then it is much more important to avoid $h$ being too small. 
+
 \subsection{Improve by Extrapolation}
-Now we can combine the previous discussed extrapolation technique to acquire higher ordered scheme. We use a very simple example to show how this works. 
+\label{SSec: 3-Imp-by-Ext}
+Now we can combine the previously discussed extrapolation technique to acquire a higher-ordered scheme. We use a very simple example to show how this works. 
 \begin{example}
     Suppose $A(f, h)$ is the central difference scheme for $f'(x)$, which is 
     \begin{equation}
@@ -271,15 +275,16 @@ Now we can combine the previous discussed extrapolation technique to acquire hig
     \end{equation}
     This central difference scheme has $\cO(h^4)$ error. 
 \end{example}
-The above example can still iterate through the extrapolation process, since $A_1(f, h) = f'(x) + \cO(h^4)$, we can use $A_2(f, h) = \frac{16}{15}A_1(f, h/2) -  \frac{1}{15}A_1(f, h)$ to cancel out the $\cO(h^4)$ term which leads to a $\cO(h^6)$ error. However one should also notice this process require more nodes for computation: $A_1$ needs nodes $x\pm h$, $x\pm h/2$, $A_2$ will acquire additional nodes $x\pm h/4$ for evaluation. Such higher precision evaluation method takes more computational time, sometimes we need to trade off the efficiency and accuracy.
+The above example can still iterate through the extrapolation process, since $A_1(f, h) = f'(x) + \cO(h^4)$, we can use $A_2(f, h) = \frac{16}{15}A_1(f, h/2) -  \frac{1}{15}A_1(f, h)$ to cancel out the $\cO(h^4)$ term which leads to a $\cO(h^6)$ error. However one should also notice this process requires more nodes for computation: $A_1$ needs nodes $x\pm h$, $x\pm h/2$, $A_2$ will acquire additional nodes $x\pm h/4$ for evaluation. Such a higher precision evaluation method takes more computational time, sometimes we need to trade off the efficiency and accuracy.
 
 \begin{remark}
-    One of the advantage of using extrapolation is that $h$ does not have to be too small which is sensitive to numerical rounding errors. The potential issue would be growth of derivative with respect to order, for sufficiently smooth functions, extrapolation usually produces quite accurate evaluations. The potential limitation of the Richardson extrapolation is the requirement of known asymptotic expansion (formally only), while the Wynn-$\eps$ method does not have such limitation. 
+    One of the advantages of using extrapolation is that $h$ does not have to be too small which is sensitive to numerical rounding errors. The potential issue would be the growth of derivative with respect to order, for sufficiently smooth functions, extrapolation usually produces quite accurate evaluations. The potential limitation of the Richardson extrapolation is the requirement of known asymptotic expansion (formally only), while the Wynn-$\eps$ method does not have such a limitation. 
 \end{remark}
 
 
 \section{Quadrature Rules}
-The numerical quadrature find the value of an integral 
+\label{Sec: 3-Qua-Rul}
+The numerical quadrature finds the value of an integral 
 $$\cI(f) = \int_a^b f(x) dx $$
 from the function values at a finite number of points. We are mostly interested in the following quadrature formula 
 \begin{equation}
@@ -293,7 +298,7 @@ where $x_j$ are the nodes and $w_j$ are the weights. Similar to the numerical de
     \end{aligned}
 \end{equation}
 \subsection{Interpolation Based Rules}
-The interpolation based idea is intuitive. Let $q_n(x)$ be the interpolation polynomial on the nodes $x_j$ with values $f(x_j)$, $j=0,1,\dots, n$, respectively. We define the quadrature by interpolation formula as 
+The interpolation-based idea is intuitive. Let $q_n(x)$ be the interpolation polynomial on the nodes $x_j$ with values $f(x_j)$, $j=0,1,\dots, n$, respectively. We define the quadrature by interpolation formula as 
 \begin{equation}
     \cI_n(f):= \int_a^b q_n(x) dx 
 \end{equation}
@@ -317,13 +322,13 @@ therefore the weights $w_j =  \int_0^1 \prod_{k=0, k\neq j }^n \frac{t - t_k}{t_
 \begin{example}[rectangle rule]
    The rectangle rule is the simplest one, where we choose $x_0 = \frac{a+b}{2}$ as the middle point. Then the quadrature rule writes
    $$\cI_{0, rectangle}(f)  = (b-a) f(x_0). $$
-  Such rule is exact for any linear functions, therefore it has degree $1$ accuracy. We can see that the degree of exactness could exceed $n$. Later we will see the maximum degree of exactness for such form is $2n+1$ in the next chapter.
+  Such a rule is exact for any linear functions, therefore it has a degree $1$ accuracy. We can see that the degree of exactness could exceed $n$. Later we will see the maximum degree of exactness for such a form is $2n+1$ in the next chapter.
 \end{example}
 
 \begin{example}[trapezoid rule]
 The trapezoid rule takes $x_0 = a$ and $x_1= b$. 
 $$\cI_{1,trapezoid} (f) = (b-a)\left( \frac{1}{2} f(x_0) + \frac{1}{2} f(x_1) \right).$$
-One can check that this rule is exact for $f(x) = 1, x$. It is also having degree $1$ accuracy. It actually has a slightly larger constant in error estimate than the rectangle rule.
+One can check that this rule is exact for $f(x) = 1, x$. It also have a degree $1$ accuracy. It actually has a slightly larger constant in error estimate than the rectangle rule.
 \end{example}
 \subsection{Numerical Error of Interpolation Based Rules}
 Now we try to estimate $|\cI(f) - \cI_n(f)|$ from above derivation. 
@@ -351,9 +356,9 @@ where $\omega_r(x) = \prod_{j=0}^r (x - x_j)$, therefore
 Since $x_{n+1},\dots, x_r$ can be chosen arbitrarily, then we select the combination that minimizes $  \left(\int_a^b |\omega_r(x)|dx \right)$, which will lead to our conclusion by a simple scaling.
 \end{proof}
 \begin{remark}
-    As we can see, the error from interpolation based quadrature has a similar form of the interpolation polynomial's error. This implies the Runge phenomenon would occur as well. In fact, the Runge function's integration will not converge on uniformly distributed nodes.
+    As we can see, the error from interpolation-based quadrature has a similar form to the interpolation polynomial's error. This implies the Runge phenomenon would occur as well. The Runge function's integration will not converge on uniformly distributed nodes.
 \end{remark}
-One way to overcome the issue of Runge phenomenon is to perform piecewise integration. Suppose $[a, b]$ is divided into $N$ sub-intervals of equal sizes, each has length $H = \frac{b-a}{N}$. Then the quadrature error on each sub-interval would be:
+One way to overcome the issue of the Runge phenomenon is to perform piecewise integration. Suppose $[a, b]$ is divided into $N$ sub-intervals of equal sizes, each has length $H = \frac{b-a}{N}$. Then the quadrature error on each sub-interval would be:
 $$\Omega_r \frac{H^{r+2}}{(r+1)!}   \max_{x\in[a,b]}|f^{(r+1)}(x)|$$
 where $\Omega_r$ is independent of the interval length. Therefore the total quadrature error would be bounded by 
 $$N\Omega_r \frac{H^{r+2}}{(r+1)!}   \max_{x\in[a,b]}|f^{(r+1)}(x)| =  (b-a)\Omega_r \frac{H^{r+1}}{(r+1)!}   \max_{x\in[a,b]}|f^{(r+1)}(x)| =\cO((b-a)H^{r+1}).$$
@@ -374,12 +379,12 @@ $$\Omega_r = \min_{z\in [-1/2, 1/2]} \int_{-1/2}^{1/2} |s||s - z| ds =  \min_{z\
 \end{example}
 
 \subsection{Newton-Cotes Formula}
-The Newton-Cotes formula is a special interpolation based quadrature rule. The nodes are \underline{equally spaced}. The rectangle and trapezoid rules are just two simplest cases. We define 
+The Newton-Cotes formula is a special interpolation-based quadrature rule. The nodes are \underline{equally spaced}. The rectangle and trapezoid rules are just the two simplest cases. We define 
 \begin{enumerate}
     \item closed form, $x_0 = a$, $x_n = b$, $x_j = a  + jh$, $h = \frac{b-a}{h}$, $n\ge 1$. 
     \item open form, $x_0 = a + h$, $x_n = b - h$, $h = \frac{b-a}{n+2}$, $n\ge 0$.
 \end{enumerate}
-The difference is whether the end points are included or not. Using the previous result, we can compute the quadrature weights by 
+The difference is whether the endpoints are included or not. Using the previous result, we can compute the quadrature weights by 
 \begin{equation}
     \begin{aligned}
         w_j &= \int_0^1 \prod_{k=0, k\neq j}^n \frac{t - t_k}{t_j - t_k} dt =  \int_0^1 \prod_{k=0, k\neq j}^n \frac{nt - k}{j- k} dt \\
@@ -701,6 +706,7 @@ High dimensional integration often suffers from \emph{the curse of dimensionalit
 \section{Exercises}
 \subsection{Theoretical Part}
 \begin{problem}
+\label{Prb: 3-Bac-Dif}
     Based on Theorem~\ref{THM: FWD DIFF} and Theorem~\ref{THM: FORWARD FD}, derive the backward difference formula.
 \end{problem}
 \begin{problem}

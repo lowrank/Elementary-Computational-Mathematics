@@ -236,7 +236,9 @@ Please find an upper bound of the rounding error for this scheme.
     Based on the theoretical part, implement an algorithm for the summation $\sum_{j=1}^n x_j$ which has $\cO(\textup{u}\log_2 n)$ rounding error.
 \end{problem}
 
-\begin{problem}[Kahan compensated summation] Suppose $a, b\in\mathbb{R}$, the rounding error for the sum $s = \fl{\fl{a}+\fl{b}}$ ($a\ge b$) can be computed using 
+\begin{problem}[Kahan compensated summation] 
+\label{Prb: 1-Kahan-Sum}
+Suppose $a, b\in\mathbb{R}$, the rounding error for the sum $s = \fl{\fl{a}+\fl{b}}$ ($a\ge b$) can be computed using 
     $$\fl{\fl{s - \fl{a}}-\fl{b}}$$
     Based on this property, one can keep track of the rounding error. 
 \begin{algorithm}[!htb]
