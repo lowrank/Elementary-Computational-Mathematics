@@ -4,7 +4,7 @@ A vast number of applications such as the calculation of tangent vectors or area
 \begin{equation}
     \cD(f) := \frac{d}{dx} f(x),\quad \cI(f) := \int_a^b f(x) dx, 
 \end{equation}
-for certain function $f(x)\in C^k([a, b])$. Accurate evaluations would sometimes be difficult if analytic expression is absent. Especially when the function values of $f$ are only accessible at a finite number of nodes. Therefore, it is important to find simple yet effective methods to approximate the derivatives and integrals. 
+for certain function $f(x)\in C^k([a, b])$. Accurate evaluations would sometimes be difficult if an analytic expression is absent. Especially when the function values of $f$ are only accessible at a finite number of nodes. Therefore, it is important to find simple yet effective methods to approximate the derivatives and integrals. 
 
 \section{Extrapolation}
 \label{Sec: 3-Ext}
@@ -358,12 +358,12 @@ where $\omega_r(x) = \prod_{j=0}^r (x - x_j)$, therefore
 \begin{equation}
    | \cI(f - f_r)| = \left| \int_a^b \frac{\omega_r(x) f^{(r+1)}(\xi)}{(r+1)!} dx \right|\le \frac{(b-a)}{(r+1)!} \left(\int_a^b |\omega_r(x)|dx \right)  \max_{x\in[a,b]}|f^{(r+1)}(x)|.
 \end{equation}
-Since $x_{n+1},\dots, x_r$ can be chosen arbitrarily, then we select the combination that minimizes $  \left(\int_a^b |\omega_r(x)|dx \right)$, which will lead to our conclusion by a simple scaling.
+Since $x_{n+1},\dots, x_r$ can be chosen arbitrarily, we select the combination that minimizes $$  \left(\int_a^b |\omega_r(x)|dx \right),$$ which will lead to our conclusion using a simple scaling.
 \end{proof}
 \begin{remark}
-    As we can see, the error from interpolation-based quadrature has a similar form to the interpolation polynomial's error. This implies the Runge phenomenon would occur as well. The Runge function's integration will not converge on uniformly distributed nodes.
+    As we can see, the error of the interpolation-based quadrature has a form similar to that of the interpolation polynomial error. This implies the Runge phenomenon would occur as well. The integration of the Runge function will not converge on uniformly distributed nodes.
 \end{remark}
-One way to overcome the issue of the Runge phenomenon is to perform piecewise integration. Suppose $[a, b]$ is divided into $N$ sub-intervals of equal sizes, each has length $H = \frac{b-a}{N}$. Then the quadrature error on each sub-interval would be:
+One way to overcome the issue of the Runge phenomenon is to perform piecewise integration. Suppose $[a, b]$ is divided into $N$ subintervals of equal sizes, each of which has length $H = \frac{b-a}{N}$. Then the quadrature error in each subinterval would be:
 $$\Omega_r \frac{H^{r+2}}{(r+1)!}   \max_{x\in[a,b]}|f^{(r+1)}(x)|$$
 where $\Omega_r$ is independent of the interval length. Therefore the total quadrature error would be bounded by 
 $$N\Omega_r \frac{H^{r+2}}{(r+1)!}   \max_{x\in[a,b]}|f^{(r+1)}(x)| =  (b-a)\Omega_r \frac{H^{r+1}}{(r+1)!}   \max_{x\in[a,b]}|f^{(r+1)}(x)| =\cO((b-a)H^{r+1}).$$
@@ -430,9 +430,9 @@ The weights $w_j$ are only relevant to $n$ and $j$. In practice, these values ar
             \hline
            \end{tabular}
     \end{table}
-    From the above table, we can notice that when $n$ is even, the exactness is at $r = n+1$ for closed forms. This is a general statement. 
+    From the above table, we can notice that when $n$ is even, the exactness is $r = n+1$ for closed forms. This is a general statement. 
 \begin{lemma}
-    For $n\ge 2$ even, the closed forms of Newton-Cotes formula have degree $r = n+1$ accuracy.
+    For $n\ge 2$ even, the closed forms of the Newton-Cotes formula have degree $r = n+1$ precision.
 \end{lemma}
 \begin{proof}
     First, we know that $r\ge n$. Consider any polynomial of degree $n+1$, 
@@ -449,7 +449,7 @@ The weights $w_j$ are only relevant to $n$ and $j$. In practice, these values ar
     \end{equation}
     while $x_{n-j} -  \frac{a+b}{2} = -(x_j -  \frac{a+b}{2}) $ and $w_j = w_{n-j}$, we can cancel all terms. 
 
-    It still remains to show that $\cI(x^{n+2})\neq \cI_{n,NC}(x^{n+2})$. Because $r= (n+1)$ degree of accuracy is achievable, then we borrow the previous estimate result, let $f(x) = x^{n+2}$, 
+    It still remains to show that $\cI(x^{n+2})\neq \cI_{n,NC}(x^{n+2})$. Because the $r= (n+1)$ degree of accuracy is achievable, we borrow the previous estimate result, let $f(x) = x^{n+2}$, 
     \begin{equation}
         \begin{aligned}
             \cI(f) - \cI_n(f) &= \int_a^b \frac{\omega_{n+1}(x) f^{(n+2)}(\xi)}{(n+2)!} dx = \int_a^b \omega_{n+1}(x) dx \\
@@ -459,9 +459,9 @@ The weights $w_j$ are only relevant to $n$ and $j$. In practice, these values ar
     where $F(x)$ is defined by 
     $$F(x) := \int_a^x \omega_{n}(t) dt. $$ Then it is simple to derive that $F(a) = F(b) = 0$ using the symmetry. Now we only have to show that 
     $$\int_a^b F(x)dx \neq 0.$$
-    We can show a stronger claim: $F(x)>  0$ over $(a, b)$. This is left as an exercise.
+    We can show a stronger claim: $F(x)>  0$ over $(a, b)$. This is left as an exercise (see Exercise~\ref{Prb: 3-Exe-4}).
 \end{proof}
-Since the Newton-Cotes formula definitely will fail when evaluating the integral of Runge function $f(x) = \frac{1}{1+x^2}$ on the interval $[-5,5]$. It is more practical to combine the piecewise integral technique, which is called the composite Newton-Cotes formula. In the following, we discretize the interval $[a, b]$ into $m$ sub-intervals of the same size $H = \frac{b-a}{m}$, then on each sub-interval, we apply the Newton-Cotes formula (say closed form) with $(n+1)$ equally spaced nodes. Then the numerical integral would have an error bounded by 
+However, the Newton-Cotes formula definitely will fail when evaluating the integral of Runge function $f(x) = \frac{1}{1+x^2}$ on the interval $[-5,5]$. It is more practical to combine the piecewise integral technique, which is called the composite Newton-Cotes formula. In the following, we discretize the interval $[a, b]$ into $m$ subintervals of the same size $H = \frac{b-a}{m}$, then on each subinterval, we apply the Newton-Cotes formula (say closed form) with $(n+1)$ equally spaced nodes. Then the numerical integral would have an error bounded by 
 \begin{equation}
     m M_n \left(\frac{H}{n}\right)^{r+2} \max_{x\in[a, b]}|f^{(r+1)}(x)| =     (b-a) \frac{M_n}{n} \left(\frac{H}{n}\right)^{r+1} \max_{x\in[a, b]}|f^{(r+1)}(x)|
 \end{equation}
@@ -476,7 +476,7 @@ where $r = n$ for odd $n$ and $r = n+1$ for even $n$, see the previous section f
     \end{equation}
 
 \end{example}
-In the next, we take a more careful look at the composite trapezoid rule. Recall the asymptotic Euler-Maclaurin summation formula: 
+In the next step, we take a more careful look at the composite trapezoid rule. Recall the asymptotic Euler-Maclaurin summation formula: 
 \begin{equation}
 \sum_{j=0}^m g(j) \sim \int_0^m g(x) dx + \frac{g(0) + g(m)}{2} + \sum_{k=1}^{\infty} \frac{B_{2k}}{(2k)!}(g^{{2k-1}}(m) - g^{(2k-1)}(0))
 \end{equation}
@@ -488,7 +488,7 @@ which means there is an asymptotic expansion in the form of
 \begin{equation}\label{EQ: TRAP EXP}
     T(f, h) = \int_a^b f(x) dx + c_2 H^2 + c_4 H^4 + \cdots.
 \end{equation}
-Particularly, for smooth periodic function, the Euler-Maclaurin summation \emph{formally} shows the numerical error is less than any polynomial of $H$.
+Particularly, for a smooth periodic function, the Euler-Maclaurin summation \emph{formally} shows the numerical error is less than any polynomial of $H$.
 \subsection{Romberg Integration}
 The composite trapezoid rule's asymptotic expansion~\eqref{EQ: TRAP EXP} implies a Richardson extrapolation combination to accelerate the evaluation. The Romberg integration refers to the following scheme: 
 \begin{enumerate}
@@ -498,32 +498,32 @@ The composite trapezoid rule's asymptotic expansion~\eqref{EQ: TRAP EXP} implies
     \item Output $a_{L,L}$, which should have an error of $\cO(H^{2L+2})$, $H = (b-a)/2^L$.
 \end{enumerate}
 \begin{remark}
-    One of advantage of the Romberg method is the re-use of the nodes. This is extremely helpful when evaluating $f$ is not cheap. The extrapolation process also builds a new quadrature formulation implicitly. This quadrature rule brings the error $\cO(n^{-2})$ to $\cO(n^{-2\log_2 n-2})$, where $n$ is the total number of nodes. Although the computational time increases a few times, the return seems worth it when $f$ is sufficiently smooth.
+    One of the advantages of the Romberg method is the reuse of the nodes. This is extremely helpful when evaluating $f$ is not cheap. The extrapolation process also builds a new quadrature formulation implicitly. This quadrature rule gives the error $\cO(n^{-2})$ to $\cO(n^{-2\log_2 n-2})$, where $n$ is the total number of nodes. Although the computational time increases a few times, the return seems worth it when $f$ is sufficiently smooth.
 \end{remark}
 % \subsection{Gauss Quadrature}
 % \subsection{Quadrature of Periodic Function}
 \subsection{Adaptive Integrations}
-Numerically, we can apply any composite quadrature rule on a successive partition of $[a, b]$ until the estimated error is under tolerance. Let $A(f, H)$ denote any composite quadrature rule (e.g. Newton-Cotes), $H = (b-a)/m$, then 
+Numerically, we can apply any composite quadrature rule to a successive partition of $[a, b]$ until the estimated error is within tolerance. Let $A(f, H)$ denote any composite quadrature rule (e.g. Newton-Cotes), $H = (b-a)/m$, then 
 \begin{equation}
     A(f, H) = \int_a^b f(x) dx + \cO(H^{r+1})
 \end{equation}
-where $r$ is the degree of accuracy. Then $A(f, H/2)$ will presumably introduce an error of about $2^{-(r+1)}$ times the size of the previous case. Therefore we obtain an rough estimate of the error by 
+where $r$ is the degree of accuracy. Then $A(f, H/2)$ will presumably introduce an error of about $2^{-(r+1)}$ times the size of the previous case. Therefore, we obtain a rough estimate of the error by
 $$\cE \approx \left|\frac{A(f, H) - A(f, H/2)}{1 - 2^{-(r+1)}}\right|$$
-One can successively halve $H$ until the estimated error is less than tolerance. However such method is not efficient when the quadrature on most of the sub-intervals are already very accurate. In this case, the best strategy is to keep those accurate sub-intervals and only partition the rest. This process will produce a non-uniform distribution of sub-intervals. 
+One can successively halve $H$ until the estimated error is less than tolerance. However, such a method is not efficient when the quadrature on most of the subintervals is already very accurate. In this case, the best strategy is to keep those accurate subintervals and only partition the rest. This process will produce a non-uniform distribution of sub-intervals. 
 
-There are several ways of implementation. The simplest recursive algorithm can be roughly described as follows. Let $A(f, \alpha, \beta)$ be any quadrature rule on $[\alpha, \beta]$ with degree of accuracy $r$ and $\cE(f, \alpha, \beta)$ be an estimate of error for $|A(f, \alpha, \beta)-\int_{\alpha}^{\beta} f(x) dx|$. Then 
+There are several ways to implement this. The simplest recursive algorithm can be roughly described as follows. Let $A(f, \alpha, \beta)$ be any quadrature rule on $[\alpha, \beta]$ with degree of accuracy $r$ and $\cE(f, \alpha, \beta)$ be an estimate of error for $|A(f, \alpha, \beta)-\int_{\alpha}^{\beta} f(x) dx|$. Then 
 \begin{enumerate}
     \item Initially, $\alpha = a$, $\beta = b$, $\eps$ is the tolerance, $\cI = 0$.
-    \item If $|\cE(f, \alpha, \beta)| \le \eps\frac{\beta - \alpha}{b - a}$ or $|\beta - \alpha|$ is too small, $\cI =\cI+A(f,\alpha, \beta)$, stop. Otherwise goto step 3.
+    \item If $|\cE(f, \alpha, \beta)| \le \eps\frac{\beta - \alpha}{b - a}$ or $|\beta - \alpha|$ is too small, $\cI =\cI+A(f,\alpha, \beta)$, stop. Otherwise, go to Step 3.
     \item Divide $[\alpha, \beta]$ into $[\alpha, \gamma]$, $[\gamma, \beta]$, $\gamma = \frac{\alpha + \beta}{2}$. 
         \begin{enumerate}
-            \item For the 1st half, let $\alpha = \alpha$, $\beta = \gamma$, goto step 2. 
-            \item For the 2nd half, let $\alpha = \gamma$, $\beta = \beta$, goto step 2. 
+            \item For the first half, let $\alpha = \alpha$, $\beta = \gamma$, go to step 2. 
+            \item For the second half, let $\alpha = \gamma$, $\beta = \beta$, go to step 2. 
         \end{enumerate}
 \end{enumerate}
-Ideally, the automatic partition will generate a non-uniform distributed sub-intervals. The total estimated numerical error will be bounded by $\eps$. 
+Ideally, the automatic partition will generate nonuniformly distributed subintervals. The total estimated numerical error will be bounded by $\eps$. 
 
-A slightly more economical plan is stated in the section 9.7 of the book~\cite{quarteroni2010numerical}, which is focusing on the left-most sub-interval until its error bound is under  some tolerance, then eliminate the chosen sub-interval and restart with the rest. 
+A slightly more economical plan is stated in section 9.7 of the book~\cite{quarteroni2010numerical}, which focuses on the left-most sub-interval until its error bound is under some tolerance, then eliminates the chosen subinterval and restarts with the rest. 
 
 \subsection{Improper Integral}
 The jump discontinuity is in general simple to deal with. We will focus on the unbounded functions, for example, $\log x$, $x^{\gamma}$ with $0 > \gamma > -1$. These singularities are integrable. Let us take the following function for an example: 
@@ -722,31 +722,32 @@ High dimensional integration often suffers from \emph{the curse of dimensionalit
 \begin{problem}
     Let the integration $\cI(f)$ given by
     $$\cI(f) = \int_0^1 x^{\alpha} f(x) dx,\quad \alpha\in [0, 1]$$
-    and consider the quadrature formula $\cI_0(f) = w_0 f(x_0)$. Is it possible to find an $\alpha$ that the quadrature rule has degree of accuracy of $r= 2$?
+    and consider the quadrature formula $\cI_0(f) = w_0 f(x_0)$. Is it possible to find an $\alpha$ that the quadrature rule has a degree $r= 2$ of accuracy?
 \end{problem}
 \begin{problem}
-    Let $n\ge 2$ is even and $\{ x_j\}_{j=0}^n$ the nodes for closed form Newton-Cotes formula on $[a, b]$. Define $\omega(x)=\prod_{j=0}^n (x - x_j)$ and $F(x)$ defined as 
+\label{Prb: 3-Exe-4}
+    Let $n\ge 2$ be even and $\{ x_j\}_{j=0}^n$ be the nodes for the Newton-Cotes formula in closed form on $[a, b]$. Define $\omega(x)=\prod_{j=0}^n (x - x_j)$ and $F(x)$ defined as 
     $$F(x) = \int_a^x \omega(t)dt.$$
     Prove that $F(a) = F(b) = 0$ and $F(x) > 0$ over $(a ,b)$. 
-    Hint: Notice $F$ is symmetric. First show that $|\omega(x)| > |\omega(x + h)|$ when $x\in (a, a + h)$, where $h = (b-a)/n$.
+    Hint: Note that $F$ is symmetric. First show that $|\omega(x)| > |\omega(x + h)|$ when $x\in (a, a + h)$, where $h = (b-a)/n$.
 \end{problem}
 \begin{problem}
-    Let $f(x)\in C(\bbR)$ be a $2\pi$-periodic function and $f_n$ is the interpolating trigonometric polynomial on equally-spaced nodes $x_j = \frac{2\pi j}{2n+1}$, $j=0,\dots, 2n$. Show that 
+    Let $f(x)\in C(\bbR)$ be a $2\pi$-periodic function and $f_n$ be the interpolating trigonometric polynomial on equally spaced nodes $x_j = \frac{2\pi j}{2n+1}$, $j=0,\dots, 2n$. Show that 
     \begin{equation}
        \cI(f_n) = \sum_{j=0}^{2n} w_j f(x_j).
     \end{equation}
     for positive weights $w_j > 0$, $j = 0,\dots, 2n$.
-    Hint: show that the ``Lagrange basis'' are $l_j(x) =\frac{1}{2n+1} \frac{\sin((2n+1)(x- x_j)/2)}{\sin((x-x_j)/2)}$.
+    Hint: Show that the ``Lagrange basis'' is $l_j(x) =\frac{1}{2n+1} \frac{\sin((2n+1)(x- x_j)/2)}{\sin((x-x_j)/2)}$.
 \end{problem}
 
  
 \subsection{Computational Part}
 \begin{problem}
     Let the infinite matrix $A$ such that $$A_{jk} = \frac{1}{(j+k-1)(j+k)/2 - (k-1)}.$$
-    Compute the operator norm $\|A\|$ with 10 digits accuracy. Hint: use extrapolation.
+    Compute the operator norm $\|A\|$ with ten digits accuracy. Hint: use extrapolation.
 \end{problem}
 \begin{problem}
-    Implement the \underline{adaptive} integration with  composite Newton-Cotes closed formula for $n = 4$. 
+    Implement the \underline{adaptive} integration with composite Newton-Cotes closed formula for $n = 4$. 
 \end{problem}
 
 \bibliographystyle{apalike}
