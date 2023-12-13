@@ -278,7 +278,7 @@ Now we can combine the previously discussed extrapolation technique to acquire a
 The above example can still iterate through the extrapolation process, since $A_1(f, h) = f'(x) + \cO(h^4)$, we can use $A_2(f, h) = \frac{16}{15}A_1(f, h/2) -  \frac{1}{15}A_1(f, h)$ to cancel out the $\cO(h^4)$ term which leads to a $\cO(h^6)$ error. However one should also notice this process requires more nodes for computation: $A_1$ needs nodes $x\pm h$, $x\pm h/2$, $A_2$ will acquire additional nodes $x\pm h/4$ for evaluation. Such a higher precision evaluation method takes more computational time, sometimes we need to trade off the efficiency and accuracy.
 
 \begin{remark}
-    One of the advantages of using extrapolation is that $h$ does not have to be too small which is sensitive to numerical rounding errors. The potential issue would be the growth of derivative with respect to order, for sufficiently smooth functions, extrapolation usually produces quite accurate evaluations. The potential limitation of the Richardson extrapolation is the requirement of known asymptotic expansion (formally only), while the Wynn-$\eps$ method does not have such a limitation. 
+    One of the advantages of using extrapolation is that $h$ does not have to be too small which is sensitive to numerical rounding errors. The potential issue would be the growth of derivative with respect to order, for sufficiently smooth functions, extrapolation usually produces quite accurate evaluations. The potential limitation of the Richardson extrapolation is the requirement of known asymptotic expansion (formally only), while the Wynn $\eps$ method does not have such a limitation. 
 \end{remark}
 
 
@@ -302,7 +302,7 @@ where $x_j$ are the nodes and $w_j$ are the weights. Similar to the numerical de
 \label{SSec: 3-Int-Bas-Rul}
 The interpolation-based idea is intuitive. Let $q_n(x)$ be the interpolation polynomial on the nodes $x_j$ with values $f(x_j)$, $j=0,1,\dots, n$, respectively. We define the quadrature by interpolation formula as 
 \begin{equation}
-    \cI_n(f):= \int_a^b q_n(x) dx 
+    \cI_n(f):= \int_a^b q_n(x) dx.
 \end{equation}
 The above quadrature formula is exact for all degree $n$ polynomials $f$, therefore it has \underline{at least} degree $n$ accuracy. 
 
@@ -384,6 +384,7 @@ $$\Omega_r = \min_{z\in [-1/2, 1/2]} \int_{-1/2}^{1/2} |s||s - z| ds =  \min_{z\
 \end{example}
 
 \subsection{Newton-Cotes Formula}
+\label{SSec: 3-NEW-COT-FOR}
 The Newton-Cotes formula is a special interpolation-based quadrature rule. The nodes are \underline{equally spaced}. The rectangle and trapezoid rules are just the two simplest cases. We define 
 \begin{enumerate}
     \item closed form, $x_0 = a$, $x_n = b$, $x_j = a  + jh$, $h = \frac{b-a}{h}$, $n\ge 1$. 
@@ -489,7 +490,10 @@ which means there is an asymptotic expansion in the form of
     T(f, h) = \int_a^b f(x) dx + c_2 H^2 + c_4 H^4 + \cdots.
 \end{equation}
 Particularly, for a smooth periodic function, the Euler-Maclaurin summation \emph{formally} shows the numerical error is less than any polynomial of $H$.
+
+
 \subsection{Romberg Integration}
+\label{SSec: 3-ROM-INT}
 The composite trapezoid rule's asymptotic expansion~\eqref{EQ: TRAP EXP} implies a Richardson extrapolation combination to accelerate the evaluation. The Romberg integration refers to the following scheme: 
 \begin{enumerate}
     \item Compute the sequence $a_{l, 0} = T(f, (b-a)/2^l)$, $l=0,\dots, L$, for the standard composite trapezoid rule with different sub-interval sizes. 
@@ -526,58 +530,135 @@ Ideally, the automatic partition will generate nonuniformly distributed subinter
 A slightly more economical plan is stated in section 9.7 of the book~\cite{quarteroni2010numerical}, which focuses on the left-most sub-interval until its error bound is under some tolerance, then eliminates the chosen subinterval and restarts with the rest. 
 
 \subsection{Improper Integral}
+\label{SSec: 3-Imp-Int}
 The jump discontinuity is in general simple to deal with. We will focus on the unbounded functions, for example, $\log x$, $x^{\gamma}$ with $0 > \gamma > -1$. These singularities are integrable. Let us take the following function for an example: 
 $$ f(x ) = \phi(x) (x - a)^{\gamma},\quad x\in[a, b].$$
 where $\phi(x)$ is a smooth function. Using integration by parts, 
 \begin{equation}
     \begin{aligned}
         \int_a^b  \phi(x) (x - a)^{\gamma} dx &= \frac{(x-a)^{\gamma + 1}}{\gamma + 1} \phi(x)\Big|_a^b - \int_a^b \phi'(x) \frac{(x-a)^{\gamma + 1}}{\gamma + 1} dx \\
-        &= \cdots \\
         &= \frac{(x-a)^{\gamma + 1}}{\gamma + 1} \phi(x)\Big|_a^b - \frac{(x-a)^{\gamma + 2}}{(\gamma + 1)(\gamma + 2)} \phi'(x)\Big|_a^b + \cdots \\
         & + \int_a^b \phi^{(p)} (x) \frac{(-1)^p (x-a)^{\gamma + p}}{(\gamma + 1)(\gamma + 2)\cdots (\gamma + p)}  dx  ,
     \end{aligned}
 \end{equation}
-where the last integral is sufficiently regular and can be evaluated by quadrature rules such as Newton-Cotes formula, the error can be estimated using the result developed in previous sections. The first $p$ terms are explicitly known. There are other choices such as series solution, which is 
+where the last integral is sufficiently regular and can be evaluated by quadrature rules such as Newton-Cotes formula, the error can be estimated using the result developed in previous sections. The first $p$ terms are explicitly known. There are other choices such as a series solution, which is 
 \begin{equation}
    \int_a^b  \frac{\phi(x)}{(x - a)^{\gamma}} dx = \int_a^b  \sum_{k=0}^{p} \frac{\phi^{(k)}(a)(x-a)^{k -\gamma }}{k!} dx + \int_a^b \frac{\phi^{(p+1  )}(\xi)(x -a)^{p+1-\gamma }}{(p+1)!} dx 
 \end{equation}
-The reminder determines the convergence of the series. As long as the reminder is decaying, one may use extrapolation technique to find the integral without using too many iterations. Otherwise the integral part has to be evaluated through quadrature rules. 
+The remainder determines the convergence of the series. As long as the reminder is decaying, one may use the extrapolation technique to find the integral without using too many iterations. Otherwise, the integral part has to be evaluated through quadrature rules. 
 
-Another typical method is to isolated the singularity 
+Another typical method is to isolate the singularity 
 \begin{equation}
-    \int_a^b \frac{\phi(x)}{(x - a)^{\gamma}} dx =  \int_a^{a + \eps} \frac{\phi(x)}{(x - a)^{\gamma}} dx +  \int_{a+\eps}^b \frac{\phi(x)}{(x - a)^{\gamma}} dx
+    \int_a^b \frac{\phi(x)}{(x - a)^{\gamma}} dx =  \int_a^{a + \eps} \frac{\phi(x)}{(x - a)^{\gamma}} dx +  \int_{a+\eps}^b \frac{\phi(x)}{(x - a)^{\gamma}} dx,
 \end{equation}
-where the integral around singularity might converge when $\eps$ is sufficiently small (less than convergence radius of Taylor series). The non-singular integral can be computed by the traditional methods, since the integrand grows fast when $\eps\to 0$, it is more suitable to apply adaptive methods.
+where the integral around singularity might converge when $\eps$ is sufficiently small (less than the convergence radius of the Taylor series). The non-singular integral can be computed by the traditional methods, since the integrand grows fast when $\eps\to 0$, it is more suitable to apply adaptive methods.
 
-Another class of improper integral is with infinite domain.  In general, this problem is difficult (e.g. oscillatory integral), we only discuss the simplest case. Let $f(x)$ be integrable over $[a, \infty)$ and assume there exists $s > 0$ such that 
+Another class of improper integral is with the infinite domain.  In general, this problem is difficult (e.g. oscillatory integral), we only discuss the simplest case right now. Let $f(x)$ be integrable over $[a, \infty)$ and assume there exists $s > 0$ such that 
 \begin{equation}
     \lim_{x\to\infty} x^{1+s} f(x) = 0.
 \end{equation}
-The most intuitive way is to truncate the interval $[a, \infty)$ to $[a, c]$ such that the integral on $[c, \infty)$ is negligible. The point $c$ sometimes can be inferred from \emph{a priori} estimate, sometimes has to be found dynamically. The other methods are more or less playing around the change of variable to make the interval ``finite'' (e.g. $x\mapsto x^{-\beta}$ when $x\ge c > 0$). 
+The most intuitive way is to truncate the interval $[a, \infty)$ to $[a, c]$ such that the integral on $[c, \infty)$ is negligible. The point $c$ sometimes can be inferred from \emph{a priori} estimate, sometimes has to be found dynamically. The other methods are more or less playing around with the change of variable to make the interval ``finite'' (e.g. $x\mapsto x^{-\beta}$ when $x\ge c > 0$). 
 
-Other advanced tools (e.g. complex analysis) and examples will be discussed in later topic chapter and integral equation chapter.
+Other advanced tools (e.g. complex analysis) and examples will be discussed in a later topic chapter and integral equation chapter.
 
 \section{Gauss Quadrature}
+\label{Sec: 3-GAU-QUA}
 The Gauss quadrature maximizes the exactness of quadrature rules. Let $x_0,\dots, x_n$ the nodes on $[-1,1]$, in the following we will discuss the numerical quadrature for the weighted integral 
 $$\cI_w(f) = \int_{-1}^1 w(x) f(x) dx\simeq \cI_{n, w}(f):= \sum_{j=0}^n c_j f(x_j),$$
-where the coefficients are determined later. We can also borrow the same accuracy concept from the previous chapter ($w(x) = 1$). It is clear that with $n+1$ nodes, the accuracy is at least degree $n$, in the later derivation we will see that Gauss quadrature has an accuracy of $r = n + m$ for $ m > 0$. 
+where the coefficients are determined later. We can also borrow the same accuracy concept from the previous chapter ($w(x) = 1$). It is clear that with $n+1$ nodes, the highest accuracy is at least degree $n$, in the later derivation we will see that the Gauss quadrature has an accuracy of $r = n + m$ for $ m > 0$. We first review the preliminaries for the theory behind the Gauss quadrature.
+
+\subsection{Orthogonal Polynomials}
+\label{SSec: 3-Ort-Pol}
+The orthogonal polynomials can be regarded as a special case of generalized Fourier series.  Let the weight function $w(x)\ge 0$ on the interval $(-1, 1)$ be an integrable function. Then we can define a sequence of polynomials $p_k\in \Pi_k$, that is, $\deg (p_k) = k$ and 
+\begin{equation}
+    \int_{-1}^1 w(x) p_k(x) p_j(x) dx = 0,\quad \text{ if } k\neq j.
+\end{equation}
+Here we define the inner product $\aver{f, g}_w$ by 
+\begin{equation}
+    \aver{f, g}_w = \int_{-1}^1 w(x) f(x) g(x) dx 
+\end{equation}
+This inner product induces a norm $\|f\|_w = \sqrt{\aver{f, f}_w}$, we then define the corresponding space as 
+\begin{equation}
+    L^2_w = \{ f: (-1,1)\to\bbR \mid \|f\|_w < \infty\}.
+\end{equation}
+Then for any $f\in L^2_w$, we can define the generalized Fourier series by $S f$:
+\begin{equation}
+    Sf = \sum_{j = 0}^{\infty} a_j p_j,\quad a_j = \frac{\aver{f, p_j}_w}{\aver{p_j, p_j}_w}.
+\end{equation} 
+The series converges to $f$ in $L^2_w$ sense from the Parseval's equality:
+\begin{equation}
+    \|f\|^2_w = \sum_{j = 0}^{\infty} a_j^2 \|p_j\|_w^2. 
+\end{equation}
+The truncated series $f_n$:
+$$f_n = \sum_{j=0}^n a_j p_j$$
+is the best degree-$n$ polynomial approximation to $f$, that is
+$$\|f - f_n\|_w = \min_{q \in \Pi_n} \|f - q\|_w.$$
+The polynomial $f_n$ is the orthogonal projection of $f$ onto $\Pi_n$ in the sense of $L^2_w$.
+
+The generation of $p_j$ follows from the following recursive formula 
+\begin{equation}\label{EQ: RECUR}
+    p_{j+1} = (x - \alpha_j) p_j(x) - \beta_j p_{j-1}(x),\quad j\ge 0
+\end{equation}
+The initial conditions are $p_{-1} = 0$, $p_0 = 1$. The constants $\alpha_j$ and $\beta_j$ can be obtained by noticing that 
+\begin{equation}
+    \begin{aligned}
+        \aver{p_{j+1}, p_j}_w &= 0\Rightarrow \alpha_j = \frac{\aver{xp_j, p_j}_w}{\aver{p_j, p_j}_w} \\
+        \aver{p_{j+1}, p_{j-1}}_w &= 0\Rightarrow \beta_j = \frac{\aver{p_j, p_j}_w}{\aver{p_{j-1}, p_{j-1}}_w}    
+    \end{aligned}
+\end{equation}
+Here $p_j$ is not normalized.
+\subsection{Chebyshev Polynomials}
+The Chebyshev polynomials are generated by using the weight $w(x) = (1- x^2)^{-1/2}$ on $(-1, 1)$. The corresponding space is 
+$$L_{w}^2 = \{ f:(-1,1)\to \bbR\mid \int_{-1}^1 f^2(x) (1 - x^2)^{-1/2}dx <\infty\}$$
+It is clear that by setting $p_k(x) = \cos(k \arccos x)$, the integral 
+\begin{equation}
+    \int_{-1}^1 p_k(x) p_j(x) (1 - x^2)^{-1/2} dx = \int_{0}^{\pi} \cos(k \theta) \cos(j\theta) d\theta = \begin{cases}
+        \pi & k = j = 0\\
+        \frac{\pi}{2} & k = j\neq 0\\
+        0 & \text{otherwise}
+    \end{cases}
+\end{equation}
+Therefore, the generalized Fourier series with Chebyshev polynomials is 
+$$f(x) = \sum_{j=0}^{\infty} a_j p_j(x)$$
+where $p_j (x)= T_j(x)$ the $j$-th Chebyshev polynomial and $a_j = \frac{1}{\pi}\aver{f, p_j}_w$ if $j = 0$ and $a_j = \frac{2}{\pi}\aver{f, p_j}_w$ otherwise.
+\subsection{Legendre Polynomials}
+The Legendre polynomials are generated using the weight $w(x) = 1$. The corresponding space is normal $L^2(-1,1)$. The recursive formula for Legendre polynomials is 
+\begin{equation}
+    L_{j+1}(x) = \frac{2j+1}{j+1} x L_j(x) - \frac{j}{j+1} L_{j-1}(x)
+\end{equation}
+and $\aver{L_j, L_j}_w = \frac{2}{2j+1}$. Therefore, the generalized Fourier series is 
+\begin{equation}
+    f(x) = \sum_{j=0}^{\infty} a_j L_j(x),\quad a_j =  \frac{2j+1}{2}\aver{f, L_j}_w.
+\end{equation}
+The first few Legendre polynomials are 
+    \begin{equation}
+        \begin{aligned}
+            L_0 = 1, \quad L_1(x) = x,\quad L_2(x) = \frac{1}{2}(3x^2 - 1).
+        \end{aligned}
+    \end{equation}
+\begin{remark}
+    Both of the above examples are special cases of Jacobi polynomials which are generated by weight function $w(x) = (1 - x)^{\alpha}(1 + x)^{\beta}$. 
+\end{remark}
+\subsection{The Riemann-Hilbert Problem}
+
+\subsection{Gauss Quadrature on Bounded Domain}
 
 \begin{theorem}
-    Let $\omega(x) = \prod_{j=0}^{n}(x - x_j)$, then
-    $$\aver{\omega(x), p_{k}}_w = 0,\quad 0\le k\le {m-1}$$
-    if and only if the associated quadrature rule has an order of $n + m$.
+Let $p_k\in \Pi_k$ and ${\varpi}(x) = \prod_{j=0}^{n}(x - x_j)$, then
+    $$\aver{\varpi(x), p_{k}}_w = 0,\quad 0\le k\le {m-1}$$
+    if and only if the associated quadrature rule has an accuracy at the order of $n + m$.
 \end{theorem}
 \begin{proof}
     The key idea is to represent any polynomial $q$ of $\Pi_{n+m}$ by 
     \begin{equation}
-        q(x) = \omega(x) s(x) + t(x)
+        q(x) = \varpi(x) s(x) + t(x)
     \end{equation}
     where $s(x)\in\Pi_{m-1}$ and $t\in \Pi_{n}$. Therefore the quadrature over the reminder term $t(x)$ is exact,
     \begin{equation}
-        \sum_{j=0}^n c_j t(x_j) =  \int_{-1}^1 t(x) w(x) dx = \int_{-1}^1 q(x) w(x)dx - \underline{\int_{-1}^1 \omega(x) s(x) w(x) dx}.
+        \sum_{j=0}^n c_j t(x_j) =  \int_{-1}^1 t(x) w(x) dx = \int_{-1}^1 q(x) w(x)dx - \underline{\int_{-1}^1 \varpi(x) s(x) w(x) dx}.
     \end{equation}
 \end{proof}
-It is clear that the maximum of $m \le n+1$, otherwise, we can choose $ s(x) = \omega(x)$, then $\aver{\omega(x), \omega(x)}_w > 0$ violates the above theorem.
+It is clear that the maximum of $m \le n+1$, otherwise, we can choose $ s(x) = \varpi(x)$, then $\aver{\varpi(x), \varpi(x)}_w > 0$ violates the above theorem.
 \begin{corollary}
     The quadrature rule 
     $$\cI_{n, w}(f)=\sum_{j=0}^n c_j f(x_j)$$
@@ -585,9 +666,9 @@ It is clear that the maximum of $m \le n+1$, otherwise, we can choose $ s(x) = \
 \end{corollary}
 The next question would be whether the maximum $2n+1$ is achievable. This requires that
 \begin{equation}\label{EQ: ORTHO}
-    \int_{-1}^1 \omega(x) p_k(x) w(x) dx = 0,\quad 0\le k\le n.
+    \int_{-1}^1 \varpi(x) p_k(x) w(x) dx = 0,\quad 0\le k\le n.
 \end{equation}
-This formula indicates that $\omega(x) = p_{n+1}(x)$.
+This formula indicates that $\langle \varpi(x), p_k\rangle = 0$ for all $0\le k \le n$.
 \begin{theorem}
     The only choice of $\omega$ satisfying~\eqref{EQ: ORTHO} is $p_{n+1}$.
 \end{theorem}
