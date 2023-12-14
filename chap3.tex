@@ -917,9 +917,22 @@ It is easy to check the following explicit formulation for Hermite polynomials.
 \end{proof}
 
 \section{Probabilistic Integration}
-High dimensional integration often suffers from \emph{the curse of dimensionality}, 
-\subsection{Monte-Carlo Integration}
-\subsection{Quasi Monte-Carlo Integration}
+\label{Sec: 3-Pro-Int}
+High dimensional integration often suffers from \emph{the curse of dimensionality} for classical quadrature rules. Instead of a deterministic approach, the probabilistic integration employs a non-deterministic way to compute the integration in high dimensions. 
+\subsection{Monte Carlo Integration}
+The Monte Carlo integration approximates the definite integral over the domain $D\subset \bbR^n$
+\begin{equation}
+    \cI := \int_{D} f(\bz) d\bz 
+\end{equation}
+by the summation over uniformly distributed sample points $\bx_i\in D$, $i=1,\cdots, m$,
+\begin{equation}
+    \cI_{\textrm{MC}, m} = \frac{\textrm{Vol}(D)}{N} \sum_{i=1}^m f(\bx_i) \sim \cI := \textrm{Vol}(D)\bbE_{\bx\sim \cU(D)} \left[f\right].
+\end{equation}
+As the sample points are independent, the law of large numbers (LLN) shows that
+\begin{equation}
+    \lim_{m\to \infty} \cI_{\textrm{MC}, m} = \cI.
+\end{equation}
+\subsection{Quasi Monte Carlo Integration}
 \section{Exercises}
 The source code and test cases for the computational part are hosted on GitHub.
 
