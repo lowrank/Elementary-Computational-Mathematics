@@ -1024,13 +1024,13 @@ Using induction, we can show the following property of the B-spline (see Exercis
         \end{equation*}
        Therefore, $\Pi_{k,\bzeta, \bm}\subset \cS_{k, \bt}$. The dimension of $\cS_{k, \bt}$ is the number of B-splines $B_{jk}$, which is, $\text{card}(\bt) - k = q k - \sum_{i=2}^n m_i$ which corresponds to the total number of bases of $\Pi_{k,\bzeta, \bm}$. 
     \end{proof}
-From now on, we assume the knot sequence $\bt$ is defined as Theorem~\ref{Thm: 2-B-SPL-EQU-PP-SPA}, where the first and last knots are repeated $k$ times, then the basic interval $[t_k, t_{n+1}]$ coincides with the range of knots. Using the partition of unity property, the spline function in $\cS_{k,\bt}$ is a strictly convex combination of the coefficients. In other words, the spline function is bounded from below and above by the coefficients nearby.
+From now on, we assume the knot sequence $\bt$ is defined as Theorem~\ref{Thm: 2-B-SPL-EQU-PP-SPA}, where the first and last knots are repeated $k$ times, then the basic interval $[t_k, t_{n+1}]$ coincides with the range of knots. By the partition of unity (see Lemma~\ref{Lem: 2-B-SPL-PAR-UNI}), the spline function in $\cS_{k,\bt}$ is a strictly convex combination of the coefficients. In other words, the spline function is bounded from below and above by the coefficients nearby.
 \begin{theorem}[Convex Hull]
     \label{Thm: 2-B-SPL-CON-NUM}
     Suppose $x \in (t_i, t_{i+1})$, then 
     $$ \min_{i+1-k\le j \le i} c_j \le  \sum_{j=i-k+1}^i c_j B_{jk}(x)  \le \max_{i+1-k\le j\le i} {c_j}.$$
 \end{theorem}
-\subsection{B-spline Interpolation}
+\subsection{B-Spline Interpolation}
 \label{SSec: 2-B-SPL-INT}
 Let $n = \dim(\cS_{k, \bt})$ for the knots $\bt$. For the observation data $\{(x_i, y_i)\}_{i=1}^n$, the B-spline interpolation finds a spline $f(x) = \sum_{j=1}^n c_j B_{jk}$ that 
 \begin{equation}
