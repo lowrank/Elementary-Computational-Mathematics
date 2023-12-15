@@ -16,3 +16,12 @@ jobs:
         with:
           name: PDF
           path: main.pdf
+      - name: Commit and push PDE file
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          git config --local user.email "yzz0225@auburn.edu"
+          git config --local user.name "Yimin Zhong"
+          git add main.pdf
+          git commit -m "Upload PDF file" || echo "No changes to commit"
+          git push
