@@ -982,7 +982,24 @@ where $\mu$ is the usual Lebesgue measure.
     \end{equation}
     where $\textrm{disc}(z) = \frac{1}{m}\sum_{i=1}^m \chi_{\prod_{j=1}^d [0, z_j)}  (\bx_{i}) - \prod_{j=1}^d z_i$ is the discrepancy function. This is also known as the Hlawka-Zaremba identity. Note $\chi_{[0, z)}(x) = \chi_{(x, 1]}(z)$.
 \end{proof}
-\subsection{Randomized Quasi-Monte Carlo}
+\begin{definition}
+    If the sequence $\{\bx_i\}_{i\ge 1}$ satisfies that
+       $D_{m}^{\ast} \le C \frac{|\ln m|^{\alpha_d}}{m}$ as $m\to\infty$ for certain $\alpha_d \ge 0$, 
+    then sequence is called a \emph{low-discrepancy point set}. 
+\end{definition} 
+It is known that $\alpha_d = d-1$ is achievable (e.g., Hammersley point set, $(t,m,s)$-nets) and there are lattice point sets with $\alpha_2 = 1$ and $\alpha_d = d$ for $d\ge 3$. See Chapter 4 and Chapter 5 of~\cite{niederreiter1992random}. 
+
+\begin{example}[Irrational rotation]
+    
+\end{example}
+
+\begin{example}[van der Corput sequence]
+    
+\end{example}
+
+\begin{example}[Sobol sequence]
+    
+\end{example}
 \section{Exercises}
 The source code and test cases for the computational part are hosted on GitHub.
 
