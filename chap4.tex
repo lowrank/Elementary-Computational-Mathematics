@@ -150,7 +150,8 @@ where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especia
     \item Form a new polynomial $p(x) = \sum_{j=0}^n a_j x^j$.
     \item Locate the local extrema nodes of $|p(x) - f(x)|$ as a new set of nodes (if no local extrema on the sub-interval, then take the larger magnitude on end nodes). If the equioscillation condition is nearly achieved, then stop. Otherwise, repeat step $2$ with the new extrema nodes.
 \end{enumerate}
-
+\subsection{Approximation for Analytic Functions}
+Berstein Ellipse
 \section{Approximation Theory for Compact Groups}
 \subsection{\mathtitle{$\mathrm{SO(n)}$}}
 
@@ -164,13 +165,6 @@ where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especia
 \subsection{Theoretical Part}
 \begin{problem}
     Show that the vector space $C^0([a, b])$ with $\|\cdot\|_{\infty}$ is not strictly normed.
-\end{problem}
-\begin{problem}[interlacing]
-    Let $p_n$ be orthogonal polynomials with respect to weight function $w(x)\ge 0$, and prove that the zeros of $p_n$ and $p_{n+1}$ are alternating. 
-    \begin{equation}
-        -1 < x_{1, n+1} < x_{1, n} < x_{2,n+1} < x_{2,n}<\dots < x_{n,n+1} < x_{n, n} < x_{n+1, n+1} < 1.
-    \end{equation}
-    where $x_{j, k}, 1\le j\le k$ are the zeros of $p_k$. Hint: Use the recursive formula.
 \end{problem}
 \begin{problem}
     Let $f(x)\in C^0([-1,1])$ is even (odd). Show that the minimax approximation $q_n(x)\in\Pi_n$ is also even (odd).
