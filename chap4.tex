@@ -2,9 +2,9 @@
 \label{Ch: 4-App}
 The approximation solves the problem 
 $$\min_{p\in P}\|f - p\|_{\cX}$$
-which aims to select the function $p\in P$ in a specific set that has the minimum distance under a certain metric $\|\cdot\|_{\cX}$ from the target function $f$. 
+which aims to select the function $p\in P$ in a specific set with the minimum distance under a certain metric $\|\cdot\|_{\cX}$ from the target function $f$. 
 \section{General Approximation Theory}
-The most famous example in approximation theory is the Least Square problem 
+The most famous example in approximation theory is the least square problem 
 $$\min_{x\in S} \|Ax - b\|_2$$
 where $A\in\bbR^{N\times k}$ and a given vector $b\in \bbR^N$. Seeking for solution $x\in S = \bbR^k$ is the simplest case. In general, the problem can be efficiently solved if $S$ is a convex set. 
 \begin{definition}
@@ -18,36 +18,54 @@ where $A\in\bbR^{N\times k}$ and a given vector $b\in \bbR^N$. Seeking for solut
     \end{equation}
 \end{definition}
 \begin{theorem}[existence of best approximation]
+\label{Thm: 4-Exi-Bes-App}
 If $u_k$ is a minimizing sequence and has an accumulation point $u^{\ast}$ in $\cM$, then  $u^{\ast}$ is a best approximation to $v$.
 \end{theorem}
 \begin{proof}
     Just take the limit (subsequence) on both sides to 
     \begin{equation}
-        \|u^{\ast} - v\| \le \|u^{\ast} - u_k\| + \|u_k - v\|
+        \|u^{\ast} - v\| \le \|u^{\ast} - u_k\| + \|u_k - v\|.
     \end{equation}
 \end{proof}
 \begin{theorem}
+\label{Thm: 4-Com-Exi}
     If $\cM$ is a compact subset of $\cV$, then the best approximation always exists.
 \end{theorem}
+\begin{proof}
+    
+\end{proof}
 One special case is that $\cM$ is a finite dimension linear subspace of $\cV$, then one can take a bounded closed set truncating the minimizing sequence, then such set must be compact.
 \begin{lemma}[convexity]
+\label{Lem: 4-CON}
 If $\cM$ is a convex set of normed space $\cV$, then the set of best approximations is convex.
 \end{lemma}
+\begin{proof}
+    
+\end{proof}
 \begin{theorem}[uniqueness]
+\label{Thm: 4-Uni-1}
     If $\cM$ is strictly convex of normed space $\cV$, then the best approximation is unique. It is worthwhile to notice that strictly convexity is sufficient but not necessary.
 \end{theorem}
+\begin{proof}
+    
+\end{proof}
 \begin{definition}
    The normed space $(\cV, \|\cdot\|)$ is strictly normed if and only if the unit ball is strictly convex).
 \end{definition}
 \begin{theorem}[uniqueness]
+\label{Thm: 4-Uni-2}
     If $\cM$ is a strictly normed linear subspace of normed space $\cV$, then there exists at most one best approximation for each $v\in\cV$.
 \end{theorem}
+\begin{proof}
+    
+\end{proof}
 \section{Minimax Approximation}
+\label{Sec: 4-MIN-APP}
 Given $f\in C^0([a, b])$, find a polynomial $p_n\in\Pi_n$ such that $$\|f - p_n\|_{\infty} = \min_{g\in\Pi_n} \|f - g\|_{\infty}$$
-Such a problem is the minimax approximation problem. In the previous sections, we have seen a similar problem which is to minimize the maximum of $|\omega(x)|$ with $\omega(x) = \prod_{j=0}^n(x - x_j)$. The proof used there can be borrowed for the following theorem as well. 
-
+Such a problem is a typical minimax approximation problem. In the previous Chapter~\ref{Ch: 2-Int}, we have seen a similar problem which is to minimize the maximum of $|\omega(x)|$ with $\omega(x) = \prod_{j=0}^n(x - x_j)$. The proof used there can be borrowed for the following theorem as well. 
 
 \begin{theorem}[de la Vall\'ee-Poussin]
+\label{Thm: 4-DE-LA-VAL-POU}
     Let $f\in C^0([a, b])$ and $n\ge 0$, let $x_0<x_1<\dots<x_{n+1}$ be $n+2$ nodes in $[a, b]$. If there exists a polynomial $q_n\in\Pi_n$ such that 
     $$f(x_j) - q_n(x_j) = (-1)^j e_j,\quad j =0,\dots, n+1.$$ 
     where $e_j$ are having the same sign and nonzero, then 
@@ -55,27 +73,30 @@ Such a problem is the minimax approximation problem. In the previous sections, w
         \min_j |e_j|\le E_n^{\ast}(f): = \min_{g\in\Pi_n} \|f - g\|_{\infty} \le \max_j |e_j|.
     \end{equation}
 \end{theorem}
+
 \begin{proof}
     Prove by contradiction. Suppose $E_n^{\ast}(f)$ is achieved by some polynomial $g\in\Pi_n$. If $q_n$ satisfies that 
     \begin{equation}
-        |e_j| > E_n^{\ast}(f) = \|f - g\|_{\infty}.
+        |e_j| > E_n^{\ast}(f) = \|f - g\|_{\infty} \quad \forall j=0,1,\cdots n+1.
     \end{equation}
-    Then $q_n - g = q_n - f - (g - f)$, which implies that 
+    Then, $q_n - g = q_n - f - (g - f)$ implies that 
     \begin{equation}
-    \sgn(q_n - g)(x_j) = \sgn(q_n - f)(x_j) = -(-1)^j\sgn(e_j)
+    \sgn(q_n - g)(x_j) = \sgn(q_n - f)(x_j) = -(-1)^j\sgn(e_j),
     \end{equation}
     which changes sign $n+1$ times while $q_n - g$ only has $n$ roots.
 \end{proof}
+The above theorem implies the sufficiency of the ``equioscillation'' property of length $n+2$ for the minimax approximation. The next theorem shows it is also necessary.
 \begin{theorem}[Chebyshev equioscillation theorem]
-    Let $f\in C^0([a, b])$ and $n\ge 0$. Then there {exists a unique polynomial} $q^{\ast}\in\Pi_n$ such that 
+\label{Thm: 4-Che-Equ}
+    Let $f\in C^0([a, b])$ and $n\ge 0$. Then there exists a \emph{unique} polynomial $q^{\ast}\in\Pi_n$ such that 
     \begin{equation}
-        E_{n}^{\ast}(f) = \|f - q_n^{\ast}\|_{\infty}
+        E_{n}^{\ast}(f) = \|f - q_n^{\ast}\|_{\infty}.
     \end{equation}
-    This polynomial is uniquely characterized by the property:
-    $$a\le x_0<\dots < x_{n+1}\le b $$
+    This polynomial is uniquely characterized by the property that 
+    $\exists a\le x_0<\dots < x_{n+1}\le b$ 
     for which we can select $\sigma = \pm 1$ that 
-    \begin{equation}
-        f(x_j) - q_n^{\ast}(x_j) = \sigma (-1)^j E_n^{\ast}(f),\quad j=0,1,\dots, n+1.
+    \begin{equation}\label{EQ: 4-EQUI-OSCI}
+        f(x_j) - q_n^{\ast}(x_j) = \sigma (-1)^j \|f - q_n^{\ast}\|_{\infty} ,\quad j=0,1,\dots, n+1.
     \end{equation}
 \end{theorem}
 \begin{proof}
@@ -83,23 +104,23 @@ Such a problem is the minimax approximation problem. In the previous sections, w
     \begin{equation}
         \cM = \{q\in \Pi_n\mid \|q - f\|\le  E_n^{\ast}(f) + 1\}
     \end{equation}
-    must be non-empty and such set is compact since $\cM$ is of finite dimension and closed. Then the minimizing sequence will have a converging sub-sequence such that the limit sits in $\cM$.
+    must be non-empty and such a set is compact since $\cM$ is of finite dimension and closed. Then the minimizing sequence will have a converging sub-sequence, so the limit sits in $\cM$.
 
-    Then we show the alternation property for this minimizing polynomial. If there is no alternation between $f$ and $q_n$, then we can partition the interval $[a, b]$ into $1\le N\le n+1$ parts 
-    $$[a, b]=\cup_{j=1}^N [t_{j-1}, t_j],\quad a = t_0<\dots< t_N = b.$$
-    that 
+    Then we show it is necessary (sufficiency by Theorem~\ref{Thm: 4-DE-LA-VAL-POU}) to have~\eqref{EQ: 4-EQUI-OSCI} for this minimizing polynomial $q_n$. If it is not satisfied, then we can partition the interval $[a, b]$ into $1\le N\le n+1$ parts 
+    $$[a, b]=\cup_{j=1}^N [t_{j-1}, t_j],\quad a = t_0<\dots< t_N = b,$$
+    such that 
     \begin{enumerate}
         \item $f(t_k) - q_n(t_k) = 0$, $k = 1,\dots, N-1$.
-        \item for each $1\le k\le N$, there exists $s_k\in [t_{k-1}, t_k]$ such that 
+        \item for each $1\le k\le N$, there exists (may not be unique) $s_k\in [t_{k-1}, t_k]$ such that 
         $$|f(s_k) - q_n(s_k)| = \|f - q_n\|_{\infty}\neq 0$$
         and for any $x\in [t_{k-1}, t_k]$, 
         $$-(f(x) - q_n(x)) \neq (f(s_k) - q_n(s_k)).$$
         \item for each $1\le k\le N-1$, 
-        $$f(s_k) - q_n(s_k) = -(f(s_{k+1}) - q_n(s_k),$$
+        $$f(s_k) - q_n(s_k) = -(f(s_{k+1}) - q_n(s_{k+1}) ).$$
     \end{enumerate}
     Without loss of generality, one can assume that 
     \begin{eqnarray}
-        \sgn(f(s_k) - q_n(s_k)) = (-1)^{k-1}
+        \sgn(f(s_k) - q_n(s_k)) = (-1)^{k-1}, 
     \end{eqnarray}
     then using the second condition, there exists $\eps$ such that $\forall x\in [t_{k-1}, t_k]$,
     \begin{equation}
@@ -119,7 +140,7 @@ Such a problem is the minimax approximation problem. In the previous sections, w
         \item $f(x) - k(x) > f(x) - q_n(x)$, if $x\in (t_{k-1}, t_k)$ for $k$ even.
         \item $f(x) - k(x)\le \|f - q_n\| -\frac{\eps}{2}$, if $x\in (t_{k-1}, t_k)$ for $k$ odd.
     \end{enumerate}
-    In this way, $\|f - k\|_{\infty} < \|f - q_n\|_{\infty}$, contradiction.
+    In this way, $\|f - k\|_{\infty} < \|f - q_n\|_{\infty}$, which is a contradiction.
 
     In the last, we show the uniqueness. Suppose there are two polynomials $q_n, \tilde{q}_n$ being the minimax approximation. Then $\frac{1}{2}(q_n +\tilde{q}_n)$ must also be a minimax approximation, therefore there exist the alternation nodes 
     \begin{equation}
@@ -131,32 +152,68 @@ Such a problem is the minimax approximation problem. In the previous sections, w
     \end{equation}
     Therefore, we must have 
     \begin{equation}
-        (q_n - f)(s_k) = (\tilde{q}_n - f)(s_k)\Rightarrow q_n(s_k) = \tilde{q}_n(s_k).
+        (q_n - f)(s_k) = (\tilde{q}_n - f)(s_k)\Rightarrow q_n(s_k) = \tilde{q}_n(s_k),
     \end{equation}
+    which implies $q_n = \tilde{q}_n$ by the uniqueness of interpolation. 
 \end{proof}
+
+\begin{remark}
+    If the approximation is under $L^{2}$ norm instead of $C^0$ norm, then  
+    \begin{equation}
+        f_n^{\ast} = \argmin_{f_n \in \Pi_n }\|f - f_n\|_{L^2[a, b]} = \sum_{k=0}^{n} a_k p_k
+    \end{equation}
+    where $\{p_k\}_{k\ge 0}$ is the set of orthogonal polynomials (Legendre polynomials) on $[a, b]$ and the coefficients $a_k = \aver{f, p_k}/\aver{p_k, p_k}$. 
+\end{remark}
+
 \subsection{Remez Algorithm}
-The numerical method to find the minimax polynomial is using the idea of the above Chebyshev equioscillation theorem. Intuitively, the aiming polynomial will be oscillatory compared with $f$, therefore we can start with the Chebyshev polynomial approximation, which is
+The Chebyshev equioscillation theorem does not provide a constructive way to find the best polynomial approximation in $L^{\infty}$ norm. However, the numerical method to find the minimax polynomial could adopt the idea of the above Chebyshev equioscillation theorem. Intuitively, the aiming polynomial will be oscillatory compared with $f$, therefore we can start with the Chebyshev polynomial approximation, which is
 \begin{equation}
     C_n(x) = \sum_{j=0}^n c_j T_j(x),\quad c_j = \aver{f, T_j}_w/\aver{T_j,T_j}_w
 \end{equation}
 where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especially if $f\in C^r([a, b])$, the coefficient $c_j\sim \cO(j^{-r})$ decays fast, then the reminder approximately $f - C_n\simeq c_{n+1}T_{n+1}$, this reminder achieves equioscillation at exactly $(n+2)$ points. The Remez algorithm is based on the above idea and performs an iterative construction.
-\begin{enumerate}
-    \item Initialize local extrema nodes $x_j$ of $T_{n+1}$. 
-    \item Solve the equation that 
-    \begin{equation}
-        \sum_{j=0}^{n} a_j x_k^j + (-1)^k E = f(x_k)
-    \end{equation}
-    for unknown coefficients $a_j$ and the estimated error $E$, $k = 0,\dots, n+1$.
-    \item Form a new polynomial $p(x) = \sum_{j=0}^n a_j x^j$.
-    \item Locate the local extrema nodes of $|p(x) - f(x)|$ as a new set of nodes (if no local extrema on the sub-interval, then take the larger magnitude on end nodes). If the equioscillation condition is nearly achieved, then stop. Otherwise, repeat step $2$ with the new extrema nodes.
-\end{enumerate}
-\subsection{Approximation for Analytic Functions}
-Berstein Ellipse
-\section{Approximation Theory for Compact Groups}
+% \begin{enumerate}
+%     \item Initialize local extrema nodes $x_j$ of $T_{n+1}$. 
+%     \item Solve the equation that 
+%     \begin{equation}
+%         \sum_{j=0}^{n} a_j x_k^j + (-1)^k E = f(x_k),\quad k = 0, \cdots n+1.
+%     \end{equation}
+%     for unknown coefficients $a_j$, $j=0,\cdots, n$ and the estimated error $E$. 
+%     \item Construct a new candidate polynomial $p(x) = \sum_{j=0}^n a_j x^j$.
+%     \item Locate the local extrema nodes of $|p(x) - f(x)|$ as a new set of nodes (if there is no local extrema on the subinterval, then take the larger magnitude on end nodes). If the equioscillation condition is nearly achieved, then stop. Otherwise, repeat the second step with the new extrema nodes.
+% \end{enumerate}
+\begin{algorithm}[!htb]
+    \SetAlgoLined
+    \caption{Remez algorithm for polynomial approximation on $[-1,1]$}    \label{ALG: REMEZ}
+    \KwData{Objective function $f(x)$ on $[-1, 1]\subset \mathbb{R}$}
+    \KwResult{Polynomial $p(x)\in\Pi_n$ and estimated error $E$}
+    $\{x_j\}_{j=0}^n\gets \texttt{findExtreme}(T_{n+1})$//  Initialize local extrema nodes of $T_{n+1}$; 
+    \\
+    \While{True}{
+        Solve the equation for $a_j$ and $E$,
+        \begin{equation}
+            \sum_{j=0}^{n} a_j x_k^j + (-1)^k E = f(x_k),\quad k = 0, \cdots n+1;
+        \end{equation}\\
+        $p(x) \gets \sum_{j=0}^{n} a_j x^j$; // new candidate polynomial; \\ 
+        $\text{stop} \gets \texttt{isEquioscillation}(p - f)$ // check equioscillation condition~\eqref{EQ: 4-EQUI-OSCI} ; \\
+        \eIf {stop}{ 
+            return \\
+        }
+        {
+            $\{x_j\}_{j=0}^n\gets \texttt{findExtreme}((p - f))$ // find local extrema nodes of $p - f$.
+        }
+    }
+\end{algorithm}
+\subsection{Polynomial Approximation for Analytic Functions}
+Let $f(z)$ be an analytic function inside a domain $D\subset \bbC$, then usually $f$ can be well approximated by polynomials. In other words, 
+\begin{equation}
+    E_n(f) = \min_{p_n\in \Pi_n} \|f - p_n\|_{D}
+\end{equation}
+decays very quickly in terms of $n$. In this section, we provide a systematic yet brief introduction. 
+\section{Approximation Theory on Compact Groups}
 \subsection{\mathtitle{$\mathrm{SO(n)}$}}
 
 \section{Pad\'e Approximation}
-
+\section{Rank one approximation}
 \section{Neural Network}
 \subsection{Radial Basis}
 \subsection{Universal Approximation Theorem}
@@ -176,6 +233,3 @@ Berstein Ellipse
     Implement the Remez algorithm and find the minimax approximation in $\Pi_3$ for the function $f(x) = e^x$ on $[0, 1]$.
 \end{problem}
 
-\begin{problem}
-    Implement the Gauss quadrature $n=4$ and compare the accuracy with Newton-Cotes closed formula $n=4$ for $f(x) = e^x$ on $[0, 1]$.
-\end{problem}
