@@ -4,6 +4,7 @@ The approximation solves the problem
 $$\min_{p\in P}\|f - p\|_{\cX}$$
 which aims to select the function $p\in P$ in a specific set with the minimum distance under a certain metric $\|\cdot\|_{\cX}$ from the target function $f$. 
 \section{General Approximation Theory}
+\label{Sec: 4-Gen-App-The}
 The most famous example in approximation theory is the least square problem 
 $$\min_{x\in S} \|Ax - b\|_2$$
 where $A\in\bbR^{N\times k}$ and a given vector $b\in \bbR^N$. Seeking for solution $x\in S = \bbR^k$ is the simplest case. In general, the problem can be efficiently solved if $S$ is a convex set. 
@@ -59,6 +60,11 @@ If $\cM$ is a convex set of normed space $\cV$, then the set of best approximati
 \begin{proof}
     
 \end{proof}
+
+\begin{remark}
+    The above theorems are quite preliminary in general Banach spaces. It is recommended to formalize the proofs with $\texttt{Lean}$. See Exercises.  
+\end{remark}
+
 \section{Minimax Approximation}
 \label{Sec: 4-MIN-APP}
 Given $f\in C^0([a, b])$, find a polynomial $p_n\in\Pi_n$ such that $$\|f - p_n\|_{\infty} = \min_{g\in\Pi_n} \|f - g\|_{\infty}$$
@@ -170,7 +176,7 @@ The Chebyshev equioscillation theorem does not provide a constructive way to fin
 \begin{equation}
     C_n(x) = \sum_{j=0}^n c_j T_j(x),\quad c_j = \aver{f, T_j}_w/\aver{T_j,T_j}_w
 \end{equation}
-where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especially if $f\in C^r([a, b])$, the coefficient $c_j\sim \cO(j^{-r})$ decays fast, then the reminder approximately $f - C_n\simeq c_{n+1}T_{n+1}$, this reminder achieves equioscillation at exactly $(n+2)$ points. The Remez algorithm is based on the above idea and performs an iterative construction.
+where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especially if $f\in C^r([a, b])$, the coefficient $c_j\sim \cO(j^{-r})$ decays fast, then the reminder approximately $f - C_n\simeq c_{n+1}T_{n+1}$, this reminder achieves equioscillation at exactly $(n+2)$ points. The Remez algorithm (see Algorithm~\ref{ALG: REMEZ}) is based on the above idea and performs an iterative construction.
 % \begin{enumerate}
 %     \item Initialize local extrema nodes $x_j$ of $T_{n+1}$. 
 %     \item Solve the equation that 
@@ -204,11 +210,36 @@ where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especia
     }
 \end{algorithm}
 \subsection{Polynomial Approximation for Analytic Functions}
-Let $f(z)$ be an analytic function inside a domain $D\subset \bbC$, then usually $f$ can be well approximated by polynomials. In other words, 
+Let $f(z)$ be an analytic function inside a domain
+$D_{\rho}\subset \bbC$, where $[-1, 1]\subset D_{\rho}$. Usually, $f$ can be well approximated by polynomials in $D_{\rho}$. Here, the parameter $\rho$ and the definition of $D_{\rho}$ will be elaborated later. In particular,   
 \begin{equation}
-    E_n(f) = \min_{p_n\in \Pi_n} \|f - p_n\|_{D}
+    E_{n}(f) = \min_{f_n\in \Pi_n} \|f - f_n\|_{L^{\infty}(I)}
 \end{equation}
-decays very quickly in terms of $n$. In this section, we provide a systematic yet brief introduction. 
+decays very quickly in terms of $n$. Let $p_n\in \Pi_n$, $n = 0,1,\cdots$ be the orthogonal polynomials over $I\subset \bbR$ with weight $w$.  Suppose one can represent (with pointwise convergence)
+\begin{equation}
+    f(x) = \sum_{n=0}^{\infty} a_n p_n(x), \quad a_n = \frac{\aver{f, p_n}}{\aver{p_n, p_n}}, 
+\end{equation}
+then, $E_{n, p}(f) \le  \sum_{k > n} | a_k | \sup_{I} \left| p_k \right|$. Therefore, we only have to estimate the coefficients $|a_n|$. 
+\begin{definition}[weighted Cauchy transform]
+Let $x\in \bbR$, the weighted Cauchy transform of $p_n$ is denoted by 
+\begin{equation}
+    P_n(z) = \frac{1}{2\pi i} \int_{I} \frac{w(x) p_n(x)}{z - x} dx,\quad z \in \bbC - \bbR. 
+\end{equation}
+\end{definition}
+\begin{lemma}
+    If $f$ is analytic in the strip-shape domain $D_{\rho}$, then the projection can be computed by the contour integral
+    \begin{equation}
+        \aver{f, p_n} = \int_{\partial D} f(z) P(z) dz
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    
+\end{proof}
+
+\begin{remark}
+    For infinite domain like $[0, \infty)$ or $(-\infty, \infty)$, the polynomial approximation error in $L^{\infty}$ norm will be unbounded. 
+\end{remark}
+
 \section{Approximation Theory on Compact Groups}
 \subsection{\mathtitle{$\mathrm{SO(n)}$}}
 
@@ -233,3 +264,10 @@ decays very quickly in terms of $n$. In this section, we provide a systematic ye
     Implement the Remez algorithm and find the minimax approximation in $\Pi_3$ for the function $f(x) = e^x$ on $[0, 1]$.
 \end{problem}
 
+\begin{problem}
+    Formalize the theorem/proofs in Section~\ref{Sec: 4-Gen-App-The} with \texttt{Lean}.
+\end{problem}
+
+\nocite{trefethen2019approximation,cheney2009course}
+\bibliographystyle{apalike}
+\bibliography{chap4}
