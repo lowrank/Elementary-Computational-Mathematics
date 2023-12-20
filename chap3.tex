@@ -1066,7 +1066,22 @@ The source code and test cases for the computational part are hosted on GitHub.
 \end{problem}
 
 \begin{problem}
-    Implement the Gauss quadrature $n=4$ and compare the accuracy with Newton-Cotes closed formula $n=4$ for $f(x) = e^x$ on $[0, 1]$.
+    Implement the Gauss-Legendre quadrature $n=4$ and compare the accuracy with Newton-Cotes closed formula $n=4$ for $f(x) = e^x$ on $[0, 1]$.
+\end{problem}
+\begin{problem}
+    Implement the Gauss-Laguerre quadrature for 
+    \begin{equation}
+        \cI_{\textrm{Laguerre}} = \int_0^{\infty} e^{-x} \cos(x) dx 
+    \end{equation}
+    and compare with the quadrature error by Gauss-Legendre quadrature on a truncated domain 
+    \begin{equation}
+        \cI_{\textrm{Legendre}} = \int_{0}^{50} e^{-x} \cos(x) dx.
+    \end{equation}
+    Explain your results.
+\end{problem}
+\begin{problem}
+    Implement the quasi-Monte Carlo method with irrational rotation sequence $\sqrt{2}$ and compare the quadrature error with the Monte Carlo integration for  
+    $$\cI = \int_{[0, 1]^2} e^{ -(x^2 + y^2) } dx d y = \frac{\pi}{4} |\textrm{erf}(1)|^2. $$
 \end{problem}
 
 \bibliographystyle{apalike}
