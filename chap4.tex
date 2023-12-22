@@ -7,7 +7,7 @@ which aims to select the function $p\in P$ in a specific set with the minimum di
 \label{Sec: 4-Gen-App-The}
 The most famous example in approximation theory is the least square problem 
 $$\min_{x\in S} \|Ax - b\|_2$$
-where $A\in\bbR^{N\times k}$ and a given vector $b\in \bbR^N$. Seeking for solution $x\in S = \bbR^k$ is the simplest case. In general, the problem can be efficiently solved if $S$ is a convex set. 
+where $A\in\bbR^{N\times k}$ and a given vector $b\in \bbR^N$. Seeking for solution $x\in S = \bbR^k$ is the simplest case. The problem can be efficiently solved if $S$ is a convex set. 
 \begin{definition}
     Let $\cM\subset \cV$ of a normed space $(\cV, \|\cdot\|)$ and given $v\in\cV$, the best approximation in $\|\cdot\|$ is 
     $$u^{\ast}\in\cM,\quad \|u^{\ast} - v\| = \inf_{u\in\cM} \|u - v\|$$
@@ -62,7 +62,7 @@ If $\cM$ is a convex set of normed space $\cV$, then the set of best approximati
 \end{proof}
 
 \begin{remark}
-    The above theorems are quite preliminary in general Banach spaces. It is recommended to formalize the proofs with $\texttt{Lean}$. See Exercises.  
+    The above theorems are quite preliminary in general Banach spaces. Formalizing the proofs with $\texttt{Lean}$ is recommended. See Exercises.  
 \end{remark}
 
 \section{Minimax Approximation}
@@ -177,17 +177,7 @@ The Chebyshev equioscillation theorem does not provide a constructive way to fin
     C_n(x) = \sum_{j=0}^n c_j T_j(x),\quad c_j = \aver{f, T_j}_w/\aver{T_j,T_j}_w
 \end{equation}
 where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especially if $f\in C^r([a, b])$, the coefficient $c_j\sim \cO(j^{-r})$ decays fast, then the reminder approximately $f - C_n\simeq c_{n+1}T_{n+1}$, this reminder achieves equioscillation at exactly $(n+2)$ points. The Remez algorithm (see Algorithm~\ref{ALG: REMEZ}) is based on the above idea and performs an iterative construction.
-% \begin{enumerate}
-%     \item Initialize local extrema nodes $x_j$ of $T_{n+1}$. 
-%     \item Solve the equation that 
-%     \begin{equation}
-%         \sum_{j=0}^{n} a_j x_k^j + (-1)^k E = f(x_k),\quad k = 0, \cdots n+1.
-%     \end{equation}
-%     for unknown coefficients $a_j$, $j=0,\cdots, n$ and the estimated error $E$. 
-%     \item Construct a new candidate polynomial $p(x) = \sum_{j=0}^n a_j x^j$.
-%     \item Locate the local extrema nodes of $|p(x) - f(x)|$ as a new set of nodes (if there is no local extrema on the subinterval, then take the larger magnitude on end nodes). If the equioscillation condition is nearly achieved, then stop. Otherwise, repeat the second step with the new extrema nodes.
-% \end{enumerate}
-\begin{algorithm}[!htb]
+\begin{algorithm}[!htbp]
     \SetAlgoLined
     \caption{Remez algorithm for polynomial approximation on $[-1,1]$}    \label{ALG: REMEZ}
     \KwData{Objective function $f(x)$ on $[-1, 1]\subset \mathbb{R}$}
@@ -211,39 +201,106 @@ where $w = (1-x^2)^{-1/2}$. The convergence is uniform as $n\to \infty$, especia
 \end{algorithm}
 \subsection{Polynomial Approximation for Analytic Functions}
 Let $f(z)$ be an analytic function inside a domain
-$D_{\rho}\subset \bbC$, where $[-1, 1]\subset D_{\rho}$. Usually, $f$ can be well approximated by polynomials in $D_{\rho}$. Here, the parameter $\rho$ and the definition of $D_{\rho}$ will be elaborated later. In particular,   
+$D_{\rho}\subset \bbC$, where a finite interval $I\subset D_{\rho}$. Usually, $f$ can be well approximated by polynomials in $D_{\rho}$. Here, the parameter $\rho$ and the definition of $D_{\rho}$ will be elaborated later. In particular,   
 \begin{equation}
-    E_{n}(f) = \min_{f_n\in \Pi_n} \|f - f_n\|_{L^{\infty}(I)}
+    E_{n,\infty}(f) = \min_{f_n\in \Pi_n} \|f - f_n\|_{L^{\infty}(I)}
 \end{equation}
-decays very quickly in terms of $n$. Let $p_n\in \Pi_n$, $n = 0,1,\cdots$ be the orthogonal polynomials over $I\subset \bbR$ with weight $w$.  Suppose one can represent (with pointwise convergence)
+decays very quickly in terms of $n$. Let $p_n\in \Pi_n$, $n = 0,1,\cdots$ be the orthogonal polynomials over $I\subset \bbR$ with the analytic weight $w$.  Suppose one can represent (pointwise convergence)
 \begin{equation}
-    f(x) = \sum_{n=0}^{\infty} a_n p_n(x), \quad a_n = \frac{\aver{f, p_n}}{\aver{p_n, p_n}}, 
+    f(x) = \sum_{n=0}^{\infty} a_n p_n(x), \quad a_n = \frac{\aver{f, p_n}_w}{\aver{p_n, p_n}_w}, 
 \end{equation}
-then, $E_{n, p}(f) \le  \sum_{k > n} | a_k | \sup_{I} \left| p_k \right|$. Therefore, we only have to estimate the coefficients $|a_n|$. 
+then, $E_{n, \infty}(f) \le  \sum_{k > n} | a_k | \sup_{I} \left| p_k \right|$. Therefore, we only have to estimate the coefficients $|a_n|$. 
 \begin{definition}[weighted Cauchy transform]
-Let $x\in \bbR$, the weighted Cauchy transform of $p_n$ is denoted by 
+\label{Def: 4-Wei-Cau-Tra}
+Let $x\in \bbR$ and suppose $w(x) p_n(x)$ satisfies that 
 \begin{equation}
-    P_n(z) = \frac{1}{2\pi i} \int_{I} \frac{w(x) p_n(x)}{z - x} dx,\quad z \in \bbC - \bbR. 
+    |w(x) p_n(x)| \le C_n \max_{1\le j\le J} \frac{1}{|x - t_j|^{\alpha}}, \quad \alpha \in (0, 1)
+\end{equation}
+for a finite number of $t_j\in \bbR$. Then the weighted Cauchy transform of $p_n$ is defined by 
+\begin{equation}
+    P_n(z) = \frac{1}{2\pi i} \int_{I} \frac{w(x) p_n(x)}{z - x} dx,\quad z \in \bbC - \overline{I}. 
 \end{equation}
 \end{definition}
-\begin{lemma}
-    If $f$ is analytic in the strip-shape domain $D_{\rho}$, then the projection can be computed by the contour integral
-    \begin{equation}
-        \aver{f, p_n} = \int_{\partial D} f(z) P(z) dz
-    \end{equation}
+Clearly, $P_n(z)$ is a holomorphic function in $\bbC - \overline{I}$. In addition, if $|z|\to \infty$, then $|P_n(z)| = \cO(|z|^{-1})$. 
+\begin{lemma}[Plemelj formula]
+\label{Lem: 4-PLE-For}
+    For any $x\in I$, then 
+    $$\lim_{\eps\to 0^{+}}P_n(x - \eps i) - P_n(x + \eps i) = w(x) p_n(x). $$ 
 \end{lemma}
 \begin{proof}
-    
+    Let $\delta_{\eps}(x) =  \frac{1}{\pi} \frac{\eps}{x^2 + \eps^2}$ and notice that 
+    \begin{equation}
+    \begin{aligned}
+           P_n(x - \eps i) - P_n(x + \eps i) &= \frac{1}{2\pi i } \int_I w(y)p_n(y) \left(\frac{1}{x - \eps i - y}  - \frac{1}{x + \eps i - y} \right) \\ 
+           &= \int_I \delta_{\eps}(x-y) \ast  w(y) p_n(y)  dy \\
+           &\to  w(x) p_n(x).
+    \end{aligned}
+    \end{equation}
 \end{proof}
-
+\begin{lemma}
+\label{Lem: 4-Coe-Pol}
+    If $f$ is analytic and bounded in the domain $D_{\rho}$ and the weight $w$ satisfies the condition in Definition~\ref{Def: 4-Wei-Cau-Tra}, 
+    then the projection can be computed by the contour integral
+    \begin{equation}
+        \aver{f, p_n}_w = \int_{\cC_{\rho}} f(z) P_n(z) dz,
+    \end{equation}
+    where the contour $\cC_{\rho} = \partial D_{\rho}$.
+\end{lemma}
+\begin{proof}
+    Since the functions $f(z)$ and $p_n(z) w(z)$ are analytic in $D_{\rho}$ except a finite number of points. Due to the mild growth of $w(x)p_n(x)$, the infinitesimal contours around these points will not contribute. Therefore, the contour $\cC_{\rho}$ can be deformed in lower and upper half-planes to the $x$-axis. Then, use Lemma~\ref{Lem: 4-PLE-For}, 
+    \begin{equation}
+         \int_{\cC} f(z) P_n(z) dz = \lim_{\eps\to 0} \int_{I}  P_n(x - \eps i) + P_n(x + \eps i) f(x) dx = \int_{I} f(x) p_n(x) w(x) dx. 
+    \end{equation}
+    The Lemma~\ref{Lem: 4-Coe-Pol} implies a trivial bound by the maximal modulus principle.
+\end{proof}
+The following examples estimate the approximation error for Chebyshev polynomials and Legendre polynomials. The Cauchy transforms are from~\cite{elliott1974asymptotic}.
+\begin{example}
+    For Chebyshev polynomials on $I = [-1,1]$ that $w(x) = (1 - x^2)^{-1/2}$, then $|p_n|$ are bounded by one,  
+    \begin{equation}
+        P_n(z) = \frac{1}{2i (z^2 - 1)^{1/2} [z + (z^2 - 1)^{1/2}]^n},\quad z \notin [-1, 1].
+    \end{equation}
+    Therefore, if we choose $D_{\rho} = \{|z + (z^2 - 1)^{1/2}| \le \rho\}$ for $\rho > 1$, the domain is an ellipse with foci at $\pm 1$, the ellipse is also called the Berstein ellipse. Then use $\aver{p_n, p_n} = \frac{\pi}{2}$ for $n > 1$, 
+    \begin{equation}
+        |a_n| \le \frac{\sup_{\cC_{\rho}} |f|}{\pi \rho^n } \int_{\cC_{\rho}} \frac{1}{|(z^2 - 1)|^{1/2}} d|z| = \frac{2}{\rho^n} \sup_{\cC_{\rho}} |f|.
+    \end{equation}
+    This implies the approximation error $E_{n,\infty}(f) \le \sum_{k > n} \frac{2}{\rho^k} \sup_{\cC_{\rho}} |f| = \cO(\rho^{-n})$.
+\end{example}
+\begin{example}
+    For Legendre polynomials on $I = [-1, 1]$ that $w(x) = 1$ and $\aver{p_n, p_n} = \frac{2}{2n+1}$, the polynomials $|p_n|$ are bounded by one, then 
+    \begin{equation}
+        P_n(z) = \frac{2^{2n+1/2}|\Gamma(n+1)|^2}{i\pi \Gamma(2n+2)(z+(z^2-1)^{1/2})^{n+1/2}} (z^2-1)^{-1/4},\quad z\notin [-1,1].
+    \end{equation}
+    Then in the Berstein ellipse $D_{\rho}$, 
+    \begin{equation}
+        |a_n|\le \frac{\sup_{\cC_{\rho}}|f|}{\pi \rho^{n + 1/2} } \frac{2^{2n-1/2}(n!)^2 }{ (2n)!  }\int_{\cC_{\rho}} \left|(z^2 - 1)^{-1/4}\right| d|z| = \cO\left(\frac{\sqrt{ n}\sup_{\cC_{\rho}|f|}}{\rho^n}\right).
+    \end{equation}
+    Therefore, if $n > |\log \rho|^{-1}$ is sufficiently large, the approximation error
+    \begin{equation}
+    \begin{aligned}
+        E_{n,\infty}(f) &= \cO\left(\sup_{\cC_{\rho} } |f| \sum_{k>n}\frac{\sqrt{k}}{\rho^k}\right) = \cO(\sqrt{n}\rho^{-n}).
+    \end{aligned}
+    \end{equation}
+\end{example}
 \begin{remark}
-    For infinite domain like $[0, \infty)$ or $(-\infty, \infty)$, the polynomial approximation error in $L^{\infty}$ norm will be unbounded. 
+    It can be shown for the general Jacobi polynomials $p_n$ with weight $(1-x)^{\alpha}(1+x)^{\beta}$, the coefficient 
+    $|a_n| = \cO(\sqrt{n} \rho^{-n} )$ as the previous example. However, let $q = \max(\alpha, \beta)$, then 
+    \begin{equation}
+        E_{n,\infty}(f) = \sum_{k>n} \cO\left(\sqrt{k} \rho^{-k} \sup_{[-1,1]} |p_k|\right) = \begin{cases}
+            \cO\left( n^{q+\frac{1}{2}}\rho^{-n}\right),\quad & q\ge -\frac{1}{2},        \\
+             \cO\left( \rho^{-n} \right),\quad & q < -\frac{1}{2}. 
+            \end{cases}
+    \end{equation}
+    In other words, the Chebyshev polynomials have attained the best bound. The approximation error by Legendre polynomials only differs by a factor of $\sqrt{n}$. 
 \end{remark}
-
 \section{Approximation Theory on Compact Groups}
 \subsection{\mathtitle{$\mathrm{SO(n)}$}}
 
 \section{Pad\'e Approximation}
+Instead of linearly combining the basis functions for approximation, it is also possible to introduce nonlinear dependencies of the parameters for approximation. The most common one is the rational approximation. It uses the rational functions 
+\begin{equation}
+    R(x) = \frac{a_0 + a_1 x + \cdots + a_n x^n}{b_0 + b_1 x + \cdots + b_m x^m}
+\end{equation}
+to approximate the objective functions.
 \section{Rank one approximation}
 \section{Neural Network}
 \subsection{Radial Basis}
@@ -268,6 +325,6 @@ Let $x\in \bbR$, the weighted Cauchy transform of $p_n$ is denoted by
     Formalize the theorem/proofs in Section~\ref{Sec: 4-Gen-App-The} with \texttt{Lean}.
 \end{problem}
 
-\nocite{trefethen2019approximation,cheney2009course}
+\nocite{trefethen2019approximation,cheney2009course, muskhelishvili2008singular, elliott1974asymptotic}
 \bibliographystyle{apalike}
 \bibliography{chap4}
