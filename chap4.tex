@@ -207,6 +207,7 @@ $D_{\rho}\subset \bbC$, where a finite interval $I\subset D_{\rho}$. Usually, $f
 \end{equation}
 decays very quickly in terms of $n$. Let $p_n\in \Pi_n$, $n = 0,1,\cdots$ be the orthogonal polynomials over $I\subset \bbR$ with the analytic weight $w$.  Suppose one can represent (pointwise convergence)
 \begin{equation}
+\label{EQ: 4-COEF-POLY}
     f(x) = \sum_{n=0}^{\infty} a_n p_n(x), \quad a_n = \frac{\aver{f, p_n}_w}{\aver{p_n, p_n}_w}, 
 \end{equation}
 then, $E_{n, \infty}(f) \le  \sum_{k > n} | a_k | \sup_{I} \left| p_k \right|$. Therefore, we only have to estimate the coefficients $|a_n|$. 
@@ -253,26 +254,26 @@ Clearly, $P_n(z)$ is a holomorphic function in $\bbC - \overline{I}$. In additio
     \end{equation}
     The Lemma~\ref{Lem: 4-Coe-Pol} implies a trivial bound by the maximal modulus principle.
 \end{proof}
-The following examples estimate the approximation error for Chebyshev polynomials and Legendre polynomials. The Cauchy transforms are from~\cite{elliott1974asymptotic}.
+The following examples estimate the approximation error for Chebyshev polynomials and Legendre polynomials. The asymptotic expressions of Cauchy transforms are from~\cite{elliott1974asymptotic} for large $n$.  
 \begin{example}
     For Chebyshev polynomials on $I = [-1,1]$ that $w(x) = (1 - x^2)^{-1/2}$, then $|p_n|$ are bounded by one,  
     \begin{equation}
-        P_n(z) = \frac{1}{2i (z^2 - 1)^{1/2} [z + (z^2 - 1)^{1/2}]^n},\quad z \notin [-1, 1].
+        P_n(z) \sim \frac{1}{2i (z^2 - 1)^{1/2} [z + (z^2 - 1)^{1/2}]^n},\quad z \notin [-1, 1].
     \end{equation}
     Therefore, if we choose $D_{\rho} = \{|z + (z^2 - 1)^{1/2}| \le \rho\}$ for $\rho > 1$, the domain is an ellipse with foci at $\pm 1$, the ellipse is also called the Berstein ellipse. Then use $\aver{p_n, p_n} = \frac{\pi}{2}$ for $n > 1$, 
     \begin{equation}
-        |a_n| \le \frac{\sup_{\cC_{\rho}} |f|}{\pi \rho^n } \int_{\cC_{\rho}} \frac{1}{|(z^2 - 1)|^{1/2}} d|z| = \frac{2}{\rho^n} \sup_{\cC_{\rho}} |f|.
+        |a_n| \sim \frac{\sup_{\cC_{\rho}} |f|}{\pi \rho^n } \int_{\cC_{\rho}} \frac{1}{|(z^2 - 1)|^{1/2}} d|z| = \frac{2}{\rho^n} \sup_{\cC_{\rho}} |f|.
     \end{equation}
     This implies the approximation error $E_{n,\infty}(f) \le \sum_{k > n} \frac{2}{\rho^k} \sup_{\cC_{\rho}} |f| = \cO(\rho^{-n})$.
 \end{example}
 \begin{example}
     For Legendre polynomials on $I = [-1, 1]$ that $w(x) = 1$ and $\aver{p_n, p_n} = \frac{2}{2n+1}$, the polynomials $|p_n|$ are bounded by one, then 
     \begin{equation}
-        P_n(z) = \frac{2^{2n+1/2}|\Gamma(n+1)|^2}{i\pi \Gamma(2n+2)(z+(z^2-1)^{1/2})^{n+1/2}} (z^2-1)^{-1/4},\quad z\notin [-1,1].
+        P_n(z) \sim \frac{2^{2n+1/2}|\Gamma(n+1)|^2}{i\pi \Gamma(2n+2)(z+(z^2-1)^{1/2})^{n+1/2}} (z^2-1)^{-1/4},\quad z\notin [-1,1].
     \end{equation}
     Then in the Berstein ellipse $D_{\rho}$, 
     \begin{equation}
-        |a_n|\le \frac{\sup_{\cC_{\rho}}|f|}{\pi \rho^{n + 1/2} } \frac{2^{2n-1/2}(n!)^2 }{ (2n)!  }\int_{\cC_{\rho}} \left|(z^2 - 1)^{-1/4}\right| d|z| = \cO\left(\frac{\sqrt{ n}\sup_{\cC_{\rho}|f|}}{\rho^n}\right).
+        |a_n|\sim \frac{\sup_{\cC_{\rho}}|f|}{\pi \rho^{n + 1/2} } \frac{2^{2n-1/2}(n!)^2 }{ (2n)!  }\int_{\cC_{\rho}} \left|(z^2 - 1)^{-1/4}\right| d|z| = \cO\left(\frac{\sqrt{ n}\sup_{\cC_{\rho}|f|}}{\rho^n}\right).
     \end{equation}
     Therefore, if $n > |\log \rho|^{-1}$ is sufficiently large, the approximation error
     \begin{equation}
@@ -292,21 +293,133 @@ The following examples estimate the approximation error for Chebyshev polynomial
     \end{equation}
     In other words, the Chebyshev polynomials have attained the best bound. The approximation error by Legendre polynomials only differs by a factor of $\sqrt{n}$. 
 \end{remark}
-\section{Approximation Theory on Compact Groups}
-\subsection{\mathtitle{$\mathrm{SO(n)}$}}
+\subsection{Polynomial Approximation for Differentiable Functions}
+If $f\in C^{m-1}(I)$ with $f^{(m)}\in L^{\infty}(I)$ instead of being analytic, it is intuitive to conjecture that the coefficients $|a_n| = \cO(n^{-m})$ as an analog to Fourier approximation theory. Unlike the analytic case, extending the definition of $f$ to the Berstein ellipse is not applicable. 
 
+Let us focus on the classical orthogonal polynomials which obey Rodrigues' formula (see Theorem~\ref{Thm: 3-Rod-For}). 
+\begin{equation}
+    p_n(x) w(x) = c_n \frac{d^n}{dx^n} \left[w(x) |g(x)|^n\right],  
+\end{equation}
+where $\frac{w'}{w} = \frac{h}{g}$ for $h\in \Pi_1$ and $g\in \Pi_2$. 
+\begin{enumerate}
+    \item Jacobi polynomials: $w(x) = (1-x)^{\alpha} (1+x)^{\beta}$ where $\alpha, \beta>-1$, and $\frac{w'}{w} = \frac{-\alpha(1+x) + \beta(1-x)}{1-x^2}$. 
+    \item Laguerre polynomials: $w(x) = x^{\alpha} e^{-x}$ where $\alpha>-1$ and $\frac{w'}{w} = \frac{\alpha-x}{x}$. 
+    \item Hermite polynomials: $w(x) = e^{-x^2}$ and $\frac{w'}{w} = -2x$. 
+\end{enumerate}
+Denote $Q(x) = c_n w(x) |g(x)|^n$. Since $w(x)g(x)|_{\partial I} = 0$, $\frac{d^k}{dx^k} (w(x) |g(x)|^n )|_{\partial I} = 0$ for $k <n$.  We apply integration by parts to~\eqref{EQ: 4-COEF-POLY} $m$ times ($m < n$). 
+\begin{equation}
+\begin{aligned}
+    a_n &= \frac{1}{ \aver{p_n, p_n}_w}\int_I f(x) p_n(x) w(x) dx \\
+    &= \frac{1}{ \aver{p_n, p_n}_w}\left( f'(x) Q^{(n-1)}(x)\Big|_{\partial I} - \int_{I} f'(x) Q^{(n-1)}(x) dx \right) \\
+    &= \cdots \\
+    &= \frac{(-1)^m }{\aver{p_n, p_n}_w} \int_{I} f^{(m)}(x) Q^{(n-m)}(x) dx. 
+\end{aligned}
+\end{equation}
+Therefore, we only have to estimate $\|Q^{(n - m)}\|_{\infty}$. Using Rodrigues' formula for Jacobi polynomials, it is straightforward to derive the following identity.
+\begin{lemma}
+\label{Lem: 4-Int-Ort-Pol}
+    For Jacobi polynomials $p_n = P_{n}^{\alpha, \beta}$,  the constant $c_n = \frac{(-1)^{n}}{2^n n!}$ and
+    \begin{equation}
+        Q^{(n - m)}(x) = \frac{c_n}{c_{n-m}} (1-x)^{\alpha+m}(1+x)^{\beta+m} P_{n-m}^{a+m, \beta + m}(x)
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    Notice that 
+    \begin{equation}\nonumber
+    \begin{aligned}
+        c_n \frac{d^{n-m}}{d x^{n-m}} \left[(1-x)^{\alpha}(1+x)^{\beta} |(1-x^2)|^n\right] &= c_n  \frac{d^{n-m}}{d x^{n-m}}  \left[ (1-x)^{m+\alpha}(1+x)^{m+\beta} |(1-x^2)|^{n-m} \right] \\
+        &=  \frac{c_n}{c_{n-m}} p_{n-m}^{\alpha+m, \beta+m}(x) (1 - x)^{\alpha+m} (1+x)^{\beta+m}. 
+    \end{aligned}
+    \end{equation}
+\end{proof}
+The following estimate is from~\cite{nevai1994generalized} for $\alpha, \beta > -\frac{1}{2}$ which has been improved in a later paper~\cite{krasikov2005maximum}. 
+\begin{theorem}
+\label{Thm: 4-Ort-Poly-Der-Est}
+    $\max_{[-1,1]} (1-x)^{\alpha+\frac{1}{2}}(1+x)^{\beta+\frac{1}{2}} \left|P^{\alpha,\beta}_n(x)\right|^2 \le \frac{2e (2 + \sqrt{\alpha^2+\beta^2})}{\pi}$. 
+\end{theorem}
+Therefore, when $m \ge 1$, we have the bound for $Q^{(n-m)}$ by 
+\begin{equation}
+    |Q^{(n-m)}(x)| \le \frac{ 2e(2+\sqrt{2}(q+m)) }{2^m \pi n (n-1)\cdots(n-m+1)}, \quad q = \max(\alpha, \beta). 
+\end{equation}
+Since 
+\begin{equation*}
+\begin{aligned}
+    &\sup_{[-1,1]} (1-x)^{\frac{\alpha+m}{2}-\frac{1}{4}} (1+x)^{\frac{\beta+m}{2} - \frac{1}{4}} \le \left|\frac{2e(2+\sqrt{(\alpha+m-1)^2 + (\beta+m-1)^2}}{\pi}\right|^{\sfrac{1}{2}},  \\
+    &\sup_{[-1, 1]} \left| p_{n-m}^{\alpha+m, \beta+m}(x) (1 - x)^{\frac{\alpha+m}{2}+\frac{1}{4}} (1+x)^{\frac{\beta+m}{2}+\frac{1}{4}}  \right|\le \left|\frac{2e(2 + \sqrt{ (\alpha+m)^2 + (\beta+m)^2 })}{\pi}\right|^{1/2}.
+\end{aligned}
+\end{equation*}
+\begin{theorem}
+\label{Thm: 4-Jac-Bou-Coe}
+For Jacobi polynomials $p_n = P_{n}^{\alpha, \beta}$, the coefficient $a_n$ satisfies 
+   $$|a_n|\le \frac{1}{\gamma_n} \frac{4e(2+\sqrt{2}(q+m))}{2^m \pi n(n-1)\cdots (n - m+1)}\|f^{(m)}\|_{L^{\infty}}, \quad q= \max(\alpha, \beta), $$
+where 
+    \begin{equation}
+        \gamma_n = \aver{p_n, p_n} = \frac{2^{\alpha + \beta + 1}}{2n+\alpha + \beta + 1} \frac{\Gamma(n+\alpha+1)\Gamma(n+\beta + 1)}{\Gamma(n+\alpha+\beta + 1)\Gamma(n+1)}.
+    \end{equation}
+\end{theorem}
+\begin{example}
+For $\alpha = \beta = 0$, the coefficient for Legendre polynomial expansion satisfies $$|a_n|\le \frac{2e(2n+1)(2+\sqrt{2}m) }{2^m \pi n(n-1)\cdots (n - m+1)}\|f^{(m)}\|_{L^{\infty}}. $$
+\end{example}
+\begin{example}
+For $\alpha = \beta = -\frac{1}{2}$, note the Chebyshev polynomials $T_n\sim \cO(\sqrt{n}) P_n^{-\sfrac{1}{2}, -\sfrac{1}{2}}(x)$, the coefficient for Chebyshev polynomial expansion satisfies 
+$$ |a_n| \le \frac{2^{2n+2}}{\pi\binom{2n}{n}}\frac{2e(2+\sqrt{2}(m-\frac{1}{2}))}{2^m \pi n (n-1)\cdots (n-m+1)} \|f^{(m)}\|_{L^{\infty}}. $$
+Note that $\frac{2^{2n+1}}{\pi\binom{2n}{n}}\sim 2\sqrt{\frac{n}{\pi}}$ by Stirling formula. This bound is worse than the estimate in~\cite{trefethen2019approximation} by a factor if $\sqrt{n}$ due to the loose bound from Theorem~\ref{Thm: 4-Ort-Poly-Der-Est}. 
+\end{example}
+By replace $x = \cos\theta$, then 
+\begin{equation}\nonumber
+    P_{n-m}^{m+\alpha, m+\beta}(x) (1-x)^{m+\alpha}(1+x)^{m+\beta} = P_{n-m}^{m+\alpha, m+\beta}(\cos\theta) \left(2\sin^2 \frac{\theta}{2}\right)^{m+\alpha}\left(2\cos^2\frac{\theta}{2}\right)^{m+\beta}.
+\end{equation}
+Using the Darboux formula for large $n$ and $\theta\in [c (n-m)^{-1}, \pi - c(n-m)^{-1}]$, see Theorem 8.21.13 in~\cite{szeg1939orthogonal}, we have the following asymptotic expression.  
+\begin{equation}\nonumber
+\begin{aligned}
+&P_{n-m}^{m+\alpha, m+\beta}(\cos\theta) (2\sin^2 \frac{\theta}{2})^{m+\alpha}(2\cos^2\frac{\theta}{2})^{m+\beta}\\
+&=    2^{2m+\alpha+\beta}|n-m|^{-\frac{1}{2}}\left( \pi^{-\frac{1}{2}}\sin^{m+\alpha-\frac{1}{2}}\frac{\theta}{2} \cos^{m+\beta-\frac{1}{2}}\frac{\theta}{2} \cos(N\theta+\gamma) + \cO((|n-m|\sin\theta)^{-1})\right), 
+\end{aligned}
+\end{equation}
+where $N = n + \frac{\alpha+\beta+1}{2}$ and $\gamma = -\frac{\pi}{2}(m + \alpha + \frac{1}{2})$. 
+\begin{theorem}
+    For Jacobi polynomials $p_n = P_n^{\alpha, \beta}$, the coefficient $a_n$ satisfies 
+    \begin{equation}
+        |a_n| \le \frac{C(\alpha, \beta)\|f^{(m)}\|_{\infty}}{\gamma_n}  \frac{1}{n(n-1)\cdots (n-m)} \frac{m+q}{\sqrt{n-m}},\quad q=\max(\alpha,\beta)
+    \end{equation}
+    for $n$ sufficiently large.
+\end{theorem}
+\begin{proof}
+    Because the coefficient 
+    \begin{equation}
+    \begin{aligned}
+        |a_n| &\le \frac{1}{\gamma_n} \int_{I} |f^{(m)}(x) Q^{(n-m)}(x) | dx  \\
+        &\le \frac{1}{\gamma_n} \int_{I_c} |f^{(m)}(x) Q^{(n-m)}(x) | dx + \frac{1}{\gamma_n} \int_{I_c'} |f^{(m)}(x)Q^{(n-m)}(x)| dx 
+    \end{aligned}
+    \end{equation}
+    where $I_c = \{\theta\mid c (n-m)^{-1}\le \theta\le \pi - c(n-m)^{-1} \} = \{x\in I\mid -1+\frac{c'}{|n-m|^2} \le x \le 1 - \frac{c'}{|n-m|^2}\}$ and $I_c' = I - I_c$. Recall Theorem~\ref{Thm: 4-Ort-Poly-Der-Est}, we also have
+    \begin{equation}
+        2^{m+\frac{\alpha}{2} + \frac{\beta}{2} - \frac{1}{2}} \sin^{m+\alpha-\frac{1}{2}}\frac{\theta}{2} \cos^{m+\beta-\frac{1}{2}}\frac{\theta}{2}  = (1-x)^{\frac{1}{2}(m+\alpha-\frac{1}{2})} (1+x)^{\frac{1}{2}(m+\beta-\frac{1}{2})} = \cO(m+q).
+    \end{equation}
+    Therefore, by neglecting the smaller term, there exists a constant $C$ such that
+    \begin{equation}
+    \begin{aligned}
+    |a_n| &\le \frac{1}{\gamma_n}  \left( |I_c|\|f^{(m)}\|_{L^{\infty}(I_c)} \sup_{I_c} |Q^{(n-m)}| + |I_c'|\|f^{(m)}\|_{L^{\infty}(I_c')} \sup_{I_c'} |Q^{(n-m)}(x)| \right) \\
+    &\le\left| \frac{c_n}{\gamma_n c_{n-m}} \right| 2^{m+(\alpha+\beta)/2+\frac{1}{2}}\cO((m+q)|n-m|^{-1/2}) \|f^{(m)}\|_{\infty} \\
+    &\le \frac{C(\alpha, \beta)}{\gamma_n} \frac{(m+q)}{n(n-1)\cdots (n-m)}|n-m|^{-\frac{1}{2}} \|f^{(m)}\|_{\infty}.
+    \end{aligned}
+    \end{equation}
+    for sufficiently large $n - m$. Now it recovers the optimal rate $\cO(n^{-m})$ for Chebyshev polynomials and $\cO(n^{-m+\frac{1}{2}})$ for Legendre polynomials when $n$ is sufficiently large.
+\end{proof}
 \section{Pad\'e Approximation}
 Instead of linearly combining the basis functions for approximation, it is also possible to introduce nonlinear dependencies of the parameters for approximation. The most common one is the rational approximation. It uses the rational functions 
 \begin{equation}
     R(x) = \frac{a_0 + a_1 x + \cdots + a_n x^n}{b_0 + b_1 x + \cdots + b_m x^m}
 \end{equation}
 to approximate the objective functions.
-\section{Rank one approximation}
+% \section{Rank one approximation}
 \section{Neural Network}
+\subsection{Kolmogorov Superposition Theorem}
 \subsection{Radial Basis}
 \subsection{Universal Approximation Theorem}
 \subsection{Gradient-Flow}
 \section{Exercises}
+The source code and tests for the computational part are hosted on GitHub.
 \subsection{Theoretical Part}
 \begin{problem}
     Show that the vector space $C^0([a, b])$ with $\|\cdot\|_{\infty}$ is not strictly normed.
@@ -315,7 +428,13 @@ to approximate the objective functions.
     Let $f(x)\in C^0([-1,1])$ is even (odd). Show that the minimax approximation $q_n(x)\in\Pi_n$ is also even (odd).
     Hint: think about the function $\frac{1}{2}(q_n(x) \pm q_n(-x))$, then use the Chebyshev equioscillation theorem and the uniqueness.
 \end{problem}
+\begin{problem}
+    Let Jacobi polynomials be defined as the following 
+\end{problem}
 
+\begin{problem}
+    TODO: analyze gradient flow.
+\end{problem}
 \subsection{Computational Part}
 \begin{problem}
     Implement the Remez algorithm and find the minimax approximation in $\Pi_3$ for the function $f(x) = e^x$ on $[0, 1]$.
