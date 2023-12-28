@@ -248,13 +248,13 @@ Clearly, $P_n(z)$ is a holomorphic function in $\bbC - \overline{I}$. In additio
     where the contour $\cC_{\rho} = \partial D_{\rho}$.
 \end{lemma}
 \begin{proof}
-    Since the functions $f(z)$ and $p_n(z) w(z)$ are analytic in $D_{\rho}$ except a finite number of points. Due to the mild growth of $w(x)p_n(x)$, the infinitesimal contours around these points will not contribute. Therefore, the contour $\cC_{\rho}$ can be deformed in lower and upper half-planes to the $x$-axis. Then, use Lemma~\ref{Lem: 4-PLE-For}, 
+    Since the functions $f(z)$ and $p_n(z) w(z)$ are analytic in $D_{\rho}$ except a finite number of points. Due to the mild growth of $w(x)p_n(x)$, the infinitesimal contours around these points will not contribute. Therefore, the contour $\cC_{\rho}$ can be deformed in the lower and upper half-planes to the $x$ axis. Then, use Lemma~\ref{Lem: 4-PLE-For}, 
     \begin{equation}
          \int_{\cC} f(z) P_n(z) dz = \lim_{\eps\to 0} \int_{I}  P_n(x - \eps i) + P_n(x + \eps i) f(x) dx = \int_{I} f(x) p_n(x) w(x) dx. 
     \end{equation}
     The Lemma~\ref{Lem: 4-Coe-Pol} implies a trivial bound by the maximal modulus principle.
 \end{proof}
-The following examples estimate the approximation error for Chebyshev polynomials and Legendre polynomials. The asymptotic expressions of Cauchy transforms are from~\cite{elliott1974asymptotic} for large $n$.  
+The following examples estimate the approximation error for Chebyshev polynomials and Legendre polynomials. The asymptotic expressions of the Cauchy transform are from~\cite{elliott1974asymptotic} for large $n$.  
 \begin{example}
     For Chebyshev polynomials on $I = [-1,1]$ that $w(x) = (1 - x^2)^{-1/2}$, then $|p_n|$ are bounded by one,  
     \begin{equation}
@@ -275,7 +275,7 @@ The following examples estimate the approximation error for Chebyshev polynomial
     \begin{equation}
         |a_n|\sim \frac{\sup_{\cC_{\rho}}|f|}{\pi \rho^{n + 1/2} } \frac{2^{2n-1/2}(n!)^2 }{ (2n)!  }\int_{\cC_{\rho}} \left|(z^2 - 1)^{-1/4}\right| d|z| = \cO\left(\frac{\sqrt{ n}\sup_{\cC_{\rho}|f|}}{\rho^n}\right).
     \end{equation}
-    Therefore, if $n > |\log \rho|^{-1}$ is sufficiently large, the approximation error
+    Therefore, if $n > |\log \rho|^{-1}$ is sufficiently large, the approximation error satisfies
     \begin{equation}
     \begin{aligned}
         E_{n,\infty}(f) &= \cO\left(\sup_{\cC_{\rho} } |f| \sum_{k>n}\frac{\sqrt{k}}{\rho^k}\right) = \cO(\sqrt{n}\rho^{-n}).
@@ -284,7 +284,7 @@ The following examples estimate the approximation error for Chebyshev polynomial
 \end{example}
 \begin{remark}
     It can be shown for the general Jacobi polynomials $p_n$ with weight $(1-x)^{\alpha}(1+x)^{\beta}$, the coefficient 
-    $|a_n| = \cO(\sqrt{n} \rho^{-n} )$ as the previous example. However, let $q = \max(\alpha, \beta)$, then 
+    $|a_n| = \cO(\sqrt{n} \rho^{-n} )$ as the previous example. However, if $q = \max(\alpha, \beta)$, then 
     \begin{equation}
         E_{n,\infty}(f) = \sum_{k>n} \cO\left(\sqrt{k} \rho^{-k} \sup_{[-1,1]} |p_k|\right) = \begin{cases}
             \cO\left( n^{q+\frac{1}{2}}\rho^{-n}\right),\quad & q\ge -\frac{1}{2},        \\
@@ -294,7 +294,7 @@ The following examples estimate the approximation error for Chebyshev polynomial
     In other words, the Chebyshev polynomials have attained the best bound. The approximation error by Legendre polynomials only differs by a factor of $\sqrt{n}$. 
 \end{remark}
 \subsection{Polynomial Approximation for Differentiable Functions}
-If $f\in C^{m-1}(I)$ with $f^{(m)}\in L^{\infty}(I)$ instead of being analytic, it is intuitive to conjecture that the coefficients $|a_n| = \cO(n^{-m})$ as an analog to Fourier approximation theory. Unlike the analytic case, extending the definition of $f$ to the Berstein ellipse is not applicable. 
+If $f\in C^{m-1}(I)$ with $f^{(m)}\in L^{\infty}(I)$ instead of being analytic, it is intuitive to conjecture that the coefficients $|a_n| = \cO(n^{-m})$ are an analog to the Fourier approximation theory. Unlike the analytic case, extending the definition of $f$ to the Berstein ellipse is not applicable. 
 
 Let us focus on the classical orthogonal polynomials which obey Rodrigues' formula (see Theorem~\ref{Thm: 3-Rod-For}). 
 \begin{equation}
@@ -318,8 +318,7 @@ Denote $Q(x) = c_n w(x) |g(x)|^n$. Since $w(x)g(x)|_{\partial I} = 0$, $\frac{d^
 Therefore, we only have to estimate $\|Q^{(n - m)}\|_{\infty}$. Using Rodrigues' formula for Jacobi polynomials, it is straightforward to derive the following identity.
 \begin{lemma}
 \label{Lem: 4-Int-Ort-Pol}
-    For Jacobi polynomials $p_n = P_{n}^{\alpha, \beta}$,  the constant $c_n = \frac{(-1)^{n}}{2^n n!}$ and
-    \begin{equation}
+    For Jacobi polynomials $p_n = P_{n}^{\alpha, \beta}$,  the constant $c_n = \frac{(-1)^{n}}{2^n n!}$ and \begin{equation}
         Q^{(n - m)}(x) = \frac{c_n}{c_{n-m}} (1-x)^{\alpha+m}(1+x)^{\beta+m} P_{n-m}^{a+m, \beta + m}(x)
     \end{equation}
 \end{lemma}
@@ -332,7 +331,7 @@ Therefore, we only have to estimate $\|Q^{(n - m)}\|_{\infty}$. Using Rodrigues'
     \end{aligned}
     \end{equation}
 \end{proof}
-The following estimate is from~\cite{nevai1994generalized} for $\alpha, \beta > -\frac{1}{2}$ which has been improved in a later paper~\cite{krasikov2005maximum}. 
+The following estimate is from~\cite{nevai1994generalized} for $\alpha, \beta > -\frac{1}{2}$, which has been improved in a later paper~\cite{krasikov2005maximum}. 
 \begin{theorem}
 \label{Thm: 4-Ort-Poly-Der-Est}
     $\max_{[-1,1]} (1-x)^{\alpha+\frac{1}{2}}(1+x)^{\beta+\frac{1}{2}} \left|P^{\alpha,\beta}_n(x)\right|^2 \le \frac{2e (2 + \sqrt{\alpha^2+\beta^2})}{\pi}$. 
@@ -409,15 +408,47 @@ where $N = n + \frac{\alpha+\beta+1}{2}$ and $\gamma = -\frac{\pi}{2}(m + \alpha
 \section{Pad\'e Approximation}
 Instead of linearly combining the basis functions for approximation, it is also possible to introduce nonlinear dependencies of the parameters for approximation. The most common one is the rational approximation. It uses the rational functions 
 \begin{equation}
-    R(x) = \frac{a_0 + a_1 x + \cdots + a_n x^n}{b_0 + b_1 x + \cdots + b_m x^m}
+    R(x) = \frac{a_0 + a_1 x + \cdots + a_n x^n}{1 + b_1 x + \cdots + b_m x^m}
 \end{equation}
-to approximate the objective functions.
+to approximate the objective function $f$, which permits an expansion $f(x) = \sum_{k=0}^{\infty} c_k x^k$. The Pad\'e approximation solves the equations 
+\begin{equation}
+    R^{(q)}(0) = f^{(q)}(0),\quad q = 0, 1, \cdots, m+n.
+\end{equation}
+
 % \section{Rank one approximation}
 \section{Neural Network}
-\subsection{Kolmogorov Superposition Theorem}
-\subsection{Radial Basis}
+The neural network (NN) is a popular model for constructing nonlinear function approximations. Next, we introduce the fundamentals and leave the rest to later topics. The basic structure of NN consists of several layers of neurons, which are connected through linear maps and activation functions. 
+
+\begin{example}[Feed-forward]
+Let $\bff_0(\bx) = \bx\in \bbR^{n_0}$ and $W_k\in \bbR^{n_{k-1}\times n_k}$, $\bb_k \in \bbR^{n_k}$, 
+\begin{equation}
+    \bff_k(\bx) = \sigma(W_k \bff_{k-1}(\bx) + \bb_k) , \quad k=1, 2,\cdots, K.
+\end{equation}
+and
+$\bff_{K+1} = W_{k+1} \bff_k(\bx)$. 
+The activation function $\sigma$ is a nonlinear function. 
+\end{example}
 \subsection{Universal Approximation Theorem}
+The universal approximation theorem validates the feasibility of applying neural networks for approximation when the activation function is not polynomial. 
+\subsection{Shallow Neural Network}
+The shallow neural networks (with $K=1$ hidden layer) can be simplified to 
+\begin{equation}
+    \bff(\bx) = W_{2}\sigma(W_1 \bx + \bb_1).
+\end{equation}
+For simplicity, we assume that the function $\bff: I\mapsto \bbR$ for some compact set $I\subset \bbR$. The neural network can be formulated in an explicit form 
+\begin{equation}
+    \bff(\bx) = \sum_{l=1}^n a_l \sigma(w_l \bx - b_l),\quad a_l, w_l, b_l\in\bbR.
+\end{equation}
+\begin{example}
+    If the parameters $w_l\equiv 1$, then the function $\bff$ is a linear combination of shifted spline basis $\sigma(\bx -\cdot)$, 
+    \begin{equation}
+     \bff(\bx) = \sum_{l=1}^n a_l \sigma(\bx - b_l).
+    \end{equation}
+    For instance, if $\sigma(x - \cdot)$ is a spline function, then the network is a spline approximation with trainable shifts.
+\end{example}
+
 \subsection{Gradient-Flow}
+The training stage involves an optimization process that minimizes an empirical loss function.
 \section{Exercises}
 The source code and tests for the computational part are hosted on GitHub.
 \subsection{Theoretical Part}
@@ -429,7 +460,17 @@ The source code and tests for the computational part are hosted on GitHub.
     Hint: think about the function $\frac{1}{2}(q_n(x) \pm q_n(-x))$, then use the Chebyshev equioscillation theorem and the uniqueness.
 \end{problem}
 \begin{problem}
-    Let Jacobi polynomials be defined as the following 
+    Let $\cS_k = \{x^{\lambda_1}, x^{\lambda_2}, \cdots, x^{\lambda_k}\}$ that $0\le \lambda_1 < \lambda_2 < \cdots < \lambda_k$, show that 
+    \begin{equation}\nonumber
+        \min_{f\in \textrm{span}(\cS_k)} \|f - x^{n}\|_{L^2[0, 1]} = \frac{1}{\sqrt{2n+1}}\prod_{j=1}^k\left|\frac{n - \lambda_j}{n + \lambda_j + 1}\right|.
+    \end{equation}
+    Show that the span of set $\lim_{k\to\infty}\cS_k$ is dense in $L^2[0, 1]$ if 
+    \begin{equation}
+      \lim_{k\to\infty}  \sum_{\lambda\in \cS_k} \frac{1}{\lambda+\sfrac{1}{2}} = \infty. 
+    \end{equation}
+\end{problem}
+\begin{problem}
+    Prove the Jacobi polynomials $P_n^{\alpha, \beta}(x)$ achieve maximum/minimum at $x= \pm 1$ if $\alpha, \beta \ge -\frac{1}{2}$.  
 \end{problem}
 
 \begin{problem}
