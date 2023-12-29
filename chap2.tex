@@ -1068,21 +1068,27 @@ Let $H$ be a Hilbert space of functions defined on $\cX$, with inner product $\a
 \begin{equation}
     f(x) = \aver{f, \psi_x},\quad \forall f\in H.
 \end{equation}
-The function $\cK(x, y):=\psi_x(y)$ is the \emph{reproducing kernel}. 
+The function $\cK(x, y):=\psi_x(y)$ is the \emph{reproducing kernel} and $\psi_x(\cdot)$ is the \emph{reproducing element} for point $x\in \cX$.
 \begin{example}
-    $L^2[0, 1]$ with the usual inner product is not an RKHS. However, the Sobolev space $W^{1, 2}[0, 1]$ with its usual norm is a RKHS by the embedding theorems.
+    $L^2[0, 1]$ with the usual inner product is not an RKHS. However, the Sobolev space $W^{1, 2}[0, 1]$ with its usual norm is a RKHS by the embedding theorems. One can prove that any Sobolev spaces with embedding $C^{0}(\Omega)\subset\subset W^{k,p}(\Omega)$ will be an RKHS on $\Omega$.
 \end{example}
 The kernel $\cK(x, y):\cX\times \cX\to\bbC$ satisfies 
 \begin{equation}
     \cK(x, y) = \aver{\psi_x, \psi_y}, 
 \end{equation}
 and the kernel is Hermitian and positive definite. Its converse is also true.
+\begin{example}
+    The positive definite $\cK(x, x)\ge 0$ is strict, that is, if $\cK(x, x) = 0$, then $\|\psi_x\|_{H} = 0$ which forces $\psi_x = 0$. Furthermore, the Cauchy-Schwartz inequality implies 
+    \begin{equation}
+        | \cK(x, y) |\le \sqrt{\cK(x, x)\cK(y, y)}. 
+    \end{equation}
+\end{example}
 \begin{theorem}[Moore-Aronszajn]
     \label{Thm: 2-MOO-ARO}
     If $\cK:\cX\times \cX\to\bbC$ is a Hermitian, positive definite kernel, then there is a unique RKHS with $\cK$ as its reproducing kernel.
 \end{theorem}
 \begin{proof}
-    We prove the RKHS is $H=\overline{\text{span}\{\cK(x, \cdot) \mid x\in \cX\}}$ equipped with the induced inner product $\aver{\cK(x, \cdot), \cK(y,\cdot)}_H = k(x, y)$. The verification is straightforward. For uniqueness, assume that $H'\supset H$ is another RKHS with kernel $\cK$ and inner product $\aver{\cdot, \cdot}_{H'}$. Then 
+    We prove the RKHS is $H=\overline{\text{span}\{\cK(x, \cdot) \mid x\in \cX\}}$ equipped with the induced inner product $\aver{\cK(x, \cdot), \cK(y,\cdot)}_H = \cK(x, y)$. The verification is straightforward. For uniqueness, assume that $H'\supset H$ is another RKHS with kernel $\cK$ and inner product $\aver{\cdot, \cdot}_{H'}$. Then 
     \begin{equation}
         \cK(x, y) = \aver{\cK(x, \cdot), \cK(y,\cdot)}_H = \aver{\cK(x, \cdot), \cK(y,\cdot)}_{H'},
     \end{equation}
@@ -1092,14 +1098,109 @@ and the kernel is Hermitian and positive definite. Its converse is also true.
     \end{equation}
     Therefore, $H' = H$.
 \end{proof}
+\begin{theorem}
+    Let $\cK_{H}:\cX\times \cX \to \bbC$ be the reproducing kernel for the Hilbert space $H$ and $\cK_{H'}: \cX\times \cX \to \bbC$ be the reproducing kernel for a closed subspace $H'\subset H$. Then $\forall f\in H$,  
+    \begin{equation}
+        f'(x) := \aver{f, \cK_{H'}(x, \cdot)} \in H',
+    \end{equation}
+    and $f'$ is the projection of $f$ onto $H'$.
+\end{theorem}
+\begin{proof}
+    For any $f\in  H$, let $f = f_{H'} + f_{H'^{\perp}}$, where $f_{H'}$ is the projection of $f$ onto $H'$, then note $\cK_{H'}(x, \cdot)\in H'$,  
+    \begin{equation}
+        f'(x) = \aver{f_{H'} + (f - f_{H'}), \cK_{H'}(x, \cdot)} = \aver{f_{H'}, \cK_{H'}(x, \cdot)} = f_{H'}(x). 
+    \end{equation}
+    Therefore $f' = f_{H'}$. Moreover, by the definition, 
+    \begin{equation}
+        \cK'_{H}(z, x) = \aver{\cK_{H}(z, \cdot), \cK_{H'}(x, \cdot)} = \overline{ \aver{\cK_{H'}(x, \cdot), \cK_{H}(z, \cdot)} } = \overline{\cK_{H'}(x, z)} = \cK_{H'}(z, x) 
+    \end{equation}
+    which implies $\cK'_{H}=\cK_{H'}$ is the projection of $\cK_{H}$ onto $H'$.
+\end{proof}
+\begin{example}
+    If $H = L^2(\cX, \mu)$ be the standard Lebesgue space with a probability measure $\mu$, then for any closed subspace $H'\subset H$, the projection of $f\in H$ onto $H'$ is
+    \begin{equation}
+        f'(x) = \aver{f, \cK_{H'}(x, \cdot)} = \int_{\cX} f(z) \cK_{H'}(x, z) d\mu(z). 
+    \end{equation}
+    Note that the Hilbert space $H$ itself may not be an RKHS, it only needs $H'$ to be an RKHS. 
+\end{example}
+\begin{example}
+    If $\cL\in H^{\ast}$ is a bounded linear functional on the Hilbert space $H$, then by Rietz representation theorem, there exists $\ell\in H$ such that
+    \begin{equation}
+        \cL \cK(x, \cdot) = \aver{\cK(x, \cdot), \ell} = \overline{\aver{\ell, \cK(x,\cdot)}} = \overline{\ell(x)}.  
+    \end{equation}
+    Similarly, for any bounded linear operator $\cA: H\to H$ can be represented by the reproducing kernel in the sense 
+    \begin{equation}
+        (\cA f)(x) = \aver{\cA f, \cK(x, \cdot)} = \aver{f, \cA^{\ast} \cK(x,\cdot)}. 
+    \end{equation}
+\end{example}
+\begin{theorem}
+    If $H$ is a separable RKHS with orthonormal basis $\{\phi_i\}_{i\ge 1}$, then the reproducing kernel permits the absolutely convergent expansion
+    \begin{equation}
+        \cK(x, y) = \sum_{i=1}^{\infty} \phi_i(x) \overline{\phi_i(y)}, 
+    \end{equation}
+    which is independent of the choice of basis. (Note that separable Hilbert spaces have countably many orthonormal bases.)
+\end{theorem}
+\begin{proof}
+     Let the subspace $H_n = \textrm{span}\{\phi_i\}_{i=1}^n$, then the reproducing kernel of $H_n$ is 
+     \begin{equation*}
+         \cK_n(x, y) = \sum_{i=1}^n \overline{\phi_i(x)} {\phi_n(y)},
+     \end{equation*}
+     since for every $f\in H_n$, $f(x) = \sum_{i=1}^n \aver{f, \phi_i} \phi_i(x)$, thus 
+     \begin{equation*}
+         \aver{f, \cK_n(x, \cdot)} = \sum_{i=1}^n \aver{f, \phi_i} \phi_i(x) = f(x),
+     \end{equation*}
+     which implies $\cK_n$ is the reproducing kernel on $H_n$. Then let $n\to\infty$, using the fact (see Exercise) that 
+     \begin{equation}
+         \sum_{i=1}^{n} |\phi_i(x)|^2 = \cK_n(x, x) \le \cK(x, x).
+     \end{equation}
+     Then, the expansion converges absolutely by Cauchy-Schwartz inequality.
+\end{proof}
 \subsection{Interpolation in RKHS}
 \label{SSec: 2-Int-RKH}
-Let $H$ be a RKHS with inner product $\aver{\cdot, \cdot}_H$. Suppose that the data $\{(\ell_j, z_j)\}_{j=1}^m$ are generated by $  z_j = \aver{\ell_j, f}_H $ such that $\ell_j\in H^{\ast}$ and $f\in H$ is a \emph{ unknown} function. The interpolation finds a function $f^{\ast}$ such that 
+Let $H$ be an RKHS on the non-empty set $\cX$ with the reproducing kernel $\cK(x, y)$. Suppose that the data $\{(x_j, y_j)\}_{j=1}^m$ are generated by $  y_j = f(x_j) = \aver{f, \cK(x_j)} $ for a unknown function $f\in H$. The interpolation finds a function $f^{\ast}$ such that 
 \begin{equation}
-    \aver{\ell_j, f^{\ast}} = z_j,\quad j=1,\cdots, m.
+    \aver{f^{\ast}, \cK(x_j)} = y_j,\quad j=1,\cdots, m.
 \end{equation}
-\subsection{Hardy Space}
+The choice for $f^{\ast}$ may not be unique. 
+
+TODO: add the Theorem for minimal norm approximation.
+
+If the number of data $m\to\infty$, then the problem becomes related to the \emph{universal interpolation problem}. 
+\begin{definition}
+    Let $H$ be an RKHS with reproducing kernel $\cK:\cX\times\cX\to \bbC$. The sequence of points $\{x_i\}_{i\ge 1}\subset \cX$ is a universal interpolation sequence (UIS) if the interpolation problem of finding $f\in H$ 
+    \begin{equation}
+        f(x_i) = y_i,\quad i \in\bbN
+    \end{equation}
+    is solvable whenever $\sum_{i\ge 1} \frac{|y_i|^2}{\cK(x_i, x_i)} < \infty$. 
+\end{definition}
+\begin{lemma}
+    The sequence $\{x_i\}_{i\in\bbN}$ is a UIS if and only if the infinite Hermitian matrix $A$ with entries
+    \begin{equation}
+        A_{ij} = \frac{\cK(x_i, x_j)}{\sqrt{\cK(x_i, x_i)\cK(x_j, x_j)}}
+    \end{equation}
+    has all of the eigenvalues bounded away from zero. 
+\end{lemma}
+\begin{proof}
+    
+\end{proof}
+\begin{corollary}
+    Suppose $H$ is an RKHS on $\bbR^d$ and let $G\subset \bbR^d$ be a subgroup of $\bbR^d$. If the reproducing kernel satisfies $\cK(x, y) = \cK(x - y)$ and  
+    $$\sum_{g\in G, g\neq 0}|\cK(g)| < \cK(0),$$
+    then $G$ is a UIS.
+\end{corollary}
+\begin{proof}
+    The resulting matrix $A$ is an $M$ matrix. See Chapter~\ref{Ch: 8-Mat-Com}.
+\end{proof}
+\begin{example}[Dirichlet kernel]
+    TODO: the subgroup is the circle group over $\{k\in\bbN\mid |k|\le n\}$. 
+\end{example}
+\subsection{Hardy Space \texorpdfstring{${\mathbb{H}}^2$}{}}
 \label{SSec: 2-Har-Spa}
+The Hardy space $\mathbb{H}^2$ refers to the holomorphic functions in the unit disk that 
+\begin{equation}
+    \sup_{0\le r <  1} \int_0^{2\pi} |f(r e^{i\theta})|^2 d\theta < \infty.
+\end{equation}
+With the usual expansion $f(z) = \sum_{n=0}^{\infty} c_n z^n$, this is equivalent to $\sum_{n=0}^{\infty} |c_n|^2 < \infty$. 
 \section{Exercises}
 The coding part and test cases are available on GitHub. 
 \subsection{Theoretical Part}
@@ -1178,6 +1279,12 @@ where $\circ$ is the Hadamard product or element-wise product.
 \begin{problem}
 \label{Prb: 2-B-SPL-NON-SUP}
     Prove the Lemma~\ref{Lem: 2-B-SPL-NON-SUP}.
+\end{problem}
+\begin{problem}
+    Let $H'$ be a closed subspace of the Hilbert space $H$. Show that the reproducing kernels $\cK_{H'}(x, x) \le \cK_{H}(x, x)$. 
+\end{problem}
+\begin{problem}
+    Find the reproducing kernel for $W^{1,2}(\bbR)$. 
 \end{problem}
 \subsection{Computational Part}
 \begin{problem}
