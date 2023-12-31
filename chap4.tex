@@ -336,34 +336,43 @@ The following estimate is from~\cite{nevai1994generalized} for $\alpha, \beta > 
 \label{Thm: 4-Ort-Poly-Der-Est}
     $\max_{[-1,1]} (1-x)^{\alpha+\frac{1}{2}}(1+x)^{\beta+\frac{1}{2}} \left|P^{\alpha,\beta}_n(x)\right|^2 \le \frac{2e (2 + \sqrt{\alpha^2+\beta^2})}{\pi}$. 
 \end{theorem}
-Therefore, when $m \ge 1$, we have the bound for $Q^{(n-m)}$ by 
+Note that the above bound is independent of $n$. Therefore, when $m \ge 1$, there exists a constant $C(\alpha, \beta, m)$ such that 
 \begin{equation}
-    |Q^{(n-m)}(x)| \le \frac{ 2e(2+\sqrt{2}(q+m)) }{2^m \pi n (n-1)\cdots(n-m+1)}, \quad q = \max(\alpha, \beta). 
+    |Q^{(n-m)}(x)| \le  C(\alpha, \beta, m)\left| \frac{c_n}{\gamma_n c_{n-m}} \right|.
 \end{equation}
-Since 
+Since $Q^{(n-m)}$ is bounded by the product of the following terms.
 \begin{equation*}
 \begin{aligned}
-    &\sup_{[-1,1]} (1-x)^{\frac{\alpha+m}{2}-\frac{1}{4}} (1+x)^{\frac{\beta+m}{2} - \frac{1}{4}} \le \left|\frac{2e(2+\sqrt{(\alpha+m-1)^2 + (\beta+m-1)^2}}{\pi}\right|^{\sfrac{1}{2}},  \\
+    &\sup_{[-1,1]} (1-x)^{\frac{\alpha+m}{2}-\frac{1}{4}} (1+x)^{\frac{\beta+m}{2} - \frac{1}{4}} \le 2^{\frac{|\beta-\alpha|}{2}} \\
     &\sup_{[-1, 1]} \left| p_{n-m}^{\alpha+m, \beta+m}(x) (1 - x)^{\frac{\alpha+m}{2}+\frac{1}{4}} (1+x)^{\frac{\beta+m}{2}+\frac{1}{4}}  \right|\le \left|\frac{2e(2 + \sqrt{ (\alpha+m)^2 + (\beta+m)^2 })}{\pi}\right|^{1/2}.
 \end{aligned}
 \end{equation*}
+% \begin{theorem}
+% \label{Thm: 4-Jac-Bou-Coe}
+% For Jacobi polynomials $p_n = P_{n}^{\alpha, \beta}$, the coefficient $a_n$ satisfies 
+%    $$|a_n|\le \frac{2^{|\beta-\alpha|/2+1}}{\gamma_n} \frac{\sqrt{2e(2+\sqrt{2}(q+m))/\pi}}{2^m n(n-1)\cdots (n - m+1)}\|f^{(m)}\|_{L^{\infty}}, \quad q= \max(\alpha, \beta), $$
+% where 
+%     \begin{equation}
+%         \gamma_n = \aver{p_n, p_n} = \frac{2^{\alpha + \beta + 1}}{2n+\alpha + \beta + 1} \frac{\Gamma(n+\alpha+1)\Gamma(n+\beta + 1)}{\Gamma(n+\alpha+\beta + 1)\Gamma(n+1)}.
+%     \end{equation}
+% \end{theorem}
+% \begin{example}
+% For $\alpha = \beta = 0$, the coefficient for Legendre polynomial expansion satisfies $$|a_n|\le \frac{(2n+1) \sqrt{2e(2+\sqrt{2}m)/\pi} }{2^{m} n(n-1)\cdots (n - m+1)}\|f^{(m)}\|_{L^{\infty}}. $$
+% \end{example}
+% \begin{example}
+% For $\alpha = \beta = -\sfrac{1}{2}$, note the Chebyshev polynomials $T_n\sim \cO(\sqrt{n}) P_n^{-\sfrac{1}{2}, -\sfrac{1}{2}}(x)$, the coefficient for Chebyshev polynomial expansion satisfies 
+% $$ |a_n| \le \frac{2^{2n+1}}{\pi\binom{2n}{n}}\frac{\sqrt{2e(2+\sqrt{2}(m-\frac{1}{2}))/\pi}}{2^m n (n-1)\cdots (n-m+1)} \|f^{(m)}\|_{L^{\infty}}. $$
+% Note that $\frac{2^{2n+1}}{\pi\binom{2n}{n}}\sim 2\sqrt{\frac{n}{\pi}}$ by Stirling formula. This bound is worse than the estimate in~\cite{trefethen2019approximation} by a factor if $\sqrt{n}$ due to the loose bound from Theorem~\ref{Thm: 4-Ort-Poly-Der-Est}. 
+% \end{example}
+
 \begin{theorem}
-\label{Thm: 4-Jac-Bou-Coe}
-For Jacobi polynomials $p_n = P_{n}^{\alpha, \beta}$, the coefficient $a_n$ satisfies 
-   $$|a_n|\le \frac{1}{\gamma_n} \frac{4e(2+\sqrt{2}(q+m))}{2^m \pi n(n-1)\cdots (n - m+1)}\|f^{(m)}\|_{L^{\infty}}, \quad q= \max(\alpha, \beta), $$
-where 
+    For Jacobi polynomials $p_n = P_n^{\alpha, \beta}$, the coefficient $a_n$ satisfies 
     \begin{equation}
-        \gamma_n = \aver{p_n, p_n} = \frac{2^{\alpha + \beta + 1}}{2n+\alpha + \beta + 1} \frac{\Gamma(n+\alpha+1)\Gamma(n+\beta + 1)}{\Gamma(n+\alpha+\beta + 1)\Gamma(n+1)}.
+        |a_n| \le \frac{C'(\alpha, \beta)\|f^{(m)}\|_{\infty}}{\gamma_n}  \frac{1}{n(n-1)\cdots (n-m)} \frac{1}{\sqrt{n-m}}
     \end{equation}
+    for $n$ sufficiently large.
 \end{theorem}
-\begin{example}
-For $\alpha = \beta = 0$, the coefficient for Legendre polynomial expansion satisfies $$|a_n|\le \frac{2e(2n+1)(2+\sqrt{2}m) }{2^m \pi n(n-1)\cdots (n - m+1)}\|f^{(m)}\|_{L^{\infty}}. $$
-\end{example}
-\begin{example}
-For $\alpha = \beta = -\frac{1}{2}$, note the Chebyshev polynomials $T_n\sim \cO(\sqrt{n}) P_n^{-\sfrac{1}{2}, -\sfrac{1}{2}}(x)$, the coefficient for Chebyshev polynomial expansion satisfies 
-$$ |a_n| \le \frac{2^{2n+2}}{\pi\binom{2n}{n}}\frac{2e(2+\sqrt{2}(m-\frac{1}{2}))}{2^m \pi n (n-1)\cdots (n-m+1)} \|f^{(m)}\|_{L^{\infty}}. $$
-Note that $\frac{2^{2n+1}}{\pi\binom{2n}{n}}\sim 2\sqrt{\frac{n}{\pi}}$ by Stirling formula. This bound is worse than the estimate in~\cite{trefethen2019approximation} by a factor if $\sqrt{n}$ due to the loose bound from Theorem~\ref{Thm: 4-Ort-Poly-Der-Est}. 
-\end{example}
+\begin{proof}
 By replace $x = \cos\theta$, then 
 \begin{equation}\nonumber
     P_{n-m}^{m+\alpha, m+\beta}(x) (1-x)^{m+\alpha}(1+x)^{m+\beta} = P_{n-m}^{m+\alpha, m+\beta}(\cos\theta) \left(2\sin^2 \frac{\theta}{2}\right)^{m+\alpha}\left(2\cos^2\frac{\theta}{2}\right)^{m+\beta}.
@@ -376,14 +385,6 @@ Using the Darboux formula for large $n$ and $\theta\in [c (n-m)^{-1}, \pi - c(n-
 \end{aligned}
 \end{equation}
 where $N = n + \frac{\alpha+\beta+1}{2}$ and $\gamma = -\frac{\pi}{2}(m + \alpha + \frac{1}{2})$. 
-\begin{theorem}
-    For Jacobi polynomials $p_n = P_n^{\alpha, \beta}$, the coefficient $a_n$ satisfies 
-    \begin{equation}
-        |a_n| \le \frac{C(\alpha, \beta)\|f^{(m)}\|_{\infty}}{\gamma_n}  \frac{1}{n(n-1)\cdots (n-m)} \frac{m+q}{\sqrt{n-m}},\quad q=\max(\alpha,\beta)
-    \end{equation}
-    for $n$ sufficiently large.
-\end{theorem}
-\begin{proof}
     Because the coefficient 
     \begin{equation}
     \begin{aligned}
@@ -391,20 +392,25 @@ where $N = n + \frac{\alpha+\beta+1}{2}$ and $\gamma = -\frac{\pi}{2}(m + \alpha
         &\le \frac{1}{\gamma_n} \int_{I_c} |f^{(m)}(x) Q^{(n-m)}(x) | dx + \frac{1}{\gamma_n} \int_{I_c'} |f^{(m)}(x)Q^{(n-m)}(x)| dx 
     \end{aligned}
     \end{equation}
-    where $I_c = \{\theta\mid c (n-m)^{-1}\le \theta\le \pi - c(n-m)^{-1} \} = \{x\in I\mid -1+\frac{c'}{|n-m|^2} \le x \le 1 - \frac{c'}{|n-m|^2}\}$ and $I_c' = I - I_c$. Recall Theorem~\ref{Thm: 4-Ort-Poly-Der-Est}, we also have
+    where $I_c = \{\theta\mid c (n-m)^{-1}\le \theta\le \pi - c(n-m)^{-1} \} = \{x\in I\mid -1+\frac{c'}{|n-m|^2} \le x \le 1 - \frac{c'}{|n-m|^2}\}$ and $I_c' = I - I_c$. We also have
     \begin{equation}
-        2^{m+\frac{\alpha}{2} + \frac{\beta}{2} - \frac{1}{2}} \sin^{m+\alpha-\frac{1}{2}}\frac{\theta}{2} \cos^{m+\beta-\frac{1}{2}}\frac{\theta}{2}  = (1-x)^{\frac{1}{2}(m+\alpha-\frac{1}{2})} (1+x)^{\frac{1}{2}(m+\beta-\frac{1}{2})} = \cO(m+q).
+    \label{EQ: 4-BOU-JAC}
+        2^{m+\frac{\alpha}{2} + \frac{\beta}{2} - \frac{1}{2}} \sin^{m+\alpha-\frac{1}{2}}\frac{\theta}{2} \cos^{m+\beta-\frac{1}{2}}\frac{\theta}{2}  = (1-x)^{\frac{1}{2}(m+\alpha-\frac{1}{2})} (1+x)^{\frac{1}{2}(m+\beta-\frac{1}{2})} \le 2^{|\beta-\alpha|/2}.
     \end{equation}
-    Therefore, by neglecting the smaller term, there exists a constant $C$ such that
+    Therefore, applying Theorem~\ref{Thm: 4-Ort-Poly-Der-Est} and neglecting the smaller term, there exists a constant $C'$ such that
     \begin{equation}
     \begin{aligned}
     |a_n| &\le \frac{1}{\gamma_n}  \left( |I_c|\|f^{(m)}\|_{L^{\infty}(I_c)} \sup_{I_c} |Q^{(n-m)}| + |I_c'|\|f^{(m)}\|_{L^{\infty}(I_c')} \sup_{I_c'} |Q^{(n-m)}(x)| \right) \\
-    &\le\left| \frac{c_n}{\gamma_n c_{n-m}} \right| 2^{m+(\alpha+\beta)/2+\frac{1}{2}}\cO((m+q)|n-m|^{-1/2}) \|f^{(m)}\|_{\infty} \\
-    &\le \frac{C(\alpha, \beta)}{\gamma_n} \frac{(m+q)}{n(n-1)\cdots (n-m)}|n-m|^{-\frac{1}{2}} \|f^{(m)}\|_{\infty}.
+    &\le\left| \frac{c_n}{\gamma_n c_{n-m}} \right|\|f^{(m)}\|_{\infty} \left[  2^{m+q+\frac{1}{2}}\cO(|n-m|^{-1/2})   + \cancel{C(\alpha,\beta, m)\cO(|n-m|^{-2})}\right]\\
+    &\le \frac{C'(\alpha, \beta)}{\gamma_n} \frac{1}{n(n-1)\cdots (n-m)}|n-m|^{-\frac{1}{2}} \|f^{(m)}\|_{\infty}
     \end{aligned}
     \end{equation}
-    for sufficiently large $n - m$. Now it recovers the optimal rate $\cO(n^{-m})$ for Chebyshev polynomials and $\cO(n^{-m+\frac{1}{2}})$ for Legendre polynomials when $n$ is sufficiently large.
+    for sufficiently large $n$. 
 \end{proof}
+\begin{remark}
+    Now it recovers the optimal rate $\cO(n^{-m})$ (resp. $\cO(n^{-m+\frac{1}{2}})$) for Chebyshev polynomials (resp. Legendre) when $n$ is sufficiently large. The constant in $\cO$ depends only on $\|f^{(m)}\|_{\infty}$ and $\alpha, \beta$.
+\end{remark}
+\section{Orthogonality in \texorpdfstring{$L^p$} - Spaces}
 \section{Pad\'e Approximation}
 Instead of linearly combining the basis functions for approximation, it is also possible to introduce nonlinear dependencies of the parameters for approximation. The most common one is the rational approximation. It uses the rational functions 
 \begin{equation}
@@ -417,7 +423,7 @@ to approximate the objective function $f$, which permits an expansion $f(x) = \s
 
 % \section{Rank one approximation}
 \section{Neural Network}
-The neural network (NN) is a popular model for constructing nonlinear function approximations. Next, we introduce the fundamentals and leave the rest to later topics. The basic structure of NN consists of several layers of neurons, which are connected through linear maps and activation functions. 
+The neural network (NN) is a popular model for constructing nonlinear function approximations. Next, we introduce the fundamentals and leave the rest to later topics. The basic structure of NN consists of several layers of neurons that are connected through linear maps and activation functions. 
 
 \begin{example}[Feed-forward]
 Let $\bff_0(\bx) = \bx\in \bbR^{n_0}$ and $W_k\in \bbR^{n_{k-1}\times n_k}$, $\bb_k \in \bbR^{n_k}$, 
@@ -435,7 +441,7 @@ The shallow neural networks (with $K=1$ hidden layer) can be simplified to
 \begin{equation}
     \bff(\bx) = W_{2}\sigma(W_1 \bx + \bb_1).
 \end{equation}
-For simplicity, we assume that the function $\bff: I\mapsto \bbR$ for some compact set $I\subset \bbR$. The neural network can be formulated in an explicit form 
+For simplicity, we assume that the function $\bff: I\mapsto \bbR$ for some compact set $I\subset \bbR$. The neural network can be formulated in an explicit form. 
 \begin{equation}
     \bff(\bx) = \sum_{l=1}^n a_l \sigma(w_l \bx - b_l),\quad a_l, w_l, b_l\in\bbR.
 \end{equation}
