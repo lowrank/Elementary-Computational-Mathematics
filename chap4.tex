@@ -64,7 +64,37 @@ If $\cM$ is a convex set of normed space $\cV$, then the set of best approximati
 \begin{remark}
     The above theorems are quite preliminary in general Banach spaces. Formalizing the proofs with $\texttt{Lean}$ is recommended. See Exercises.  
 \end{remark}
+\subsection{Orthogonality in \texorpdfstring{$L^p$} - Spaces}
+The orthogonality in $L^p$ spaces is defined similarly to $L^2$ spaces. Here $p\in(1,\infty)$.
+\begin{definition}
+    Let $H = L^p(\cX, \mu)$. If $\|f\|_p\le \|f + g\|_p$ for all $g\in H'\subset H$ in a closed subspace, then we say $f\perp H'$. 
+\end{definition}
+Since the $L^p$ norm is strictly convex, for any $f\in H$, there exists a unique $f^{\ast}\in H'\subset H$ as the best approximation in $H'$. It is not difficult to observe that $f-f^{\ast}\perp H'$. 
 
+Using the Hahn-Banach theorem, we can prove the following lemma. 
+\begin{lemma}
+    Let $H'$ be a closed subspace of $H=L^p(\cX, \mu)$, $p\in(1,\infty)$. Then $f\perp H'$ is equivalent to 
+    \begin{equation}
+       \aver{ {|f|^{p-2}} \overline{f},  \overline{g} } = 0,\quad \forall g\in H'.
+    \end{equation}
+\end{lemma}
+\begin{proof}
+($\Leftarrow$) Assuming the equality, 
+    \begin{equation}
+      \|f\|_p^p = \aver{ |f|^{p-2} \overline{f}, \overline{f} } = \aver{|f|^{p-2} \overline{f},  \overline{f + g}} \le \| |f|^{p-2} \overline{f} \|_{p'} \|f+g\|_p = \|f\|_p^{p-1} \|f+g\|_p,
+    \end{equation}
+    which implies the orthogonality $\|f\|\le \|f + g\|$ for all $g\in H'$. 
+    
+($\Rightarrow$) Assuming the orthogonality, then by the Hahn-Banach theorem, there exists a linear functional $\cD\in L^{p,\ast}=L^{p'}$ that 
+\begin{equation}
+    \cD f = 1,\quad \cD H' = 0, \quad \|\cD\|= \|f\|_p^{-1}. 
+\end{equation}
+By Rietz representation theorem, we have an element $h\in L^{p'}$ that $\cD f = \aver{f, h}$ with $\|h\|_{p'}=\|f\|_p^{-1}$. Therefore, the H\"older inequality 
+\begin{equation}
+    1 =\cD f = \aver{f, h} \le \|f\|_p \|h\|_{p'} = 1. 
+\end{equation}
+The condition for equality is $f(x) h(x) \ge 0$ and $|h|^{p'} = \lambda |f|^p$ for certain $\lambda > 0$. Thus, $h \propto |f|^{p-2} \overline{f}$ and our conclusion is proved by $\cD H' = 0$.
+\end{proof}
 \section{Minimax Approximation}
 \label{Sec: 4-MIN-APP}
 Given $f\in C^0([a, b])$, find a polynomial $p_n\in\Pi_n$ such that $$\|f - p_n\|_{\infty} = \min_{g\in\Pi_n} \|f - g\|_{\infty}$$
@@ -410,7 +440,7 @@ where $N = n + \frac{\alpha+\beta+1}{2}$ and $\gamma = -\frac{\pi}{2}(m + \alpha
 \begin{remark}
     Now it recovers the optimal rate $\cO(n^{-m})$ (resp. $\cO(n^{-m+\frac{1}{2}})$) for Chebyshev polynomials (resp. Legendre) when $n$ is sufficiently large. The constant in $\cO$ depends only on $\|f^{(m)}\|_{\infty}$ and $\alpha, \beta$.
 \end{remark}
-\section{Orthogonality in \texorpdfstring{$L^p$} - Spaces}
+
 \section{Pad\'e Approximation}
 Instead of linearly combining the basis functions for approximation, it is also possible to introduce nonlinear dependencies of the parameters for approximation. The most common one is the rational approximation. It uses the rational functions 
 \begin{equation}
@@ -420,7 +450,9 @@ to approximate the objective function $f$, which permits an expansion $f(x) = \s
 \begin{equation}
     R^{(q)}(0) = f^{(q)}(0),\quad q = 0, 1, \cdots, m+n.
 \end{equation}
-
+\begin{lemma}[existence and uniqueness]
+    
+\end{lemma}
 % \section{Rank one approximation}
 \section{Neural Network}
 The neural network (NN) is a popular model for constructing nonlinear function approximations. Next, we introduce the fundamentals and leave the rest to later topics. The basic structure of NN consists of several layers of neurons that are connected through linear maps and activation functions. 
@@ -450,7 +482,7 @@ For simplicity, we assume that the function $\bff: I\mapsto \bbR$ for some compa
     \begin{equation}
      \bff(\bx) = \sum_{l=1}^n a_l \sigma(\bx - b_l).
     \end{equation}
-    For instance, if $\sigma(x - \cdot)$ is a spline function, then the network is a spline approximation with trainable shifts.
+    For example, if $\sigma(x - \cdot)$ is a spline function, then the network is a spline approximation with trainable shifts.
 \end{example}
 
 \subsection{Gradient-Flow}
@@ -463,7 +495,7 @@ The source code and tests for the computational part are hosted on GitHub.
 \end{problem}
 \begin{problem}
     Let $f(x)\in C^0([-1,1])$ is even (odd). Show that the minimax approximation $q_n(x)\in\Pi_n$ is also even (odd).
-    Hint: think about the function $\frac{1}{2}(q_n(x) \pm q_n(-x))$, then use the Chebyshev equioscillation theorem and the uniqueness.
+    Hint: Think about the function $\frac{1}{2}(q_n(x) \pm q_n(-x))$, then use the Chebyshev equioscillation theorem and the uniqueness.
 \end{problem}
 \begin{problem}
     Let $\cS_k = \{x^{\lambda_1}, x^{\lambda_2}, \cdots, x^{\lambda_k}\}$ that $0\le \lambda_1 < \lambda_2 < \cdots < \lambda_k$, show that 
