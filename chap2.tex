@@ -149,9 +149,9 @@ $$|x - x_j|\le j \Delta$$
 for $j = 2, \dots, n$, which implies 
 \begin{equation}
 \label{EQ: MAX-OMEGA}
-    |\omega(x)|\le \prod_{j=0}^n |x - x_j|\le n! \Delta^{n-1} \sup_{x\in [x_0, x_1]} |(x - x_0)(x-x_1)|= \frac{n!}{4} \frac{(b-a)^{n+1}}{n^{n+1}},
+    |\omega(x)|\le \prod_{j=0}^n |x - x_j|\le n! \Delta^{n-1} \sup_{x\in [x_0, x_1]} |(x - x_0)(x-x_1)|= \frac{n!}{4} \frac{(b-a)^{n+1}}{n^{n+1}}.
 \end{equation}
-Thus interpolation error is bounded by
+Thus the interpolation error is bounded by
 $$  \|h  - f\|_{\infty} \le  \frac{\sup_{x\in[a,b]}|h^{(n+1)}(x)|}{4(n+1)} \frac{(b-a)^{n+1}}{n^{n+1}}.$$
 Such an estimate is useful to derive uniform convergence. 
 \begin{example}
