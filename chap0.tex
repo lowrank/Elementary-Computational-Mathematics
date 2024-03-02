@@ -403,6 +403,9 @@ $$
 $$
 If we denote the error $\epsilon_{n} = x_n - x^{\ast}$, then $\epsilon_{n+1} = \frac{f''(\zeta)}{f'(x_n)} \epsilon_{n}^2$, which implies the order of convergence is 2.
 \end{proof}
+\begin{remark}
+    The analysis can only provide convergence for the initial guess close to the root. If the initial guess is far from the root, then the sequence may diverge.
+\end{remark}
 \subsection{Secant Method}
 \label{SSec: 0-SE-ME}
 The secant method is similar to the false position method, but it always uses the latest two iterations to perform the next iteration. The secant method computes the next iteration $x_{n+1}$ by
