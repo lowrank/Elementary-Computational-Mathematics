@@ -243,7 +243,7 @@ Suppose $a, b\in\mathbb{R}$, the rounding error for the sum $s = \fl{\fl{a}+\fl{
     Based on this property, one can keep track of the rounding error. 
 \begin{algorithm}[!htb]
     \SetAlgoLined
-    \caption{Kahan compensated summation}\label{alg:1}
+    \caption{Kahan compensated summation}
     \KwData{$\{x_j\}_{j=1}^n\subset \mathbb{R}$}
     \KwResult{$s_n = \sum_{j=1}^n x_j$ }
     $j\gets 1$, $e_j \gets 0$, $s_j \gets x_j$ //    initialization; 
