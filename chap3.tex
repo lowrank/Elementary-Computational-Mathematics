@@ -82,14 +82,20 @@ However, such a process can constantly refine the approximation due to the poten
 \label{SSec: 3-Wynn-Eps-Met}
 Wynn's $\eps$ method~\cite{wynn1956device,wynn1966convergence} is another kind of extrapolation algorithm that is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
 
-The algorithm is stated as follows. Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity.
-\begin{enumerate}
-    \item Initialization. For $j = 0, 1, 2,\dots$, set 
-    $$\eps_{-1}^{(j)} = 0 \text{ (guarding elements)}, \quad \eps_{0}^{(j)} = s_j.$$
-    \item Iteration. For $j,k = 0,1,2,\dots$, 
-    $$\eps_{k+1}^{(j)} = \eps_{k-1}^{(j+1)} + [\eps_{k}^{(j+1)} - \eps_{k}^{j}]^{-1}.$$
-\end{enumerate}
-The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1, \dots$.
+Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity. The algorithm is stated as follows, see Algorithm~\ref{ALG: WYNN}. The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1, \dots$.
+\begin{algorithm}[!htb]
+    \SetAlgoLined
+    \caption{Wynn's $\eps$ method}
+    \KwData{$s_0, s_1, \dots, s_n,\dots$}
+    \KwResult{$\eps_{2l}^{(j)}$}
+    \For{$j = 0, 1, 2,\dots$}{set 
+    $\eps_{-1}^{(j)} = 0, \quad \eps_{0}^{(j)} = s_j.$ //    initialization; }
+    \For{$j,k= 0, 1, 2,\dots$}{
+      $$\eps_{k+1}^{(j)} = \eps_{k-1}^{(j+1)} + \frac{1}{\eps_{k}^{(j+1)} - \eps_{k}^{j}}.$$
+    }
+    \label{ALG: WYNN}
+\end{algorithm}
+
 \begin{example}
     It is known that $\sfrac{\pi}{4}$ can be calculated by the asymptotic expansion:
     \begin{equation}
@@ -104,12 +110,101 @@ The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1,
         \item [$\circ$] Richardson Extrapolation. We take $1/h = 250, 500, 1000, 2000$ and calculate that the Richardson extrapolation three times would result in almost machine precision.
         \item [$\circ$] Wynn's $\eps$ method. We take the sequence 
         $$s_k = \sum_{j=0}^k \frac{(-1)^j}{2 j + 1}$$
-        as the truncated series at $z = 1$. With about 20 terms, we already reached machine precision.
+        as the truncated series at $z = 1$. With about 20 terms, we have already reached machine precision.
     \end{enumerate}
 \end{example}
+\begin{lemma}
+    Let $\phi(x)$ solve the moment problem on domain $\cD$
+        $$\int_{\cD} x^k \phi(x) dx = c_k,\quad k\ge 0 $$
+    Then the orthogonal polynomials
+     $p_{n}^{(m)}(z) = \sum_{s = 0}^{n} k_{n, s}^{(m)} z^s$ with leading coefficient $k_{n,n}^{(m)} = 1$ defined by 
+    \begin{equation}
+        \int_{\cD} x^{m+s} p_n^{(m)}(x) \phi(x) dx = \begin{cases}
+            0,\quad &0\le s\le n-1 \\
+            \omega_n\neq 0,\quad &s = n
+        \end{cases}
+    \end{equation}
+    satisfy
+    \begin{equation}
+        p_n^{(m)}(z) = (-1)^n \frac{\left|\begin{matrix}
+            1 & z & \cdots & z^n \\
+            c_m & c_{m+1} & \cdots & c_{m+n}\\
+            c_{m+1} & c_{m+2} & \cdots & c_{m+n+1}\\
+            \vdots & \vdots & \ddots & \vdots \\
+            c_{m+n-1} & c_{m+n} & \cdots & c_{m+2n-1} 
+        \end{matrix}\right|}{\left| \begin{matrix}
+            c_m & c_{m+1} & \cdots & c_{m+n-1} \\
+            c_{m+1} & c_{m+2} & \cdots & c_{m+n} \\ 
+            \vdots & \vdots & \ddots & \vdots \\
+            c_{m+n-1} & c_{m+n} & \cdots & c_{m+n-1}
+        \end{matrix}\right|} .
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    The coefficients $\bk = \{k_{n, t}^{(m)}\}_{t=0}^n\in \bbR^{n+1}$ of $p_n^{(m)}$ solve the linear system
+    \begin{equation}
+      \begin{pmatrix}
+            1 & z & \cdots & z^n \\
+            c_m & c_{m+1} & \cdots & c_{m+n}\\
+            c_{m+1} & c_{m+2} & \cdots & c_{m+n+1}\\
+            \vdots & \vdots & \ddots & \vdots \\
+            c_{m+n-1} & c_{m+n} & \cdots & c_{m+2n-1} 
+      \end{pmatrix} \bk = \begin{pmatrix}
+          p_n^{(m)}(z) \\ 0 \\ 0 \\ \vdots \\ 0
+      \end{pmatrix}.
+    \end{equation}
+    Denote the matrix as $A$, thus the adjugate matrix $\text{Adj}(A)$ satisfies 
+    \begin{equation}
+        \frac{1}{\det(A)} \text{Adj}(A)  \begin{pmatrix}
+          p_n^{(m)}(z) \\ 0 \\ 0 \\ \vdots \\ 0
+      \end{pmatrix} = \bk = \begin{pmatrix}
+          k_{n, 0}^{(m)} \\ k_{n, 1}^{(m)} \\ k_{n, 2}^{(m)} \\ \vdots \\ 1
+      \end{pmatrix}.
+    \end{equation}
+    The last row of the above linear system corresponds to the equation 
+    \begin{equation}
+        \frac{1}{\det(A)} (-1)^n \left| \begin{matrix}
+            c_m & c_{m+1} & \cdots & c_{m+n-1} \\
+            c_{m+1} & c_{m+2} & \cdots & c_{m+n} \\ 
+            \vdots & \vdots & \ddots & \vdots \\
+            c_{m+n-1} & c_{m+n} & \cdots & c_{m+n-1}
+        \end{matrix}\right| p_n^{(m)}(z) = 1.
+    \end{equation}
+\end{proof}
 \begin{theorem}
-    TODO: Theory for $\eps$ method.
+    Suppose that $\eps_{0}^{(m)} = \sum_{k=0}^m c_m x^m$ which converges as $j\to\infty$, then each iterate $\eps_{2r}^{(m)}$ is a rational approximation 
+    \begin{equation}
+        \eps_{2r}^{(m)} = \dfrac{\sum_{k=0}^{r+m} a_{r,r+m, k} x^k}{\sum_{k=0}^r b_{r, r+m, k} x^k} = \sum_{k=0}^{2r+m} c_k x^k + \sum_{q = 2r+m+1}^{\infty} d_q x^q,
+    \end{equation}
+    where the parameters $a_{i,j,k}$ and $b_{i,j,k}$ form the Pad\'e table. The coefficients $d_q$ are not necessarily close to $c_q$.
 \end{theorem}
+\begin{proof}
+    Let us assume that $\phi(x)$ solves the moment problem
+    $$\int_{\cD} x^k \phi(x) dx = c_k, $$
+    then formally 
+    $$\int_{\cD} \frac{1}{z - x} \phi(x) dx = \sum_{k=0}^{\infty} c_k z^{-k-1}.$$
+    Define the polynomials $p_{n}^{(m)}(z) = \sum_{s = 0}^{n} k_{n, s}^{(m)} z^s$ with leading coefficient $k_{n,n}^{(m)} = 1$ by 
+    \begin{equation}
+        \int_{\cD} x^{m+s} p_n^{(m)}(x) \phi(x) dx = \begin{cases}
+            0,\quad &0\le s\le n-1 \\
+            \omega_n,\quad &s = n.
+        \end{cases}
+    \end{equation}
+    That is, $p_{n}^{(m)}$ is orthogonal to polynomials in $\text{span}\{x^m, \cdots, x^{m+n-1}\}$. Define the second sequence of polynomials $q_{n}^{(m)}(z) = \sum_{s = 0}^{n-1} j_{n,s}^{(m)} z^s$ that 
+    \begin{equation}
+        q_n^{(m)}(z) = \int_{\cD} \frac{x^m(p_n^{(m)}(z) - p_n^{(m)}(x))}{z - x} \phi(x) dx.
+    \end{equation}
+    Therefore, using the orthogonality,
+    \begin{equation}
+    \begin{aligned}
+        \frac{q_n^{(m)}(z)}{p_n^{(m)}(z)} &= \frac{1}{p_n^{(m)}(z)}\int_{\cD} \frac{x^m(p_n^{(m)}(z) - p_n^{(m)}(x))}{z - x} \phi(x) dx \\
+        &= \int_{\cD} \frac{x^m}{z - x} \phi(x) dx - \frac{1}{p_n^{(m)}(z)} \int_{\cD} \frac{x^m p_{n}^{(m)}(x)}{z - x} \phi(x) dx \\
+        &= \sum_{k=0}^{\infty} c_{m+k} z^{-k-1} + \cO(z^{-2n-1}).
+    \end{aligned}
+    \end{equation}
+\end{proof}
+\begin{remark} Accelerating fixed-point iteration
+\end{remark}
 \section{Differentiation with Finite Difference}
 Let $f\in C^2([a, b])$, we recall the Taylor expansion with reminder term, 
 \begin{equation}
@@ -280,7 +375,7 @@ Now we can combine the previously discussed extrapolation technique to acquire a
 The above example can still iterate through the extrapolation process, since $A_1(f, h) = f'(x) + \cO(h^4)$, we can use $A_2(f, h) = \frac{16}{15}A_1(f, h/2) -  \frac{1}{15}A_1(f, h)$ to cancel out the $\cO(h^4)$ term which leads to a $\cO(h^6)$ error. However one should also notice this process requires more nodes for computation: $A_1$ needs nodes $x\pm h$, $x\pm h/2$, $A_2$ will acquire additional nodes $x\pm h/4$ for evaluation. Such a higher precision evaluation method takes more computational time, sometimes we need to trade off the efficiency and accuracy.
 
 \begin{remark}
-    One of the advantages of using extrapolation is that $h$ does not have to be too small which is sensitive to numerical rounding errors. The potential issue would be the growth of derivative with respect to order, for sufficiently smooth functions, extrapolation usually produces quite accurate evaluations. The potential limitation of the Richardson extrapolation is the requirement of known asymptotic expansion (formally only), while the Wynn $\eps$ method does not have such a limitation. 
+    One of the advantages of using extrapolation is that $h$ does not have to be too small which is sensitive to numerical rounding errors. The potential issue would be the growth of derivative in order, for sufficiently smooth functions, extrapolation usually produces quite accurate evaluations. The potential limitation of the Richardson extrapolation is the requirement of known asymptotic expansion (formally only), while the Wynn $\eps$ method does not have such a limitation. 
 \end{remark}
 
 
@@ -1067,7 +1162,7 @@ The source code and test cases for the computational part are hosted on GitHub.
 \subsection{Computational Part}
 \begin{problem}
     Let the infinite matrix $A$ such that $$A_{jk} = \frac{1}{(j+k-1)(j+k)/2 - (k-1)}.$$
-    Compute the operator norm $\|A\|$ with ten digits accuracy. Hint: use extrapolation.
+    Compute the operator norm $\|A\|$ with at least ten digits accuracy.
 \end{problem}
 \begin{problem}
     Implement the \underline{adaptive} integration with composite Newton-Cotes closed formula for $n \le 10$. 
