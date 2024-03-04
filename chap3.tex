@@ -77,12 +77,59 @@ Therefore by taking $A_2(h) = \frac{A_1(h)- t^{2\gamma} A_1(\frac{h}{t^{2\gamma}
     A^{\ast}\approx A_2(h) + \cO(h^{3\gamma}).
 \end{equation}
 However, such a process can constantly refine the approximation due to the potentially fast-growing constant in the $\cO$ notation.
+\subsection{Aitken Extrapolation}
+\label{SSec: 3-Ait-Ext}
+Aitken extrapolation~\cite{aitken1927xxv} was introduced by Alexander Aitken and has been used for accelerating the rate of convergence of a sequence. 
 
+Given a sequence $S = \{s_n\}_{n\ge 0}$, the Aitken extrapolation generates a new sequence 
+
+$$AS = \left\{\frac{s_n s_{n+2} - s_{n+1}^2}{s_n + s_{n+2} - 2 s_{n+1}}\right\}_{n\ge 0}. $$
+A more stable formulation (why?) is written as 
+$$(AS)_n  = s_n - \frac{(\Delta s_n)^2}{\Delta^2 s_n},$$
+where $\Delta$ is the forward difference operator that $\Delta s_n = s_{n+1} - s_n$. It is not difficult to see that Aitken extrapolation can accelerate linearly convergent sequences. 
+
+\begin{theorem}
+    Assume that the sequence $S = \{s_n\}_{n\ge 0}$ satisfies 
+    \begin{equation}
+        \lim_{n\to\infty} \frac{|x_{n+1} - \mu|}{|x_n - \mu|} = \rho \in (0, 1).
+    \end{equation}
+    Then the accelerated sequence $AS$ converges faster than $S$.
+\end{theorem}
+\begin{proof}
+Let $\rho_n := \frac{s_{n+1} - \mu}{s_n - \mu}$, without loss of generality, we assume $\lim_{n\to\infty} \rho_n = \rho$.  
+By the definition of the acceleration formula, we obtain 
+    \begin{equation}
+       \frac{ (AS)_{n} - \mu}{ s_{n} - \mu } =  1 - \frac{(\Delta s_{n})^2}{\Delta^2 s_{n}} \frac{1}{s_n -\mu}.
+    \end{equation}
+    For sufficiently large $n$, we have $\rho_n \approx \rho$ and 
+    \begin{equation}
+    \begin{aligned}
+        \Delta s_n &= s_{n+1} - \mu - (s_n -\mu) = (\rho_n - 1) (s_n -\mu)    \\
+        \Delta^2 s_n &= s_{n+2} - \mu + s_n -\mu - 2(s_{n+1} -\mu) = (\rho_{n+1}\rho_n-2\rho_{n}+1)(s_n -\mu)
+    \end{aligned}
+    \end{equation}
+    Therefore
+    \begin{equation}
+      \frac{ (AS)_{n} - \mu}{ s_{n} - \mu } = 1 - \frac{(\rho_n-1)^2}{(\rho_{n+1}\rho_n - 2\rho_{n} + 1)}=\frac{\rho_n(\rho_{n+1} - \rho_n)}{(\rho_{n+1}\rho_n - 2\rho_{n} + 1)}  \to 0. 
+    \end{equation}
+\end{proof}
+\begin{remark}
+    Let $ \eps_n := s_n - \mu$. If the error satisfies the following relation (common in most fixed-point iterations) $$\eps_{n+1} = \eps_n (\rho + c_1 \eps_n + o(\eps_n)),$$ then
+    \begin{equation}
+        \frac{ (AS)_{n} - \mu}{ s_{n} - \mu }  = \frac{\rho_n(\rho_{n+1} - \rho_n)}{(\rho_{n+1}\rho_n - 2\rho_{n} + 1)} \approx \frac{c_1 \rho}{(1-\rho)^2} \left((\rho - 1)\eps_n + o(\eps_n) \right).
+    \end{equation}
+    That is, $| (AS)_{n} - \mu| = \cO( |s_{n} - \mu |^2 )$.
+\end{remark}
+This extrapolation formula has been rediscovered by~\cite{schmidt1941xxxii} and~\cite{shanks1955non} independently. In~\cite{shanks1955non}, the sequence $S = \{s_n\}_{n\ge 0}$ is specified by the partial sum form,
+\begin{equation}
+    s_n = \sum_{k=0}^n a_k, 
+\end{equation}
+under this case, the Aitken extrapolation is also called the Shanks transformation. 
 \subsection{Wynn's Epsilon Method}
 \label{SSec: 3-Wynn-Eps-Met}
-Wynn's $\eps$ method~\cite{wynn1956device,wynn1966convergence} is another kind of extrapolation algorithm that is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
+Wynn's $\eps$ method~\cite{wynn1956device,wynn1966convergence} is an iterative algorithm for the Shanks transformation. It is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
 
-Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity. The algorithm is stated as follows, see Algorithm~\ref{ALG: WYNN}. The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1, \dots$.
+The algorithm is stated as follows, see Algorithm~\ref{ALG: WYNN}. Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity. The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1, \dots$.
 \begin{algorithm}[!htb]
     \SetAlgoLined
     \caption{Wynn's $\eps$ method}
@@ -203,7 +250,7 @@ Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantit
     \end{aligned}
     \end{equation}
 \end{proof}
-\begin{remark} Accelerating fixed-point iteration
+\begin{remark} The Aitken extrapolation can be used to accelerate fixed-point iteration $x_{n+1} = f(x_n)$. Steffensen's method is based on such extrapolation.
 \end{remark}
 \section{Differentiation with Finite Difference}
 Let $f\in C^2([a, b])$, we recall the Taylor expansion with reminder term, 
