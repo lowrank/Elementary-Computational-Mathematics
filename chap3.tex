@@ -79,7 +79,7 @@ Therefore by taking $A_2(h) = \frac{A_1(h)- t^{2\gamma} A_1(\frac{h}{t^{2\gamma}
 However, such a process can constantly refine the approximation due to the potentially fast-growing constant in the $\cO$ notation.
 \subsection{Aitken Extrapolation}
 \label{SSec: 3-Ait-Ext}
-Aitken extrapolation~\cite{aitken1927xxv} was introduced by Alexander Aitken and has been used for accelerating the rate of convergence of a sequence. 
+Aitken extrapolation~\cite{aitken1927xxv} was rediscovered by Alexander Aitken and has been used for accelerating the rate of convergence of a sequence. Its history can be found in~\cite{brezinski2013extrapolation}.
 
 Given a sequence $S = \{s_n\}_{n\ge 0}$, the Aitken extrapolation generates a new sequence 
 
@@ -113,21 +113,169 @@ By the definition of the acceleration formula, we obtain
       \frac{ (AS)_{n} - \mu}{ s_{n} - \mu } = 1 - \frac{(\rho_n-1)^2}{(\rho_{n+1}\rho_n - 2\rho_{n} + 1)}=\frac{\rho_n(\rho_{n+1} - \rho_n)}{(\rho_{n+1}\rho_n - 2\rho_{n} + 1)}  \to 0. 
     \end{equation}
 \end{proof}
-\begin{remark}
+\begin{remark}\label{rem: 4-aitken-conv}
     Let $ \eps_n := s_n - \mu$. If the error satisfies the following relation (common in most fixed-point iterations) $$\eps_{n+1} = \eps_n (\rho + c_1 \eps_n + o(\eps_n)),$$ then
     \begin{equation}
         \frac{ (AS)_{n} - \mu}{ s_{n} - \mu }  = \frac{\rho_n(\rho_{n+1} - \rho_n)}{(\rho_{n+1}\rho_n - 2\rho_{n} + 1)} \approx \frac{c_1 \rho}{(1-\rho)^2} \left((\rho - 1)\eps_n + o(\eps_n) \right).
     \end{equation}
     That is, $| (AS)_{n} - \mu| = \cO( |s_{n} - \mu |^2 )$.
 \end{remark}
-This extrapolation formula has been rediscovered by~\cite{schmidt1941xxxii} and~\cite{shanks1955non} independently. In~\cite{shanks1955non}, the sequence $S = \{s_n\}_{n\ge 0}$ is specified by the partial sum form,
+The Aitken extrapolation can be used to accelerate fixed-point iteration solving the root $x^{\ast}$ for $f(x)$. Steffensen's method is a root-finding algorithm based on such an acceleration technique, the iteration is given by 
+\begin{equation*}
+       x_{n+1} = x_n - \frac{f(x_n)}{g(x_n)} ,\quad 
+g(x)= \frac{f(x + f(x))}{f(x)} - 1.
+\end{equation*}
+If $f$ is twice differentiable, then clearly the function $g(x)\approx f'(x)$, which recovers the Newton-Raphson method asymptotically if $f(x)\approx 0$.
+\begin{theorem}
+    Suppose $f'(x^{\ast})\in (-1, 0)$, then the order of convergence is 2 for Steffensen's method.
+\end{theorem}
+\begin{proof}
+    Let us first point out the connection between Aitken extrapolation and Steffensen's method. Denote $x_0$ as the starting point, the intermediate values $z_1 = x_0 +f (x_0)$ and $z_2 =z_1 +f(z_1)$. The Aitken extrapolation finds
+    \begin{equation}
+    \begin{aligned}
+    A x_0 &= x_0 - \frac{(z_1 - x_0)^2}{z_2 + x_0 - 2 z_1 } = x_0 - \frac{|f(x_0)|^2}{z_1 + f(z_1) + x_0 - 2 (x_0 + f(x_0)) }     \\
+    &=x_0 - \frac{|f(x_0)|^2}{f(z_1) - f(x_0)} = x_0 - \frac{f(x_0)}{g(x_0)} = x_1.
+    \end{aligned}
+    \end{equation}
+    When the iterates $x_0, z_1, z_2$ are close to the root $x^{\ast}$, the convergence is linear. Therefore, using the same derivation as Remark~\ref{rem: 4-aitken-conv}, we find 
+    \begin{equation*}
+       x_1 - x^{\ast} = A x_0 - x^{\ast} = \cO( | x_0 - x^{\ast}|^2 ).
+    \end{equation*}
+\end{proof}
+
+\begin{remark}
+    It should be noticed that Steffensen's method evaluates $f$ twice during each iteration, the same as Newton's method (one for $f$ and one for $f'$, although the evaluation of $f'$ is more expensive in practice). That is, each evaluation brings an order of $1$ of convergence on average. From the viewpoint of efficiency, the secant method is preferred, since it only evaluates $f$ once each iteration with an order of $\frac{1+\sqrt{5}}{2}$ of convergence. 
+\end{remark}
+It is natural to use repeated applications of Aitken extrapolation to improve the convergence further. Such an idea has been rediscovered by~\cite{schmidt1941xxxii} and~\cite{shanks1955non}. In~\cite{shanks1955non}, the sequence $S = \{s_n\}_{n\ge 0}$ is specified by the partial sum form,
 \begin{equation}
     s_n = \sum_{k=0}^n a_k, 
 \end{equation}
-under this case, the Aitken extrapolation is also called the Shanks transformation. 
+under this case, the $A^k S$ is also called the Shanks transformation. When $k=1$, it corresponds to the standard Aitken extrapolation.
+\begin{lemma}[Sylvester determinantal identity]
+Let $A\in \bbR^{n\times n}$ and $\alpha, \beta,\gamma, \delta\in\bbR$, $\ba, \bb,\bc,\bd\in\bbR^{n}$. Then
+\begin{equation}
+     \left| \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}\right| = \frac{1}{\det(A)} \left(  \left| \begin{pmatrix}
+      \alpha & \ba^{T}   \\
+        \bb & A  
+    \end{pmatrix}\right|     \left| \begin{pmatrix}
+     A & \bc \\
+       \bd^T & \delta 
+    \end{pmatrix}\right|  -     \left| \begin{pmatrix}
+      \ba^{T} & \beta  \\
+         A & \bc \\ 
+    \end{pmatrix}\right|     \left| \begin{pmatrix}
+        \bb & A  \\
+        \gamma & \bd^T  
+    \end{pmatrix}\right| \right).
+\end{equation}
+\end{lemma}
+\begin{proof}
+    Without loss of generality, we assume $A$ is invertible, otherwise, we substitute $A$ with $A + \eps I$ and take $\eps\to 0$. Let $\bv = A^{-1} \bb$, then 
+    \begin{equation}\label{EQ: 4-SYL-DET-ID}
+    \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}\begin{pmatrix}
+        \det(A) \\ - \det(A) \bv \\ 0
+    \end{pmatrix} = \begin{pmatrix}
+        \det(A) (\alpha - \ba^T A^{-1} \bb) \\ \bzero \\ \det(a) (\gamma - \bd^T A^{-1}\bb)
+    \end{pmatrix}.
+    \end{equation}
+    By Schur's completion, 
+    \begin{equation}
+    \begin{aligned}
+    \det(A) (\alpha - \ba^T A^{-1} \bb)  &=  \left| \begin{pmatrix}
+      \alpha & \ba^{T}   \\
+        \bb & A  
+    \end{pmatrix}\right|  ,  \\
+    \det(A) (\gamma - \bd^T A^{-1} \bb)  &=  (-1)^{n} \left| \begin{pmatrix}
+        \bb & A  \\
+        \gamma & \bd^T
+    \end{pmatrix}\right|   . 
+    \end{aligned}
+    \end{equation}
+    Using the adjugate matrix, we obtain
+    \begin{equation}\nonumber
+     \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}^{-1} = \frac{1}{  \left| \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}\right|} \begin{pmatrix}
+          \left| \begin{pmatrix}
+     A & \bc \\
+       \bd^T & \delta 
+    \end{pmatrix}\right| & \cdots & (-1)^{n-1}   \left| \begin{pmatrix}
+      \ba^{T} & \beta  \\
+         A & \bc \\ 
+    \end{pmatrix}\right| \\
+    \vdots & \ddots & \vdots \\
+    (-1)^{n-1}  \left| \begin{pmatrix}
+        \bb & A  \\
+        \gamma & \bd^T  
+    \end{pmatrix}\right| & \cdots &  \left| \begin{pmatrix}
+      \alpha & \ba^{T}   \\
+        \bb & A  
+    \end{pmatrix}\right|  
+    \end{pmatrix}.
+    \end{equation}
+    Apply the inverse matrix to the right-hand side in~\eqref{EQ: 4-SYL-DET-ID}, the first row implies 
+    \begin{equation}
+        \frac{1}{\left| \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}\right|} \left(   \left| \begin{pmatrix}
+     A & \bc \\
+       \bd^T & \delta 
+    \end{pmatrix}\right|\left| \begin{pmatrix}
+      \alpha & \ba^{T}   \\
+        \bb & A  
+    \end{pmatrix}\right| -  \left| \begin{pmatrix}
+      \ba^{T} & \beta  \\
+         A & \bc \\ 
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+        \bb & A  \\
+        \gamma & \bd^T
+    \end{pmatrix}\right| 
+ \right) = \det(A).
+    \end{equation}
+\end{proof}
+\begin{theorem}
+The $k$-th application of Aitken extrapolation equals
+    \begin{equation}
+        (A^k S)_n = \frac{\left|\begin{matrix}
+            s_{n} & \cdots & s_{n+k-1} & s_{n+k} \\
+            \Delta s_{n} & \cdots & \Delta s_{n+k-1} & \Delta s_{n+k} \\
+             \Delta s_{n+1} & \cdots & \Delta s_{n+k} & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots & \vdots \\
+            \Delta s_{n+k-1} & \cdots & \Delta s_{n+2k-2} & \Delta s_{n+2k-1}
+        \end{matrix}\right|}{\left|\begin{matrix}
+            1 & \cdots & 1 & 1 \\
+               \Delta s_{n} & \cdots & \Delta s_{n+k-1} & \Delta s_{n+k} \\
+             \Delta s_{n+1} & \cdots & \Delta s_{n+k} & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots & \vdots \\
+            \Delta s_{n+k-1} & \cdots & \Delta s_{n+2k-2} & \Delta s_{n+2k-1}
+        \end{matrix}\right|}
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    We simply verify that 
+    \begin{equation}
+          (A^{k+1} S)_n =  (A^{k} S)_n - \frac{(\Delta  (A^{k} S)_n)^2 }{\Delta^2  (A^{k} S)_n } 
+    \end{equation}
+\end{proof}
 \subsection{Wynn's Epsilon Method}
 \label{SSec: 3-Wynn-Eps-Met}
-Wynn's $\eps$ method~\cite{wynn1956device,wynn1966convergence} is an iterative algorithm for the Shanks transformation. It is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
+Wynn's $\eps$ method~\cite{wynn1956device,wynn1966convergence} is an iterative algorithm for the Shanks transformation (Aitken's extrapolation). It is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
 
 The algorithm is stated as follows, see Algorithm~\ref{ALG: WYNN}. Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity. The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1, \dots$.
 \begin{algorithm}[!htb]
@@ -250,8 +398,7 @@ The algorithm is stated as follows, see Algorithm~\ref{ALG: WYNN}. Let $s_0, s_1
     \end{aligned}
     \end{equation}
 \end{proof}
-\begin{remark} The Aitken extrapolation can be used to accelerate fixed-point iteration $x_{n+1} = f(x_n)$. Steffensen's method is based on such extrapolation.
-\end{remark}
+\subsection{Anderson Acceleration}
 \section{Differentiation with Finite Difference}
 Let $f\in C^2([a, b])$, we recall the Taylor expansion with reminder term, 
 \begin{equation}
