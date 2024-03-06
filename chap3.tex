@@ -150,7 +150,59 @@ It is natural to use repeated applications of Aitken extrapolation to improve th
 \begin{equation}
     s_n = \sum_{k=0}^n a_k, 
 \end{equation}
-under this case, the $A^k S$ is also called the Shanks transformation. When $k=1$, it corresponds to the standard Aitken extrapolation.
+under this case, the $A^k S$ is also called the Shanks transformation. When $k=1$, it corresponds to the standard Aitken extrapolation. The explicit form of $(A^k S)_n$ will be given in the next section.
+
+\subsection{Wynn's Epsilon Method}
+\label{SSec: 3-Wynn-Eps-Met}
+Wynn's $\eps$ method~\cite{wynn1956device,wynn1966convergence} is an iterative algorithm for the Shanks transformation (Aitken's extrapolation). It is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
+
+The algorithm is quite simple, see Algorithm~\ref{ALG: WYNN}. Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity,  the extrapolated results are stored at the columns $\eps_{2k}^{(j)}$, $j, k=0,1, \dots$.
+\begin{algorithm}[!htb]
+    \SetAlgoLined
+    \caption{Wynn's $\eps$ method}
+    \KwData{$s_0, s_1, \dots, s_n,\dots$}
+    \KwResult{$\eps_{2l}^{(j)}$}
+    \For{$j = 0, 1, 2,\dots$}{set 
+    $\eps_{-1}^{(j)} = 0, \quad \eps_{0}^{(j)} = s_j.$ //    initialization; }
+    \For{$j,k= 0, 1, 2,\dots$}{
+      $$\eps_{k+1}^{(j)} = \eps_{k-1}^{(j+1)} + \frac{1}{\eps_{k}^{(j+1)} - \eps_{k}^{j}}.$$
+    }
+    \label{ALG: WYNN}
+\end{algorithm}
+
+\begin{example}
+    It is known that $\sfrac{\pi}{4}$ can be calculated by the asymptotic expansion:
+    \begin{equation}
+        \arctan z = z - \frac{z^3}{3} + \frac{z^5}{5} - \dots 
+    \end{equation}
+    at $z = 1$. Define the function $A(h)$ such that 
+    \begin{equation}
+        A(h)= \sum_{j=0}^{1/h} \frac{(-1)^j}{2 j + 1} = \frac{\pi}{4} + a_1 h + a_3 h^3 + \dots
+    \end{equation}
+    Then the approximation error is $\cO(h)$, which is very slow. Taking $h=10^{-3}$ has around $2\times 10^{-4}$ error.  We test with two extrapolation algorithms.
+    \begin{enumerate}
+        \item [$\circ$] Richardson Extrapolation. We take $1/h = 250, 500, 1000, 2000$ and calculate that the Richardson extrapolation three times would result in almost machine precision.
+        \item [$\circ$] Wynn's $\eps$ method. We take the sequence 
+        $$s_k = \sum_{j=0}^k \frac{(-1)^j}{2 j + 1}$$
+        as the truncated series at $z = 1$. With about 20 terms, we have already reached machine precision.
+    \end{enumerate}
+\end{example}
+
+Before we provide a connection between the table $\{ \eps_{2k}^{(n)} \}_{k\ge 0, n\ge 0}$ and Shanks transformation, let us first define the Hankel determinants for $k \ge 1$, 
+\begin{equation}
+    \cH_k(s_n) = \left|\begin{matrix}
+        s_n & s_{n+1} & \cdots & s_{n+k- 1} \\
+        s_{n+1} & s_{n+2} & \cdots & s_{n + k} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        s_{n+k-1} & s_{n+k} & \cdots & s_{n+2k-2} 
+    \end{matrix}\right| = \left|\begin{matrix}
+        s_n & s_{n+1} & \cdots & s_{n+k- 1} \\
+        \Delta s_{n} & \Delta s_{n+1} & \cdots &\Delta s_{n + k - 1} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \Delta s_{n+k-2} & \Delta s_{n+k - 1} & \cdots & \Delta s_{n+2k-3} 
+    \end{matrix}\right| ,
+\end{equation}
+and we set $\cH_0(s_n) = 1$. We will need the following lemmas.
 \begin{lemma}[Sylvester determinantal identity]
 \label{Lem: 4-SYL-DET-ID}
 Let $A\in \bbR^{n\times n}$ and $\alpha, \beta,\gamma, \delta\in\bbR$, $\ba, \bb,\bc,\bd\in\bbR^{n}$. Then
@@ -187,7 +239,7 @@ Let $A\in \bbR^{n\times n}$ and $\alpha, \beta,\gamma, \delta\in\bbR$, $\ba, \bb
         \det(A) (\alpha - \ba^T A^{-1} \bb) \\ \bzero \\ \det(a) (\gamma - \bd^T A^{-1}\bb)
     \end{pmatrix}.
     \end{equation}
-    By Schur's completion, 
+    By Schur's complement, 
     \begin{equation}
     \begin{aligned}
     \det(A) (\alpha - \ba^T A^{-1} \bb)  &=  \left| \begin{pmatrix}
@@ -250,9 +302,9 @@ Let $A\in \bbR^{n\times n}$ and $\alpha, \beta,\gamma, \delta\in\bbR$, $\ba, \bb
  \right) = \det(A).
     \end{equation}
 \end{proof}
-\begin{lemma}[Schweinsian expansion, 1825]
+\begin{lemma}[Schweinsian expansion]
 \label{Lem: 4-SCH-EXP}
-Let $P = \frac{\left| \begin{pmatrix}
+Assume that $$P = \frac{\left| \begin{pmatrix}
       \theta & \ba^{T} & \beta  \\
         \be & A & \bc \\
         \upsilon & \bd^T & \delta 
@@ -260,13 +312,13 @@ Let $P = \frac{\left| \begin{pmatrix}
       \alpha & \ba^{T} & \beta  \\
         \bb & A & \bc \\
         \gamma & \bd^T & \delta 
-    \end{pmatrix}\right|  }$ and $Q =\frac{ \left| \begin{pmatrix}
+    \end{pmatrix}\right|  },\quad Q =\frac{ \left| \begin{pmatrix}
       \theta & \ba^{T} \\
         \be & A  
     \end{pmatrix}\right|  }{  \left| \begin{pmatrix}
       \alpha & \ba^{T} \\
         \bb & A  
-    \end{pmatrix}\right|}$, then 
+    \end{pmatrix}\right|},$$ then 
 \begin{equation}
 \begin{aligned}
 P-Q = \frac{\left| \begin{pmatrix}
@@ -397,22 +449,184 @@ P-Q = \frac{\left| \begin{pmatrix}
     \end{equation}
     The conclusion is clear after one more application of Lemma~\ref{Lem: 4-SYL-DET-ID}.
 \end{proof}
+The connection of the table $\{ \eps_{2k}^{(n)} \}_{k\ge 0, n\ge 0}$ with the Shanks transformation has been proved in~\cite{wynn1956device}. 
+\begin{theorem}
+Let $\Delta$ be the forward difference operator, then 
+    $$\eps_{2k}^n = \frac{\cH_{k+1}(s_n)}{\cH_k(\Delta^2 s_n)},\quad \eps_{2k+1}^n = \frac{\cH_{k}(\Delta^3 s_n)}{\cH_{k+1}(\Delta s_n)}.$$
+\end{theorem}
+\begin{proof}
+    We simply verify the above results in the $\eps$-algorithm. We consider two cases. 
+    \begin{equation}
+    \eps_{2k+2}^{(n)} = \eps_{2k}^{(n+1)} + \frac{1}{\eps_{2k+1}^{(n+1)} - \eps_{2k+1}^{(n)}}.
+    \end{equation}
+    and 
+    \begin{equation}
+    \eps_{2k+1}^{(n)} = \eps_{2k-1}^{(n+1)} + \frac{1}{\eps_{2k}^{(n+1)} - \eps_{2k}^{(n)}}.   
+    \end{equation}
+    The first case is equivalent to 
+    \begin{equation}
+        \frac{\cH_{k+2}(s_n)}{\cH_{k+1}(\Delta^2 s_n)} - \frac{\cH_{k+1}(s_{n+1})}{\cH_{k}(\Delta^2 s_{n+1})} = \frac{\cH_{k+1}(\Delta s_n) \cH_{k+1}(\Delta s_{n+1}) }{\cH_{k}(\Delta^3 s_{n+1})\cH_{k+1}(\Delta s_n) - \cH_{k}(\Delta^3 s_n)\cH_{k+1}(\Delta s_{n+1}) }.
+    \end{equation}
+    The left-hand side can be written as
+    \begin{equation}
+        \frac{\left| \begin{matrix}
+            s_n & \cdots & s_{n+k+1} \\ 
+            \Delta s_n & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k+1}
+        \end{matrix}   \right|}{\left|  \begin{matrix}
+            1 & \cdots & 1 \\ 
+            \Delta s_n & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k+1}
+        \end{matrix}    \right|} -         
+        \frac{\left| \begin{matrix}
+            s_{n+1} & \cdots & s_{n+k+1} \\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k}
+        \end{matrix}   \right|}{\left|  \begin{matrix}
+            1 & \cdots & 1 \\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k}
+        \end{matrix}    \right|},
+    \end{equation}
+    after rearranging the first column to the last, we can use Lemma~\ref{Lem: 4-SCH-EXP}, the left-hand side equals
+    \begin{equation}\label{EQ: 4-LHS-SHANKS}
+    \begin{aligned}
+       & \frac{\left| \begin{matrix}
+            s_{n+1} & \cdots & s_{n+k+1} & s_n\\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} & \Delta s_n \\
+            \vdots & \ddots & \vdots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k} & \Delta s_{n+k-1} \\
+            1 & \cdots & 1 & 1
+        \end{matrix}   \right|}{\left|  \begin{matrix}
+            1 & \cdots & 1 & 1\\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+2} & \Delta s_n \\
+            \vdots & \ddots & \vdots & \vdots  \\
+            \Delta s_{n+k+1} & \cdots & \Delta s_{n+2k+1} & \Delta s_{n+k}
+        \end{matrix}    \right|} \cdot \frac{\left| \begin{matrix}
+            \Delta s_{n+k+1} & \cdots & \Delta s_{n+2k+1} \\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k}
+        \end{matrix}   \right|
+        }{ \left|  \begin{matrix}
+            1 & \cdots & 1 \\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k}
+        \end{matrix}    \right| } \\
+        &=(-1)^{k+1}\frac{\left| \begin{matrix}
+            1 & \cdots & 1 & 1\\
+            s_{n+1} & \cdots & s_{n+k+1} & s_n\\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} & \Delta s_n \\
+            \vdots & \ddots & \vdots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k} & \Delta s_{n+k-1} \\
+        \end{matrix}   \right|}{\left|  \begin{matrix}
+            1 & \cdots & 1 & 1\\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+2} & \Delta s_n \\
+            \vdots & \ddots & \vdots & \vdots  \\
+            \Delta s_{n+k+1} & \cdots & \Delta s_{n+2k+1} & \Delta s_{n+k}
+        \end{matrix}    \right|} \cdot (-1)^k\frac{\left| \begin{matrix}
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k}\\
+            \Delta s_{n+k+1} & \cdots & \Delta s_{n+2k+1}
+        \end{matrix}   \right|
+        }{ \left|  \begin{matrix}
+            1 & \cdots & 1 \\ 
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta s_{n+k} & \cdots & \Delta s_{n+2k}
+        \end{matrix}    \right| } 
+    \end{aligned}
+    \end{equation}
+    For the right-hand side, the denominator (after slight arrangements) is 
+    \begin{equation}
+    \begin{aligned}
+        \left|\begin{matrix}
+            1 & \cdots & 1 \\
+            \Delta^2 s_{n+1} & \cdots &\Delta^2 s_{n + k + 1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta^2 s_{n+k} & \cdots &\Delta^2 s_{n+2k}
+        \end{matrix}\right| \left|
+        \begin{matrix}
+            \Delta s_n & \cdots & \Delta s_{n+k} \\
+            \Delta^2 s_n & \cdots & \Delta^2 s_{n+k} \\
+            \vdots & \ddots & \vdots \\
+            \Delta^2 s_{n+k-1} &\cdots & \Delta^2 s_{n+2k-1}
+        \end{matrix}
+        \right| \\ - \left|\begin{matrix}
+            1 & \cdots & 1 \\
+            \Delta^2 s_n & \cdots & \Delta^2 s_{n+k} \\
+            \vdots & \ddots & \vdots \\
+            \Delta^2 s_{n+k-1} & \cdots & \Delta^2 s_{n+2k-1}
+        \end{matrix}\right| \left|
+        \begin{matrix}
+            \Delta s_{n+1} & \cdots & \Delta s_{n+k+1} \\
+             \Delta^2 s_{n+1} & \cdots & \Delta^2 s_{n+k+1} \\
+            \vdots & \ddots & \vdots \\
+            \Delta^2 s_{n+k} & \cdots & \Delta^2 s_{n+2k}
+        \end{matrix}
+        \right|
+    \end{aligned}
+    \end{equation}
+Using Lemma~\ref{Lem: 4-SYL-DET-ID}, this equals to 
+\begin{equation}
+\begin{aligned}
+   &(-1)^{k+1} \left|\begin{matrix}
+        1 & 1 & \cdots & 1 \\
+        \Delta^2 s_n & \Delta^2 s_{n+1} & \cdots & \Delta^2 s_{n+k+1} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \Delta^2 s_{n+k-1} & \Delta^2 s_{n+k} & \cdots & \Delta^2 s_{n+2k}\\
+        \Delta s_n & \Delta s_{n+1} & \cdots & \Delta_{n+k+1}
+    \end{matrix}\right| \left| \begin{matrix}
+        \Delta^2 s_{n+1} &\cdots & \Delta^2 s_{n+k} \\
+        \vdots & \ddots & \vdots \\
+        \Delta^2 s_{n+k} & \cdots & \Delta^2 s_{n+2k-1}
+    \end{matrix}\right|\\
+    &= -\left|\begin{matrix}
+        1 & 1 & \cdots & 1 \\
+ \Delta s_n & \Delta s_{n+1} & \cdots & \Delta_{n+k+1}\\
+        \Delta^2 s_n & \Delta^2 s_{n+1} & \cdots & \Delta^2 s_{n+k+1} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \Delta^2 s_{n+k-1} & \Delta^2 s_{n+k} & \cdots & \Delta^2 s_{n+2k}
+    \end{matrix}\right| \left| \begin{matrix}
+    1 & \cdots & 1\\
+        \Delta s_{n+1} &\cdots & \Delta s_{n+k+1} \\
+        \vdots & \ddots & \vdots \\
+        \Delta s_{n+k} & \cdots & \Delta s_{n+2k}
+    \end{matrix}\right|
+\end{aligned}
+\end{equation}
+it is fairly easy to verify the numerator is identical to~\eqref{EQ: 4-LHS-SHANKS}. The other case can be derived in a very similar way.
+\end{proof}
+\begin{remark}
+    In the previous proof, we obtained the following recursive relations 
+    \begin{equation}
+    \begin{aligned}
+    \cH_{k+2}(s_n) \cdot \cH_k(\Delta^2 s_n) - \cH_{k+1}(\Delta^2 s_n)\cdot \cH_{k+1}(s_{n+1}) = - \cH_{k+1}(\Delta s_{n})\cdot \cH_{k+1}(\Delta s_{n+1})
+    \end{aligned}
+    \end{equation}
+    and 
+    \begin{equation}
+    \cH_{k}(\Delta^3 s_{n+1})\cdot \cH_{k+1}(\Delta s_n) - \cH_{k}(\Delta^3 s_n)\cdot \cH_{k+1}(\Delta s_{n+1}) = - \cH_{k+1}(\Delta^2 s_n) \cdot \cH_{k}(\Delta^2 s_{n+1}).
+    \end{equation}
+    Other relations can be derived in the same way, for instance, 
+    \begin{equation}
+    \cH_{k+2}(s_n) \cdot \cH_{k}(s_{n+2}) = \cH_{k+1}(s_n) \cdot \cH_{k+1}(s_{n+2}) - \cH_{k+1}(s_{n+1}) ^2 .
+    \end{equation}
+\end{remark}
+% We can derive the following recursive relation for the Hankel determinants from Lemma~\ref{Lem: 4-SYL-DET-ID} directly.
+%  \begin{equation}
+%     \cH_{k+2}(s_n) \cdot \cH_{k}(s_{n+2}) = \cH_{k+1}(s_n) \cdot \cH_{k+1}(s_{n+2}) - \cH_{k+1}(s_{n+1}) ^2 .
+% \end{equation}
 \begin{theorem}
 The $k$-th order of Shanks transformation equals
     \begin{equation}
-        (A^k S)_n = \frac{\left|\begin{matrix}
-            s_{n} & \cdots & s_{n+k-1} & s_{n+k} \\
-            \Delta s_{n} & \cdots & \Delta s_{n+k-1} & \Delta s_{n+k} \\
-             \Delta s_{n+1} & \cdots & \Delta s_{n+k} & \Delta s_{n+k+1} \\
-            \vdots & \ddots & \vdots & \vdots \\
-            \Delta s_{n+k-1} & \cdots & \Delta s_{n+2k-2} & \Delta s_{n+2k-1}
-        \end{matrix}\right|}{\left|\begin{matrix}
-            1 & \cdots & 1 & 1 \\
-               \Delta s_{n} & \cdots & \Delta s_{n+k-1} & \Delta s_{n+k} \\
-             \Delta s_{n+1} & \cdots & \Delta s_{n+k} & \Delta s_{n+k+1} \\
-            \vdots & \ddots & \vdots & \vdots \\
-            \Delta s_{n+k-1} & \cdots & \Delta s_{n+2k-2} & \Delta s_{n+2k-1}
-        \end{matrix}\right|}
+        (A^k S)_n = \frac{\cH_{k+1}(s_n)}{\cH_{k}(\Delta^2 s_n)}.
     \end{equation}
 \end{theorem}
 \begin{proof}
@@ -420,46 +634,9 @@ The $k$-th order of Shanks transformation equals
     \begin{equation}
           (A^{k+1} S)_n - (A^{k} S)_n = \frac{(\Delta  (A^{k} S)_n)^2 }{\Delta^2  (A^{k} S)_n }.
     \end{equation}
-    The left-hand side can be written as a quotient by Lemma~\ref{Lem: 4-SCH-EXP} (transpose),
-    \begin{equation}
-    (A^{k+1} S)_n - (A^{k} S)_n = 
-    \end{equation}
+    
 \end{proof}
-\subsection{Wynn's Epsilon Method}
-\label{SSec: 3-Wynn-Eps-Met}
-Wynn's $\eps$ method~\cite{wynn1956device,wynn1966convergence} is an iterative algorithm for the Shanks transformation (Aitken's extrapolation). It is recommended as the best all-purpose acceleration method. It has a strong connection with Pad\'e approximation and continued fractions. We will not cover the detailed derivation of the theory in this section. However, Wynn's $\eps$ method still has its limitations if the sequence converges to the desired value too slowly. 
 
-The algorithm is stated as follows, see Algorithm~\ref{ALG: WYNN}. Let $s_0, s_1, \dots, s_n,\dots$ be a sequence converging to the desired quantity. The extrapolated results are stored at the columns $\eps_{2l}^{(j)}$, $j, l=0,1, \dots$.
-\begin{algorithm}[!htb]
-    \SetAlgoLined
-    \caption{Wynn's $\eps$ method}
-    \KwData{$s_0, s_1, \dots, s_n,\dots$}
-    \KwResult{$\eps_{2l}^{(j)}$}
-    \For{$j = 0, 1, 2,\dots$}{set 
-    $\eps_{-1}^{(j)} = 0, \quad \eps_{0}^{(j)} = s_j.$ //    initialization; }
-    \For{$j,k= 0, 1, 2,\dots$}{
-      $$\eps_{k+1}^{(j)} = \eps_{k-1}^{(j+1)} + \frac{1}{\eps_{k}^{(j+1)} - \eps_{k}^{j}}.$$
-    }
-    \label{ALG: WYNN}
-\end{algorithm}
-
-\begin{example}
-    It is known that $\sfrac{\pi}{4}$ can be calculated by the asymptotic expansion:
-    \begin{equation}
-        \arctan z = z - \frac{z^3}{3} + \frac{z^5}{5} - \dots 
-    \end{equation}
-    at $z = 1$. Define the function $A(h)$ such that 
-    \begin{equation}
-        A(h)= \sum_{j=0}^{1/h} \frac{(-1)^j}{2 j + 1} = \frac{\pi}{4} + a_1 h + a_3 h^3 + \dots
-    \end{equation}
-    Then the approximation error is $\cO(h)$, which is very slow. Taking $h=10^{-3}$ has around $2\times 10^{-4}$ error.  We test with two extrapolation algorithms.
-    \begin{enumerate}
-        \item [$\circ$] Richardson Extrapolation. We take $1/h = 250, 500, 1000, 2000$ and calculate that the Richardson extrapolation three times would result in almost machine precision.
-        \item [$\circ$] Wynn's $\eps$ method. We take the sequence 
-        $$s_k = \sum_{j=0}^k \frac{(-1)^j}{2 j + 1}$$
-        as the truncated series at $z = 1$. With about 20 terms, we have already reached machine precision.
-    \end{enumerate}
-\end{example}
 \begin{lemma}
     Let $\phi(x)$ solve the moment problem on domain $\cD$
         $$\int_{\cD} x^k \phi(x) dx = c_k,\quad k\ge 0 $$
