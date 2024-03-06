@@ -366,7 +366,7 @@ For the following context, we assume that \emph{$\phi$ is Lipschitz for all vari
     If root condition is satisfied, then consistency order $p$ implies convergence order $p$ for suitable step size $h$.
 \end{corollary} 
 For consistency order, the main tool is the Taylor expansion, we carry out the following lemma without providing a proof (see exercise). 
-\begin{lemma}\label{LEM: CONSISTENCY}
+\begin{lemma}\label{Lem: 6-CONSISTENCY}
     The linear $m$-step method 
     \begin{equation}
         \sum_{j=0}^m c_j y_{l+j} = h \sum_{j=0}^m \beta_j f(t_{l + j}, y_{l+j})
@@ -526,7 +526,7 @@ When an orthonormal basis is perturbed, the orthogonality will be lost, however,
     Show the Runge Kutta $\texttt{RK4}$ has an order of convergence $p=4$.
 \end{problem}
 \begin{problem}
-    Prove Lemma~\ref{LEM: CONSISTENCY}.
+    Prove Lemma~\ref{Lem: 6-CONSISTENCY}.
 \end{problem}
 \begin{problem}
     Determine the consistency order of the multi-step method 
