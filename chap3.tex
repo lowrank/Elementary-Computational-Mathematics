@@ -152,6 +152,7 @@ It is natural to use repeated applications of Aitken extrapolation to improve th
 \end{equation}
 under this case, the $A^k S$ is also called the Shanks transformation. When $k=1$, it corresponds to the standard Aitken extrapolation.
 \begin{lemma}[Sylvester determinantal identity]
+\label{Lem: 4-SYL-DET-ID}
 Let $A\in \bbR^{n\times n}$ and $\alpha, \beta,\gamma, \delta\in\bbR$, $\ba, \bb,\bc,\bd\in\bbR^{n}$. Then
 \begin{equation}
      \left| \begin{pmatrix}
@@ -249,8 +250,155 @@ Let $A\in \bbR^{n\times n}$ and $\alpha, \beta,\gamma, \delta\in\bbR$, $\ba, \bb
  \right) = \det(A).
     \end{equation}
 \end{proof}
+\begin{lemma}[Schweinsian expansion, 1825]
+\label{Lem: 4-SCH-EXP}
+Let $P = \frac{\left| \begin{pmatrix}
+      \theta & \ba^{T} & \beta  \\
+        \be & A & \bc \\
+        \upsilon & \bd^T & \delta 
+    \end{pmatrix}\right|}{ \left| \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}\right|  }$ and $Q =\frac{ \left| \begin{pmatrix}
+      \theta & \ba^{T} \\
+        \be & A  
+    \end{pmatrix}\right|  }{  \left| \begin{pmatrix}
+      \alpha & \ba^{T} \\
+        \bb & A  
+    \end{pmatrix}\right|}$, then 
+\begin{equation}
+\begin{aligned}
+P-Q = \frac{\left| \begin{pmatrix}
+      \theta & \ba^{T} & \alpha \\
+        \be & A & \bb \\
+        \upsilon & \bd^T & \gamma 
+    \end{pmatrix}\right|}{ \left| \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}\right|  } \cdot \frac{ \left| \begin{pmatrix}
+      \beta & \ba^{T} \\
+        \bc & A  
+    \end{pmatrix}\right|  }{  \left| \begin{pmatrix}
+      \alpha & \ba^{T} \\
+        \bb & A  
+    \end{pmatrix}\right|}.
+\end{aligned}
+\end{equation}
+\end{lemma}
+\begin{proof}
+    We only have to show the numerator
+    \begin{equation}\nonumber
+        \left| \begin{pmatrix}
+      \theta & \ba^{T} & \alpha \\
+        \be & A & \bb \\
+        \upsilon & \bd^T & \gamma 
+    \end{pmatrix}\right|\left| \begin{pmatrix}
+      \beta & \ba^{T} \\
+        \bc & A  
+    \end{pmatrix}\right| = \left| \begin{pmatrix}
+      \theta & \ba^{T} & \beta  \\
+        \be & A & \bc \\
+        \upsilon & \bd^T & \delta 
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+      \alpha & \ba^{T} \\
+        \bb & A  
+    \end{pmatrix}\right| - \left| \begin{pmatrix}
+      \alpha & \ba^{T} & \beta  \\
+        \bb & A & \bc \\
+        \gamma & \bd^T & \delta 
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+      \theta & \ba^{T} \\
+        \be & A  
+    \end{pmatrix}\right|.
+    \end{equation}
+    Apply the Lemma~\ref{Lem: 4-SYL-DET-ID} to the right-hand side, 
+    then first term becomes  
+    \begin{equation}
+      \frac{1}{\det(A)}  \left(
+            \left| \begin{pmatrix}
+      \theta & \ba^{T}   \\
+        \be & A  
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+  A & \bc \\
+         \bd^T & \delta 
+    \end{pmatrix}\right| - \left| \begin{pmatrix}
+      \ba^{T} & \beta  \\
+         A & \bc  
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+        \be & A  \\
+        \upsilon & \bd^T 
+    \end{pmatrix}\right|
+        \right) \left| \begin{pmatrix}
+      \alpha & \ba^{T} \\
+        \bb & A  
+    \end{pmatrix}\right|.
+    \end{equation}
+    Similarly, the second term is
+    \begin{equation}
+        \frac{1}{\det(A)}  \left(
+            \left| \begin{pmatrix}
+      \alpha & \ba^{T}   \\
+        \bb & A  
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+  A & \bc \\
+         \bd^T & \delta 
+    \end{pmatrix}\right| - \left| \begin{pmatrix}
+      \ba^{T} & \beta  \\
+         A & \bc  
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+        \bb & A  \\
+        \gamma & \bd^T 
+    \end{pmatrix}\right|
+        \right)  \left| \begin{pmatrix}
+      \theta & \ba^{T} \\
+        \be & A  
+    \end{pmatrix}\right|. 
+    \end{equation}
+    After cancellation and a rearrangement of the columns, we obtain
+    \begin{equation}
+    \begin{aligned}
+        &\frac{1}{\det(A)} \left(  \left| \begin{pmatrix}
+      \theta & \ba^{T} \\
+        \be & A  
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+        \bb & A  \\
+        \gamma & \bd^T 
+    \end{pmatrix}\right| -   \left| \begin{pmatrix}
+        \be & A  \\
+        \upsilon & \bd^T 
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+      \alpha & \ba^{T} \\
+        \bb & A  
+    \end{pmatrix}\right|
+        \right)  \left| \begin{pmatrix}
+      \ba^{T} & \beta  \\
+         A & \bc  
+    \end{pmatrix}\right| \\
+    &=   \frac{1}{\det(A)} \left(  \left| \begin{pmatrix}
+      \theta & \ba^{T} \\
+        \be & A  
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+       A & \bb  \\
+        \bd^T & \gamma
+    \end{pmatrix}\right| -   \left| \begin{pmatrix}
+        \be & A  \\
+        \upsilon & \bd^T 
+    \end{pmatrix}\right| \left| \begin{pmatrix}
+      \ba^{T} & \alpha  \\
+        A & \bb   
+    \end{pmatrix}\right|
+        \right)  \left| \begin{pmatrix}
+       \beta & \ba^{T}  \\
+         \bc  &  A 
+    \end{pmatrix}\right|.
+    \end{aligned}
+    \end{equation}
+    The conclusion is clear after one more application of Lemma~\ref{Lem: 4-SYL-DET-ID}.
+\end{proof}
 \begin{theorem}
-The $k$-th application of Aitken extrapolation equals
+The $k$-th order of Shanks transformation equals
     \begin{equation}
         (A^k S)_n = \frac{\left|\begin{matrix}
             s_{n} & \cdots & s_{n+k-1} & s_{n+k} \\
@@ -270,7 +418,11 @@ The $k$-th application of Aitken extrapolation equals
 \begin{proof}
     We simply verify that 
     \begin{equation}
-          (A^{k+1} S)_n =  (A^{k} S)_n - \frac{(\Delta  (A^{k} S)_n)^2 }{\Delta^2  (A^{k} S)_n } 
+          (A^{k+1} S)_n - (A^{k} S)_n = \frac{(\Delta  (A^{k} S)_n)^2 }{\Delta^2  (A^{k} S)_n }.
+    \end{equation}
+    The left-hand side can be written as a quotient by Lemma~\ref{Lem: 4-SCH-EXP} (transpose),
+    \begin{equation}
+    (A^{k+1} S)_n - (A^{k} S)_n = 
     \end{equation}
 \end{proof}
 \subsection{Wynn's Epsilon Method}
@@ -448,7 +600,7 @@ It is straightforward that $n \ge m$ is necessary; otherwise, the first equation
 \begin{remark}
     The abscissa $\xi_j$, $j=0,\dots,n$ are in general distinct, but it is possible to choose a single $\xi$ to simplify the representation through the intermediate value theorem. 
 \end{remark}
-\begin{lemma}\label{LEM: FD COEF}
+\begin{lemma}\label{Lem: FD COEF}
     If $f\in C^{m+1}(\cI)$, where $\xi_j\in\cI$, then there exists $\xi\in \cI$ such that 
     \begin{equation}
         \sum_{j=0}^n c_j  a_j^{m+1}\frac{f^{(m+1)}(\xi_j)}{(m+1)!} =   \sum_{j=0}^n c_j  a_j^{m+1}\frac{f^{(m+1)}(\xi)}{(m+1)!},
@@ -473,10 +625,10 @@ It is straightforward that $n \ge m$ is necessary; otherwise, the first equation
     The above formula can be generalized. The constant $C = c_2(a_2 - a_0)(a_2 - a_1) (a_0 + a_1 + a_2)$. We list a few possible choices to satisfy~\eqref{EQ: EXAM FD}. 
     \begin{enumerate}
         \item $(a_0, a_1, a_2) = (-1, 0, 1)$, $c_2 = 1$. Then $c_0 = 1$ and $c_1 = -2$ are derived. In this case $C = 0$. We will have the error term 
-        $$E(x, h) = \frac{h^2}{24}\left(f^{(4)}(\xi_0) + f^{(4)}(\xi_2)\right) \underbrace{\Longrightarrow }_{\ref{LEM: FD COEF}} \frac{h^2}{12} f^{(4)}(\xi).$$
+        $$E(x, h) = \frac{h^2}{24}\left(f^{(4)}(\xi_0) + f^{(4)}(\xi_2)\right) \underbrace{\Longrightarrow }_{\ref{Lem: FD COEF}} \frac{h^2}{12} f^{(4)}(\xi).$$
         This is called the central difference scheme.
         \item $(a_0, a_1, a_2) = (0, 1, 2)$, $c_2 = 1$. Then $c_1 = -2$, $c_0 = 1$,  $C \neq 0$. The error is 
-        $$E(x, h) = \frac{h}{6} (f^{(4)}(\xi_1) + 8 f^{(4)}(\xi_2)) \underbrace{\Longrightarrow }_{\ref{LEM: FD COEF}} \frac{3h}{2} f^{(4)}(\xi).$$
+        $$E(x, h) = \frac{h}{6} (f^{(4)}(\xi_1) + 8 f^{(4)}(\xi_2)) \underbrace{\Longrightarrow }_{\ref{Lem: FD COEF}} \frac{3h}{2} f^{(4)}(\xi).$$
         This is the forward difference scheme.
     \end{enumerate}
     The combination of the coefficients is not unique. The central scheme has better approximation due to its symmetry. Any combination satisfying $a_0 + a_1 + a_2 = 0$ should have the same order of error.
