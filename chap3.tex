@@ -146,11 +146,31 @@ If $f$ is twice differentiable, then clearly the function $g(x)\approx f'(x)$, w
 \begin{remark}
     It should be noticed that Steffensen's method evaluates $f$ twice during each iteration, the same as Newton's method (one for $f$ and one for $f'$, although the evaluation of $f'$ is more expensive in practice). That is, each evaluation brings an order of $1$ of convergence on average. From the viewpoint of efficiency, the secant method is preferred, since it only evaluates $f$ once each iteration with an order of $\frac{1+\sqrt{5}}{2}$ of convergence. 
 \end{remark}
-It is natural to use repeated applications of Aitken extrapolation to improve the convergence further. Such an idea has been rediscovered by~\cite{schmidt1941xxxii} and~\cite{shanks1955non}. In~\cite{shanks1955non}, the sequence $S = \{s_n\}_{n\ge 0}$ is specified by the partial sum form,
+It is natural to generalize Aitken extrapolation to improve the convergence further. Such an idea has been proposed by~\cite{schmidt1941xxxii} and~\cite{shanks1955non}. In~\cite{shanks1955non}, the sequence $S = \{s_n\}_{n\ge 0}$ is specified by the partial sum form,
 \begin{equation}
-    s_n = \sum_{k=0}^n a_k, 
+    s_n = \sum_{k=0}^n a_k. 
 \end{equation}
-under this case, the $A^k S$ is also called the Shanks transformation. When $k=1$, it corresponds to the standard Aitken extrapolation. The explicit form of $(A^k S)_n$ will be given in the next section.
+The core idea of the acceleration is based on the assumption that the limit $s^{\ast}$ stays in the kernel space among consecutive sequence elements. $$ \sum_{n=i}^{n+k} a_{i - n + 1} ( s_n -  s^{\ast} ) = 0.$$ Then there exists a set of parameters $\{ \mu_i \}_{i=1}^k $ that 
+\begin{equation}
+    s_{n+j} = s^{\ast} + \sum_{i=1}^k \mu_i \Delta s_{n+k+j-1}
+\end{equation}
+and the limit can be derived by Cramer's rule.
+\begin{equation}
+    e_k(s_n) = \frac{\left|\begin{matrix}
+        s_n & s_{n+1} & \cdots & s_{n+k} \\
+        \Delta s_{n} & \Delta s_{n+1} & \cdots & s_{n+k} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \Delta s_{n+k-1} & \Delta s_{n+k} & \cdots & \Delta s_{n+2k-1}
+    \end{matrix} \right|}{\left|     
+    \begin{matrix}
+      1 & 1 & \cdots & 1 \\
+        \Delta s_{n} & \Delta s_{n+1} & \cdots & s_{n+k} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        \Delta s_{n+k-1} & \Delta s_{n+k} & \cdots & \Delta s_{n+2k-1}      
+    \end{matrix}
+\right|}.
+\end{equation}
+Under this case, the $ e_k(s_n) $ is also called the Shanks transformation. When $k=1$, it corresponds to the standard Aitken extrapolation. The explicit form of $ e_k(s_n) $ will be given in the next section.
 
 \subsection{Wynn's Epsilon Method}
 \label{SSec: 3-Wynn-Eps-Met}
@@ -607,11 +627,11 @@ it is fairly easy to verify the numerator is identical to~\eqref{EQ: 4-LHS-SHANK
     In the previous proof, we obtained the following recursive relations 
     \begin{equation}
     \begin{aligned}
-    \cH_{k+2}(s_n) \cdot \cH_k(\Delta^2 s_n) - \cH_{k+1}(\Delta^2 s_n)\cdot \cH_{k+1}(s_{n+1}) = - \cH_{k+1}(\Delta s_{n})\cdot \cH_{k+1}(\Delta s_{n+1})
+    \cH_{k+2}(s_n) \cdot \cH_k(\Delta^2 s_{n+1}) - \cH_{k+1}(\Delta^2 s_n)\cdot \cH_{k+1}(s_{n+1}) = - \cH_{k+1}(\Delta s_{n})\cdot \cH_{k+1}(\Delta s_{n+1})
     \end{aligned}
     \end{equation}
-    and 
-    \begin{equation}
+    and ($\Delta s_n$ can be replaced with $s_n$)
+    \begin{equation}\label{EQ: 4-HANKEL-REC}
     \cH_{k}(\Delta^3 s_{n+1})\cdot \cH_{k+1}(\Delta s_n) - \cH_{k}(\Delta^3 s_n)\cdot \cH_{k+1}(\Delta s_{n+1}) = - \cH_{k+1}(\Delta^2 s_n) \cdot \cH_{k}(\Delta^2 s_{n+1}).
     \end{equation}
     Other relations can be derived in the same way, for instance, 
@@ -623,20 +643,14 @@ it is fairly easy to verify the numerator is identical to~\eqref{EQ: 4-LHS-SHANK
 %  \begin{equation}
 %     \cH_{k+2}(s_n) \cdot \cH_{k}(s_{n+2}) = \cH_{k+1}(s_n) \cdot \cH_{k+1}(s_{n+2}) - \cH_{k+1}(s_{n+1}) ^2 .
 % \end{equation}
+The previous theorem also proves the following result for Shanks transformation.
 \begin{theorem}
 The $k$-th order of Shanks transformation equals
-    \begin{equation}
-        (A^k S)_n = \frac{\cH_{k+1}(s_n)}{\cH_{k}(\Delta^2 s_n)}.
-    \end{equation}
+\begin{equation}
+ e_k(s_n) =  \frac{\cH_{k+1}(s_n)}{\cH_{k}(\Delta^2 s_n)}.
+\end{equation}
 \end{theorem}
-\begin{proof}
-    We simply verify that 
-    \begin{equation}
-          (A^{k+1} S)_n - (A^{k} S)_n = \frac{(\Delta  (A^{k} S)_n)^2 }{\Delta^2  (A^{k} S)_n }.
-    \end{equation}
-    
-\end{proof}
-
+In the following, we briefly discuss the connection with Pad\'e approximation.
 \begin{lemma}
     Let $\phi(x)$ solve the moment problem on domain $\cD$
         $$\int_{\cD} x^k \phi(x) dx = c_k,\quad k\ge 0 $$
@@ -1618,6 +1632,7 @@ It is known that $\alpha_d = d-1$ is achievable (e.g., Hammersley point set, $(t
 \begin{example}[Sobol sequence]
     
 \end{example}
+
 \section{Exercises}
 The source code and test cases for the computational part are hosted on GitHub.
 
