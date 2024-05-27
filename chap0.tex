@@ -245,7 +245,7 @@ The Pegasus method is a variant of the Illinois method, whose updating scheme fo
 
 $$\lambda=\frac{f_1}{f_1+f_2}$$ 
 
-in {prf:ref}`AL-ILLINOIS`. Then the order of convergence is $\sqrt[4]{\frac{7+\sqrt{57}}{2}}$.    
+in Algorithm~\ref{ALG: ILLINOIS}. Then the order of convergence is $\sqrt[4]{\frac{7+\sqrt{57}}{2}}$.    
 \end{theorem}
 
 \begin{proof}
@@ -432,7 +432,7 @@ The error $\eps_{n+1}$ can be found by
 \end{equation*}
 With the asymptotic expansion $f_n = f'(x^{\ast}) \eps_n + \frac{1}{2} f''(x^{\ast}) \eps_n^2 + \frac{1}{6} f'''(x^{\ast})\eps_n^3 + o(\eps_n^3)$, we can find the leading term is 
 $$\eps_{n+1} \approx \left[2 \left(\frac{f''(x^{\ast})}{2f'(x^{\ast})} \right)^2 - \frac{f'''(x^{\ast})}{6f'(x^{\ast})} \right]\eps_{n}\eps_{n-1}\eps_{n-2}.$$
-Therefore, the order of convergence $p$ solves $p^3 - p^2 - p - 1 = 0$ which implies $p = \frac{1}{3} + \frac{1}{3}\left(c + \frac{4}{c}\right)\approx 1.83929$, where $c = \sqrt[3]{\frac{38 - \sqrt{1188}}{2}}$. Although the order is greater than secant methods and many other methods, it also has several defects. For instance, if the values $f_n\approx f_{n-1}$ or $f_n\approx f_{n-2}$, the interpolation will be numerically unstable. In such cases, we need to roll back to less effective methods such as secant method.  
+Therefore, the order of convergence $p$ solves $p^3 - p^2 - p - 1 = 0$ which implies $p = \frac{1}{3} + \frac{1}{3}\left(c + \frac{4}{c}\right)\approx 1.83929$, where $c = \sqrt[3]{\frac{38 - \sqrt{1188}}{2}}$. Although the order is greater than secant methods and many other methods, it also has several defects. For instance, if the values $f_n\approx f_{n-1}$ or $f_n\approx f_{n-2}$, the interpolation will be numerically unstable. In such cases, we need to roll back to less effective methods such as the secant method.  
 
 \section{Exercises}
 \subsection{Theoretical Part}
@@ -440,7 +440,7 @@ Therefore, the order of convergence $p$ solves $p^3 - p^2 - p - 1 = 0$ which imp
 Briefly explain why the formula $x_2 = x_0 - f_0 \frac{x_1 - x_0}{f_1 - f_0}$ in bracket methods will not suffer from catastrophic cancellation when $x_1 - x_0$ is small.
 \end{problem}
 \begin{problem}
-The only difference between the improved Pegasus method and the usual Pegasus method is at the 3rd step in the while loop, which eliminates consecutive false position steps. This change is very simple, but it leads to an improvement in the order of convergence. Explain why the Illinois method $\lambda = \frac{1}{2}$ cannot be faster by the same technique.
+The only difference between the improved Pegasus method and the usual Pegasus method is at the 3rd step in the while loop, which eliminates consecutive false position steps. This change is straightforward, but it leads to an improvement in the order of convergence. Explain why the Illinois method $\lambda = \frac{1}{2}$ cannot be faster by the same technique.
 \end{problem}
 \begin{problem}
 Suppose $f\in C^2$ and the root $x^{\ast}$ has a multiplicity of $m>1$, then the order of convergence for the Newton-Raphson method is $1$. The modified Newton-Raphson method
