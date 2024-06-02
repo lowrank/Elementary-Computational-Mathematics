@@ -27,15 +27,15 @@ $$\|f(y_1, t) - f(y_2, t)\|\le L\|y_1 - y_2\|,\quad t\in[a, b].$$
     \end{equation}
     such that $\|\delta(t)\|, \|\delta_0\|\le \eps$ for all $t\in [a, b]$ and the resulting perturbative equation's solution $\tilde{y}$ satisfies 
     $$\|y(t) - \tilde{y}(t)\|\le C\eps$$
-    then the problem is Liapunov stable. The Lipschitz continuity of $f$ guarantees the Liapunov stability.
+    then the problem is Lyapunov stable. The Lipschitz continuity of $f$ guarantees the Lyapunov stability.
 \end{remark}
 \subsection{One-step Methods}
-The simplest numerical solution for IVP is the one-step method. We consider the discretization of solution 
+The simplest numerical solution for IVP is the one-step method. We consider the discretization of the solution 
 $$y_n\simeq y(t_n), \quad n = 0,1,\dots, M$$
 on the grid 
 $$\Delta = \{ a=  t_0 < t_1 < \dots < t_M  = b\},\quad h_n := t_{n+1} - t_n.$$
 \begin{definition}[scheme]
-    The explicit (forward) one-step method for approximation of the solution to the IVP~\eqref{EQ: ODE} is in the from
+    The explicit (forward) one-step method for approximation of the solution to the IVP~\eqref{EQ: ODE} is in the form
     \begin{equation}
         y_{n+1} = y_n + h_n \phi(t_n, y_n; h_n),\quad y_0:= y(t_0).
     \end{equation}

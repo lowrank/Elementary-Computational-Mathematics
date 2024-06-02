@@ -1,270 +1,456 @@
+\chapter{Root Finding}
+\label{Ch: 0-Ro-Fi}
 
-\chapter{Floating Point Arithmetic}
-\label{Ch: 1-Flo-Poi-Ari}
+Root finding is a fundamental problem in numerical analysis and has many applications in science and engineering such as solving nonlinear equations, optimization problems, and differential equations. Usually, a closed form of the root is not available, and we need to compute the root numerically. In this chapter, we will discuss some of the most common methods for root finding.
 
-In this chapter, we will introduce some basics of the real number system for modern computers and discuss the arithmetic operations of the number system.
+\section{Bracket Methods}
+\label{Sec: 0-Br-Me}
 
-\section{Representation of Real Numbers}
-\label{Sec: 1-Rep-Rea-Num}
+If $f$ is a continuous function, and $f(a)$ and $f(b)$ have opposite signs, then by the Intermediate Value Theorem, there exists a root of $f$ on the interval $[a, b]$. The bracket method is based on this fact and iteratively locates the pair of points $a$ and $b$ such that $f(a)$ and $f(b)$ have opposite signs. The most common bracket methods are the bisection method and the false position method.
 
-Any \emph{nonzero} real number $x\in \bbR$ can be accurately represented with an infinite sequence of digits. This can be understood as the consequence that rational numbers are dense on any interval. Therefore, with the binary representation, we can write 
-$$x = \pm (0.d_1 d_2 d_3\dots d_{t-1} d_t d_{t+1}\dots) \times 2^e,$$
-where $e$ is an integer exponent and $d_1=1$, the other binary digits $d_i\in \{0, 1\}$. The mantissa part
-$$0.d_1 d_2 d_3\dots =  \frac{d_1}{2} + \frac{d_2}{2^2} + \frac{d_3}{2^3} + \cdots.$$
+\subsection{Bisection Method}
+\label{SSec: 0-Bi-Me}
 
-\begin{remark}
-    To guarantee the uniqueness of the above representation, we need a further assumption that there exists an infinite subset $S\subset \bbN$ that $d_j\neq 1$ for $j\in S$. For example, under binary representation
-    $$0.111\dots = (0.1)\times 2^1,$$
-    then we will take the latter representation.
-\end{remark}
+The simplest bracket method is the bisection method. Once $f(a)f(b) < 0$, one can select the midpoint $c = \frac{a + b}{2}$ and check the sign of $f(a) f(c)$.
 
-\section{Floating Point Numbers}
-\label{Sec: 1-Flo-Poi-Num}
-
-The floating point numbers generally refer to a set of real numbers with \emph{finite} mantissa length. More precisely, we consider the set of real numbers $\mathbb{F} = \mathbb{F}(t, e_{\min}, e_{\max})\subset \bbR$ that
-$$\mathbb{F} := \{x\in \bbR\mid x = \pm (0.d_1 d_2 d_3\dots d_{t-1} d_t) \times 2^e, d_1 =1,  e_{\min}\le e\le e_{\max}\}\cup \{0\}.$$
-It can be seen that there are only finite numbers in $\mathbb{F}$ with the smallest positive element $x_{\min} = 2^{e_{\min}-1}$ and the largest element $x_{\max} = ( 1- 2^{-t} )\times 2^{e_{\max} }$. Therefore $$\mathbb{F}\subset \overline{\mathbb{F}}:= \{ x\in \bbR\mid x_{\min} \le |x| \le x_{\max}\}\cup \{ 0\}.$$
-
-\begin{remark}
-    The elements in $\mathbb{F}$ are called normalized. If we allow $d_1 = 0$ in the definition of $\mathbb{F}$, then the numbers in the set are called denormalized.
-\end{remark}
-
-\begin{theorem}[Distribution of floating numbers]
-\label{Thm: 1-Dis-flo-num}
-    For any $e_{\min} \le e\le e_{\max}$, the distribution of the floating point number system $\mathbb{F}$ on interval $[2^{e-1}, 2^e]$ is equidistant with distances of length $2^{e-t}$.
-\end{theorem}
-
-\begin{proof}
-    For any  $x \in \mathbb{F}\cap [2^{e-1}, 2^e]$ it can be represented by 
-    $$x = (0.d_1d_2\dots d_t)\times 2^{e}$$
-    where $d_1 = 1$. The mantissa is equidistantly distributed with distance $2^{-t}$, therefore the floating point numbers are equidistantly distributed with distances of length $2^{e-t}$. 
-\end{proof}
-
-To understand the approximation to real numbers by the floating point number system $\mathbb{F}$, it is important to consider the maximal relative distance between the numbers in $\overline{\mathbb{F}}$ and their respective closest element in $\mathbb{F}$, which is the following quantity:
-$$\max_{x\in \overline{\mathbb{F}}, x\neq 0}\min_{z\in\mathbb{F}} \frac{|z - x|}{|x|}.$$
-The following holds:
-\begin{theorem}[Machine precision]
-\label{Thm: 1-Mac-pre}
-    $$\max_{x\in \overline{\mathbb{F}}, x\neq 0}\min_{z\in\mathbb{F}} \frac{|z - x|}{|x|}\le  2^{-t}.$$
-    The number $\mathrm{u}:= 2^{-t}$ is also called rounding unit or machine precision.
-\end{theorem}
-\begin{proof}
-    Without loss of generality, we only need to consider the positive numbers in $\overline{\mathbb{F}}$, then one can represent any nonzero $x\in [x_{\min}, x_{\max}]$ by
-    $$x = (0.d_1 d_2 \dots d_t\dots)\times 2^e\in [2^{e-1}, 2^e].$$
-    Since the floating point numbers are equidistantly distributed on $[2^{e-1}, 2^e]$ from Theorem~\ref{Thm: 1-Dis-flo-num}, one can find $z^{\ast}\in\mathbb{F}$ such that $$|z^{\ast} - x| \le \frac{1}{2} 2^{e-t},$$
-    therefore 
-    $$\frac{|z^{\ast}- x|}{|x|}\le \frac{1}{2} 2^{e-t} \frac{1}{2^{e-1}} = 2^{-t}.$$
-\end{proof}
-
-\begin{remark}
-On modern computers, the following two floating point number systems $$\mathbb{F}_{32}:= \mathbb{F}(24, -125, 128),\quad\mathbb{F}_{64}:= \mathbb{F}(53, -1021, 1024)$$ are supported, they are often called single precision and double precision, respectively.  
-\end{remark}
-
-\section{Rounding}
-\label{Sec: 1-Rou}
-The rounding operation $\textsc{fl}$ is to map any real numbers of $\overline{\mathbb{F}}$ into the floating point number system $\mathbb{F}$ with the smallest error. Such rounding operation can be written out explicitly, let $ = \pm (0.d_1 d_2\dots d_t d_{t+1}\dots )\times 2^e$, then
-
-\begin{equation*}
-    \textsc{fl}(x) =\begin{cases}
-        \pm (0.d_1 d_2\dots d_t) \times 2^e & \text{if } d_{t+1} = 0,\\
-        \pm (0.d_1 d_2\dots d_t  + 2^{-t}) \times 2^e & \text{if } d_{t+1} = 1.
-    \end{cases}
-\end{equation*}
-It is clear that rounding $\textsc{fl}$ is monotone and idempotent, which means
 \begin{itemize}
-    \item $x\le y \Rightarrow \textsc{fl}(x) \le \textsc{fl}(y)$. 
-    \item $\textsc{fl}(z) = z$ if $z\in \mathbb{F}$.
+    \item If $f(a)f(c) < 0$, then the root is in the interval $[a, c]$.
+    \item If $f(a)f(c) > 0$, then the root is in the interval $[c, b]$.
+    \item If $f(a)f(c) = 0$, then $c$ is the root.
 \end{itemize}
 
+For the first two cases, we can repeat the process with the new interval until certain stop criteria are met. Each iteration reduces the size of the interval by half (gaining one bit each iteration), and the total number of iterations required to reduce the interval to a certain size is $\lceil\log_2\left(\frac{b - a}{\epsilon}\right)\rceil$, where $\epsilon$ is the desired tolerance.
 
-\begin{theorem}[Rounding error]
-\label{Thm: 1-Rou-err}
-    For any $x\in \overline{\mathbb{F}}$, $|\textsc{fl}(x) - x| = \min_{z\in \mathbb{F}} |z - x|$. If $x\neq 0$, then
-    $$\frac{|\textsc{fl}(x) - x|}{|x|}\le \mathrm{u} = 2^{-t}.$$
+Once the function $f$ has a sign change over the bracket $[a, b]$, the bisection method is guaranteed to converge to a root, but it is not very efficient. It is usually used to obtain a rough estimate of the root, which is then taken as an initial guess for a more efficient method.
+
+\begin{remark}
+The bisection method can be implemented either iteratively or recursively. The recursive program is usually more compact but may suffer from inefficiency (more instructions) and the risk of stack overflow.
+
+For a variety of programming languages, recursive implementation can be made more efficient by using the so-called tail recursion optimization. This compiler feature allows the recursive program to be executed with the same efficiency as the iterative one. However, neither \texttt{Python} nor \texttt{MATLAB} natively supports tail recursion optimization.
+\end{remark}
+
+\subsection{False Position Method}
+\label{SSec: 0-Fa-Po-Me}
+The bisection method only uses $\text{sgn}(f(a))$ and $\text{sgn}(f(b))$ instead of the function values. The false position method (\emph{Regula falsi} in Latin) improves the bisection method by taking the function values into account. Instead of selecting the midpoint $c = \frac{a + b}{2}$, the false position method selects the point $c\in[a, b]$ that lies on the line connecting $(a, f(a))$ and $(b, f(b))$, that is
+
+$$c = \frac{f(b) a - f(a) b}{f(b) - f(a)} = a - f(a)\frac{b - a}{f(b) - f(a)}.$$
+
+The false position method is also guaranteed to converge to a root if $f(a)f(b) < 0$ and the implementation is quite similar to the bisection method. It usually converges faster than the bisection method, but sometimes exceptions occur.
+
+\begin{remark}
+    When $f''$ keeps the same sign over $[a, b]$, it is not hard to show that only one side of the bracket is updating. The bracket size will never decrease to zero, which is different from the bisection method. In the following, we use an example to illustrate this, see Figure~\ref{FIG: 0-RO-FI-FA}. The function $f(x) = x^2 - 1$ over the initial bracket $[0, 2]$. The left endpoint is updating to the root while the right endpoint is fixed at $2$.
+
+\begin{figure}[!htb]
+    \centering
+\includegraphics[scale=0.6]{Figures/root_finding_img_0.png}
+    \caption{False position method}
+    \label{FIG: 0-RO-FI-FA}
+\end{figure}
+\end{remark}
+
+It is easy to improve the false position method by forcing more weight toward the other endpoint. This is called the Illinois method. Once the same side has updated in two consecutive iterations, the Illinois method will adjust $c$ using a slightly different formula.
+
+$$
+{c} = a - f(a)\frac{ b - a }{\lambda f(b) - f(a)}
+\quad \text{or}\quad 
+{c} =  b -  f(b) \frac{a - b}{\lambda f(a) - f(b)},
+$$
+
+where the weight $\lambda$ controls the position of $c$. The weight is initially set to $1$ which corresponds to the standard false position method. If the same side is about to update twice, the weight of the other side will be halved. If not, the weight on the new bracket point will be reset to $1$. See Algorithm~\ref{ALG: ILLINOIS}.
+
+\begin{algorithm}[!htb]
+    \SetAlgoLined
+    \caption{Illinois Method}
+    \KwData{$f$, $a, b$, $\epsilon$}
+    \KwResult{root $c$}
+    $x_0\gets a$
+    
+    $x_1\gets b$
+    
+    $f_0\gets f(x_0)$
+    
+    $f_1\gets f(x_1)$
+    
+    $iter = 0$ //    initialization; 
+    \\
+    \While{\texttt{True}}{
+       $x_2 \gets x_0 - f_0 \frac{x_1 - x_0}{f_1 - f_0}$
+       
+       $f_2 \gets f(x_2)$
+       
+       $iter \gets iter + 1$. //standard false position step;
+       
+        \If{$ |f_2| < \epsilon$}{ return $x_2$ //check stopping criteria; }
+        \While{$f_1 f_2 > 0$}{
+
+        $(x_0, f_0)\gets (x_0, \lambda f_0)$, where $\lambda = \frac{1}{2}$
+        
+        $(x_1, f_1)\gets (x_2, f_2)$ 
+        
+        $x_2 \gets x_0 - f_0 \frac{x_1 - x_0}{f_1 - f_0}$
+        
+        $f_2 \gets f(x_2)$
+        
+        $iter \gets iter + 1$.
+
+        \If{$ |f_2| < \epsilon$ }{return $x_2$; //check stopping criteria;}
+        }
+        \If {$f_1 f_2 < 0$}{ $(x_0, f_0)\gets (x_1, f_1)$ 
+        
+        $(x_1, f_1)\gets (x_2, f_2)$. }
+        
+    }
+    \label{ALG: ILLINOIS}
+\end{algorithm}
+
+
+\begin{remark}
+The choice of decay factor $\frac{1}{2}$ is optimal if it has to be a constant (explain later). The factor can be replaced with other variable values. A usual replacement is the Pegasus method.
+
+Essentially, the Pegasus method replaces $\lambda = 1/2$ with $\lambda=\frac{f_1}{f_1 + f_2}$.
+
+\end{remark}
+
+\begin{remark}
+We use the previous example to illustrate the difference between the false position method and the Illinois method. At the second iteration, the Illinois method finds the updating is still on the left side, so it modifies the right endpoint $f(b)$ into $\frac{1}{2} f(b)$ to compute the new $c$, which makes the selected point ${c}$ closer to the right endpoint than the false position method, see Figure~\ref{FIG: 0-RO-FI-IL}.
+
+\begin{figure}[!htb]
+    \centering
+\includegraphics[scale=0.6]{Figures/root_finding_img_1.png}
+    \caption{Illinois method}
+    \label{FIG: 0-RO-FI-IL}
+\end{figure}
+\end{remark}
+
+\begin{remark}
+    The bracket methods need to first locate an interval $[a, b]$ such that $f(a)f(b) < 0$. A common approach is to sample a few equidistant points in a large interval and then use the sign of the function values to identify the bracket. This is a simple and robust approach, but it may require a large number of function evaluations.
+\end{remark}
+
+\subsection{Order of Convergence}
+The order of convergence quantifies how fast the sequence approximates the limiting value.
+
+\begin{definition}
+The order of convergence of a sequence $\{x_n\}$ is $p > 0$ if 
+$$
+\lim_{n\to\infty}\frac{|x_{n+1} - x^{\ast}|}{|x_n - x^{\ast}|^p} = \rho,
+$$
+The constant $\rho$ is the rate of convergence. If $p = 1$, the sequence is said to have linear convergence. If $p = 2$, the sequence is said to have quadratic convergence. 
+If the limit does not exist while the upper bound exists for sufficiently large $n$:
+$$
+\frac{|x_{n+1} - x^{\ast}|}{|x_n - x^{\ast}|^p} \le \rho,
+$$
+then the order of convergence is at least $p$ and the rate of convergence is at most $\rho$.
+\end{definition}
+\begin{remark}
+   In practice, the limit or even upper bound may not exist for $\frac{|x_{n+1} - x^{\ast}|}{|x_n - x^{\ast}|^p}$, it is possible to consider the convergence rate in a weaker sense. For instance, for sufficiently large $n$ that the inequality 
+
+$$
+\lim_{k\to\infty}\sqrt[k]{\frac{|x_{n+k} - x^{\ast}|}{|x_n - x^{\ast}|^{p^k}}}= \rho
+$$
+
+holds for certain $p > 0$ and $\rho > 0$, then the sequence has a mean order of convergence is $p$ and a mean convergence rate $\rho$. On average, each iteration contributes an order of $p$ and a rate of $\rho$. 
+\end{remark}
+
+\begin{theorem}
+The bisection method has a linear convergence rate.   
 \end{theorem}
 
 \begin{proof}
-    The special case that $x = 0$ is trivial, we only consider $x\in [x_{\min}, x_{\max}]$, it can be seen that 
-    \begin{equation*}
-        |\textsc{fl}(x) - x| = | (0.d_1d_2\dots \tilde{d}_t) - (0.d_1d_2\dots d_t d_{t+1} \dots )|\times 2^e \le 2^{-(t+1)} \times 2^e,
-    \end{equation*}
-    where $\tilde{d}_t$ is the rounding bit, therefore 
-    \begin{equation*}
-        \frac{|\textsc{fl}(x) - x|}{|x|} \le \frac{2^{e-(t+1)}}{2^{e-1}} = 2^{-t}.
-    \end{equation*}
+Without loss of generality, we may assume the initial bracket is on $[0, 1]$. Let the root $x^{\ast} = 0.b_1 b_2\cdots$ be the binary representation, then the sequence of bisection method can be written as 
+$$
+x_n = 0.b_1 b_2\cdots b_{n-1} 1,
+$$
+where $b_i$ is the $i$-th bit of the binary representation. The error at the $n$-th iteration is
+$$|x_n - x^{\ast}| = |2^{-n} - \sum_{j\ge n} 2^{-j} b_j|=\begin{cases}\sum_{j>n} 2^{-j}b_j & \text{if } b_n=1\\\sum_{j>n} 2^{-j}(1-b_j) &\text{if }b_n=0\end{cases}$$
+For each $n$ such that $b_n = 1$ (similar argument holds for $b_n=0$), we can find $s\in\mathbb N$ such that $b_{s+n} = 1$, otherwise we arrive at the exact solution. 
+$$
+\frac{|x_{n+k} - x^{\ast}|}{|x_n - x^{\ast}|} = \frac{\sum_{j>n+k} 2^{-j} b_j }{\sum_{j>n} 2^{-j}b_j} \le \frac{2^{-(n+k)}}{2^{-(n+s)}} =2^{s - k} $$
+Therefore, the geometric mean of the convergence rate is bounded by $\frac{1}{2}$.
+$$
+\rho =\lim_{k\to\infty} \sqrt[k]{\frac{|x_{n+k} - x^{\ast}|}{|x_n - x^{\ast}|}} \le \lim_{k\to\infty}2^{s/k}\frac{1}{2} =\frac{1}{2}.
+$$
 \end{proof}
 
-\begin{corollary}
-\label{Cor: 1-Rel-err}
-    For any $x\in\overline{\mathbb{F}}$, $\textsc{fl}(x) = x(1+\delta)$ with $|\delta|\le \mathrm{u}$.
-\end{corollary}
 
+A common technique to study the order of convergence is to use the Taylor expansion. Let us use the Illinois method as an example.
 
-\setlength\fboxsep{2pt}
-\section{Arithmetic Operations}
-\label{Sec: 1-Ari-Ope}
-Let $\mathbb{F} = \mathbb{F}(t, e_{\min}, e_{\max})$ be a given floating point number system and we consider the basic binary operation $\circ\in \{ +, -, *, /\}$ on $\mathbb{F}$, to represent the outcome in $\mathbb{F}$, a straightforward realization is to define the binary operation $\boxed{\circ}$ as the following (for the case of division, we assume $y\neq 0$):
-$$x \,\boxed{\circ}\, y := \textsc{fl}(x\circ y),$$
-then for any $x, y\in\mathbb{F}$, if $x\circ y\in \overline{\mathbb{F}}$, then $x \,\boxed{\circ}\, y = (x\circ y)(1 + \delta)$ with $|\delta| \le \mathrm{u}$ from the Corollary~\ref{Cor: 1-Rel-err}.
-
-\begin{remark}[Cancellation error]
-\label{Rem: 1-Can-err}
-    If $x, y\in\bbR$, then the relative error from the following binary operation $\textsc{fl}(x)\,\boxed{+}\,\textsc{fl}(y)$ can be estimated by
-    \begin{equation*}
-    \begin{aligned}
-    \frac{|\textsc{fl}(x)\,\boxed{+}\,\textsc{fl}(y)- (x +  y) |}{|x + y|} &\le \frac{|\textsc{fl}(x)\,\boxed{+}\,\textsc{fl}(y) - (\textsc{fl}(x) +  \textsc{fl}(y)) |}{|x + y|} + \frac{| (\textsc{fl}(x) +  \textsc{fl}(y)) - (x+y)   |}{|x+y|}\\  
-    &\le\mathrm{u} + (\mathrm{u} +\mathrm{u}^2) \frac{|x|+|y|}{|x+y|}.
-    \end{aligned}
-    \end{equation*}
-    When $x$ and $y$ are close in magnitude but with opposite signs, the cancellation error will be significant.
-\end{remark}
-\subsection{Error Accumulation: Multiplication}
-\label{SSec: 1-Err-Acc-Mul}
-For complicated computations on modern computers, the errors from arithmetic operations will accumulate towards the final result (we do not consider techniques such as fused multiply-add (FMA) here). To quantify the accumulation effect, we will need the following lemma.
-
-\begin{lemma}
-\label{Lem: 1-Acc}
-    For real numbers $a_1, a_2, \dots, a_n$ with $|a_k|\le \delta$ for $k=1,\dots, n$, then for $n\delta < 1$, the following holds
-    $$\prod_{k=1}^n (1 + a_k) = 1 + b_n,$$
-    where $|b_n| \le \frac{n\delta}{1 - n\delta}$.
-\end{lemma}
-
+\begin{theorem}
+\label{THM: 0-IL-ME}
+    The order of convergence of the Illinois method is $\sqrt[3]{3}$.
+\end{theorem}
 
 \begin{proof}
-    The proof is quite easy with induction. When $n=1$, $|b_1| = |a_1|\le \delta \le \frac{\delta}{1 - \delta}$. Suppose the claim holds for $n = m$, then for $n = m +1$, we could see that
-    \begin{equation*}
-        \prod_{k=1}^{m+1} (1 + a_k) = (1 + b_m) (1 + a_{m+1}) = 1 + b_{m+1}, 
-    \end{equation*}
-    which implies that $b_{m+1} = b_m + a_{m+1} + a_{m+1}b_m$, with the given bounds on $a_{m+1}$ and $b_m$, we can estimate
-    \begin{equation*}
-        |b_{m+1}| = | b_m + a_{m+1} + a_{m+1}b_m | \le \frac{(m+1)\delta}{1 - m\delta} \le \frac{(m+1)\delta}{1 - (m+1)\delta}.
-    \end{equation*}
+Let $f(x)\in C^2[a, b]$ and $x^{\ast}$ be the root. For simplicity, we assume the root is simple. Let $\ell(x)$ be the linear interpolation of $f$ at the bracket $[a, b]$, the slope is $f'(\zeta)=\frac{f(b) - f(a)}{b -a}$, then 
+
+$$
+f(x) - \ell(x) = \frac{f''(\xi)}{2}(x - a)(x - b),
+$$
+therefore, the root satisfies $-\ell(x^{\ast}) = \frac{f''(\xi)}{2}(x^{\ast} - a)(x^{\ast} - b)$. Let $c$ be the next iteration, then 
+
+$$
+-\ell(x^{\ast}) + \ell(c) = -(x^{\ast} - c) f'(\zeta) =  \frac{f''(\xi)}{2}(x^{\ast} - a)(x^{\ast} - b),
+$$
+
+which implies $(x^{\ast} - c) = -\frac{f''(\xi)}{2 f'(\zeta)} (x^{\ast} - a)(x^{\ast} - b)$. When $a$ and $b$ are already near the root, the right-hand side has a fixed sign, which implies that using the unadjusted false position method, the new point $c$ will always fall into a fixed side of the root.
+
+Now, we consider the adjustment of the Illinois method. Without loss of generality, we assume that $c$ falls into the left side of the root. Then the next iteration will be using the bracket $[c, b]$ with adjusted weight for $b$. The new point $c'$ satisfies 
+
+$$
+\begin{aligned}
+c' - x^{\ast} &= \frac{\frac{1}{2} f(b) (c - x^{\ast}) - f(c) (b - x^{\ast})}{\frac{1}{2} f(b) - f(c)}  = (c - x^{\ast}) - \frac{f(c)(b-x^{\ast})}{\frac{1}{2}f(b) - f(c)}
++ \frac{f(c)(c - x^{\ast})}{\frac{1}{2}f(b) - f(c)}\\
+&= (c - x^{\ast}) - \frac{2f(c)}{f(b)}(b - x^{\ast}) \frac{1}{1 - \frac{2f(c)}{f(b)}} + \frac{2f(c)}{f(b)}(c - x^{\ast}) \frac{1}{1 - \frac{2f(c)}{f(b)}}
+\end{aligned}
+$$
+
+Using Taylor expansion at $x^{\ast}$, since $f'$ is bounded from below near the root, 
+
+ $$
+ \begin{aligned}
+ \frac{f(c)}{f(b)} &= \frac{(c - x^{\ast}) + \cO(|c - x^{\ast}|^2)}{(b - x^{\ast}) + \cO(|b - x^{\ast}|^2)} = \frac{(c - x^{\ast})}{(b - x^{\ast})}\left(1 + \frac{\cO(|b-x^{\ast}|) + \cO(|c - x^{\ast}|)}{1 + \cO(|b-x^{\ast}|)}\right) \\&= \frac{(c - x^{\ast})}{(b - x^{\ast})}\left(1 + \cO(|b-x^{\ast}|)\right) = \frac{f''(\xi)}{2 f'(\zeta)} (a - x^{\ast}) \left(1 + \cO(|b-x^{\ast}|)\right)  .
+ \end{aligned}
+ $$ 
+
+Therefore, we obtain
+
+$$
+\begin{aligned}
+c' - x^{\ast} &= (c- x^{\ast}) + 2(x^{\ast} - c)\left(1 + \cO(|a - x^{\ast}|)\right) + \cO(|a - x^{\ast}||c - x^{\ast}|) \\
+&= (x^{\ast} - c)(1 + \cO(|a - x^{\ast}|)),
+\end{aligned}
+$$
+which moves the new point to the other side of the root by almost reflection. The next bracket becomes $[c, c']$ such that $|c - x^{\ast}|\approx |c' - x^{\ast}|$. Therefore, if denote the last two points as $c = x_{n}$ and $c'=x_{n+1}$, then $|x_{n} - x^{\ast}|\approx |x_{n+1} - x^{\ast}|$, currently $c'$ is on the right side of the root. The next three iterations satisfy
+
+\begin{itemize}
+    \item  $|x_{n+2} - x^{\ast}| = \Theta(|x_n - x^{\ast}| |x_{n+1} - x^{\ast}|) = \Theta(|x_{n+1} - x^{\ast}|^2) $, the iteration $x_{n+2}$ is on left side.
+    \item  $|x_{n+3} - x^{\ast}| = \Theta(|x_{n+2} - x^{\ast}||x_{n+1} - x^{\ast}|) = \Theta(|x_{n+1} - x^{\ast}|^3)$, the iteration $x_{n+3}$ is again on left side.
+    \item  $|x_{n+4} - x^{\ast}| = \Theta(|x_{n+3} - x^{\ast}|) = \Theta(|x_{n+1} - x^{\ast}|^3)$, adjusted by Illinois method, the iteration $x_{n+4}$ is on right side, which completes a cycle.
+\end{itemize}
+
+By the previous definition of order of convergence, the Illinois method has an order of convergence $\sqrt[3]{3}$.
 \end{proof}
 
+\begin{remark}
+\label{REM: 0-CO-IL-AS}
+A quick way of proof uses the asymptotic analysis. 
 
-Next, we consider the naive floating point product $P_n$ of $n$ real numbers $\{x_j\}_{j=1}^n \subset \bbR$ with assumption that $(2n-1)\textup{u} < 1$ by the following iteration
-\begin{equation*}
-    \begin{cases}
-        P_k = \fl{x_1} & k=1,\\
-        P_k = P_{k-1}~\boxed{\ast}~ \fl{x_k} & k\ge 2.
-    \end{cases}
-\end{equation*}
-Let $\fl{x_k} = x_k(1 + \tau_k)$, then $|\tau_k|\le \textup{u}$. From the $n$-th iteration step $$P_n = P_{n-1}~\boxed{\ast}~ \fl{x_k} = \fl{\fl{P_{n-1}}\fl{x_n}} = \fl{P_{n-1}}\fl{x_n}(1 + \delta_n)$$ such that $|\delta_n|\le \textup{u}$, since $P_{n-1}\in \mathbb{F}$, $\fl{P_{n-1}} = P_{n-1}$, then 
-\begin{equation*}
-    \begin{aligned}
-        P_n &= P_{n-1} \fl{x_n}(1 + \delta_n) = P_{n-2} \fl{x_{n-1}}(1 + \delta_{n-1}) (1 + \delta_k) = \cdots \\
-        &=  \fl{x_1} \fl{x_2}\cdots \fl{x_n} \prod_{j=2}^n (1 + \delta_j) = \prod_{j=1}^n x_j (1 + \tau_j)  \prod_{j=2}^n (1 + \delta_j) \\
-        &\le  (1 + \eta_n) \prod_{j=1}^n x_j,
-    \end{aligned}
-\end{equation*}
-where $|\eta_n|\le \frac{(2n-1)\textup{u}}{1 - (2n-1)\textup{u}}$ by Lemma~\ref{Lem: 1-Acc}. 
+If we denote $\epsilon_{n} =x_n - x^{\ast}$, then if $\epsilon_{i} > 0$ and $\epsilon_{i-1} < 0$, then $\epsilon_{i+1} \simeq C \epsilon_{i}\epsilon_{i-1}$, where $C\approx \frac{f''(x^{\ast})}{2f'(x^{\ast})}$, here we may assume $C > 0$, then $\epsilon_{i+1} < 0$.  The next iteration applies the same rule, which is $\epsilon_{i+2} \simeq C \epsilon_{i+1}\epsilon_{i} = C^2 \epsilon_i^2 \epsilon_{i-1} < 0$.  Now, we need an adjustment step, which gives $\epsilon_{i+3} = -C^2 \epsilon_i^2 \epsilon_{i-1} > 0$, which completes a cycle. Every three iterations make a cycle, to derive the order of convergence, we continue to derive $\epsilon_{i+6}$, which equals to $-C^8\epsilon_{i}^6\epsilon_{i-1}^3 = C^2\epsilon_{i+3}^3$. Therefore, the order of convergence is $\sqrt[3]{3}$.
+\end{remark}
 
-\subsection{Error Accumulation: Addition}
-\label{SSec: 1-Err-Acc-Add}
-For naive floating point summation $S_n$ of $n$ real numbers $\{x_j \}_{j=1}^n$ by the iteration 
+By taking the decay factor as a constant, the order of convergence is at most $\sqrt[3]{3}$. However, if the decay factor can be chosen as a variable one, the order of convergence can be improved. Next, we apply the same technique to analyze the Pegasus method, which is a variant of the Illinois method. Interestingly, the Pegasus method was initially discovered in a subroutine for the Ferranti Pegasus computer, but no author information is included. The convergence analysis was given by~\cite{dowell1972pegasus} after its discovery.
+
+\begin{theorem}
+    \label{THM: 0-PE-ME}
+The Pegasus method is a variant of the Illinois method, whose updating scheme for the decay factors is replaced by 
+
+$$\lambda=\frac{f_1}{f_1+f_2}$$ 
+
+in Algorithm~\ref{ALG: ILLINOIS}. Then the order of convergence is $\sqrt[4]{\frac{7+\sqrt{57}}{2}}$.    
+\end{theorem}
+
+\begin{proof}
+Similar to the previous Remark~\ref{REM: 0-CO-IL-AS}, we assume $\epsilon_{i-1} < 0$ and $\epsilon_{i} > 0$ such that $|\epsilon_i|\ll |\epsilon_{i-1}|$, the constant $C = \frac{f''}{2f'}|_{x=x^{\ast}} > 0$.
+Similar to the previous analysis, we can derive more terms in the asymptotic form
+$$
+\epsilon_{i+1}\simeq C \epsilon_{i}\epsilon_{i-1} + D \epsilon_{i} \epsilon_{i-1}(\epsilon_{i} + \epsilon_{i-1})< 0
+$$
+where $D = -C^2 + \frac{f'''}{6f'}|_{x=x^{\ast}}$. Then due to a different sign for $\epsilon_{i}$ and $\epsilon_{i+1}$, we can derive 
+$$\epsilon_{i+2}\simeq C \epsilon_{i+1}\epsilon_{i} + D \epsilon_{i+1} \epsilon_{i}(\epsilon_{i+1} + \epsilon_{i}) < 0.$$
+Now use the adjustment step, we obtain (needs some calculation)
+$$
+\begin{aligned}
+\epsilon_{i+3} &= \frac{\epsilon_{i+2}\lambda f(x_i) - \epsilon_i f(x_{i+2})}{\lambda f(x_{i}) - f(x_{i+2})},\quad \lambda = \frac{f(x_{i+1})}{f(x_{i+2}) + f(x_{i+1})}\\
+&\approx C^2 \epsilon_{i}^2\epsilon_{i+2} - D \epsilon_{i} \epsilon_{i+1} \epsilon_{i+2}, 
+\end{aligned}
+$$
+it implies $\epsilon_{i+3} < 0$ as well. Therefore, another adjustment step is needed (after some more calculations, see Remark~\ref{REM: 0-CO-PE-AS})
+$$
+\begin{aligned}
+\epsilon_{i+4} &=  \frac{\epsilon_{i+3}\lambda f(x_i) - \epsilon_i f(x_{i+3})}{\lambda f(x_{i}) - f(x_{i+3})},\quad \lambda = \frac{f(x_{i+2})}{f(x_{i+3}) + f(x_{i+2})}\frac{f(x_{i+1})}{f(x_{i+2}) + f(x_{i+1})}\\
+&\approx C^5 \epsilon_{i}^4\epsilon_{i+1}^2 > 0.
+\end{aligned}
+$$
+Therefore, $\epsilon_{i+4}\approx C \epsilon_{i+3} \epsilon_{i+2}$. A full cycle consists of 4 iterations and 
+$$
+\epsilon_{i+8} \simeq C^7 \epsilon_{i+4}^6 \epsilon_{i+3}^2 \simeq C^{8}\epsilon_{i+4}^7 \epsilon_i^2.
+$$
+The order of convergence $p$ solves $p^2 - 7p - 2 = 0$, which gives $p = \sqrt[4]{\frac{7+\sqrt{57}}{2}}$.
+\end{proof}
+
+\begin{remark}
+\label{REM: 0-CO-PE-AS}
+Actually, the asymptotic expansion of $\epsilon_{i+4}$ is (expanded in $\epsilon_{i+1}$ first )
+
+$$
+\epsilon_{i+4} = C^5 \epsilon_{i}^4\epsilon_{i+1}^2 + C^7 \epsilon_i^7\epsilon_{i+1}
++ \cO(\epsilon_{i}^8 \epsilon_{i+1} + \epsilon_{i}^5 \epsilon_{i+1}^2 + \epsilon_{i}^3 \epsilon_{i+1}^3)$$
+
+It is at first not clear why we can retain the first term and drop the rest because it requires the following inequalities to hold
+
+$$\epsilon_{i}^3 \ll \epsilon_{i+1}\ll \epsilon_i.$$
+
+The latter one is correct because of the relation $\epsilon_{i+1} \simeq C \epsilon_{i}\epsilon_{i-1} \ll \epsilon_i$ once the iterations are close to the root. The former one is equivalent to $\epsilon_{i}^2 \ll \epsilon_{i-1}$. This can be made into an assumption because $\epsilon_{i-1}$ and $\epsilon_{i}$ are the last two iterations in the previous cycle, which correspond to $\epsilon_{i+3}$ and $\epsilon_{i+4}$ in the current cycle, we can use the above asymptotic estimate to find $\epsilon_{i+3}^3 \approx C^6 \epsilon_{i}^9 \epsilon_{i+1}^3 \ll \epsilon_{i+4}$. 
+
+Therefore, if the inequality does not hold, one can use the current cycle as the starting point to perform the same analysis.
+\end{remark}
+
+In the Pegasus method, two consecutive standard false position steps and two adjustment steps are performed in a full cycle. Although the decay over a full cycle is significant, such an advantage will be gone if the cycle is long. To make the cycle shorter, we need to drop at least one step. According to the previous analysis (see Illinois method), the standard false position step does not change the sign of the error asymptotically, thus it is preferred to drop one of the standard false position steps.
+
+Let us finish this section with a brief discussion on the improved Pegasus method \cite{king1973improved}, which takes advantage of the symmetry in the false position method to avoid consecutive standard false position steps. A similar technique can be also applied to other methods such as the Anderson-Bjorck method \cite{anderson1973new}.
+
+\begin{algorithm}[!htb]
+    \SetAlgoLined
+    \caption{Improved Pegasus Method}
+    \KwData{$f$, $a, b$, $\epsilon$}
+    \KwResult{root $c$}
+    $x_0\gets a$
+    
+    $x_1\gets b$
+    
+    $f_0\gets f(x_0)$
+    
+    $f_1\gets f(x_1)$
+    
+    $iter = 0$ //    initialization; 
+    \\
+    \While{\texttt{True}}{
+       $x_2 \gets x_0 - f_0 \frac{x_1 - x_0}{f_1 - f_0}$
+       
+       $f_2 \gets f(x_2)$
+       
+       $iter \gets iter + 1$. //standard false position step;
+       
+        \If{$ |f_2| < \epsilon$}{ return $x_2$ //check stopping criteria; }
+        {\color{cyan}\If{$f_1 f_2 < 0$}{swap $(x_0, f_0)$ and $(x_1, f_1)$; // avoid false position step}}
+        \While{$f_1 f_2 > 0$}{
+
+        $(x_0, f_0)\gets (x_0, \lambda f_0)$, where $\lambda = \frac{1}{2}$
+        
+        $(x_1, f_1)\gets (x_2, f_2)$ 
+        
+        $x_2 \gets x_0 - f_0 \frac{x_1 - x_0}{f_1 - f_0}$
+        
+        $f_2 \gets f(x_2)$
+        
+        $iter \gets iter + 1$.
+
+        \If{$ |f_2| < \epsilon$ }{return $x_2$; //check stopping criteria;}
+        }
+        \If {$f_1 f_2 < 0$}{ $(x_0, f_0)\gets (x_1, f_1)$ 
+        
+        $(x_1, f_1)\gets (x_2, f_2)$. }
+        
+    }
+    \label{ALG: IMPROVE_PEGASUS}
+\end{algorithm}
+
+\begin{theorem}
+The improved Pegasus method has an order of convergence at least $\sqrt[3]{5}$.
+\end{theorem}
+\begin{proof}
+In the same setting as the previous theorem, we will find the first iteration is the same as the Pegasus method (false position) that
+$$\epsilon_{i+1}\simeq C \epsilon_i \epsilon_{i-1} + D \epsilon_i \epsilon_{i-1}(\epsilon_{i} + \epsilon_{i-1}) < 0.$$
+For the second iteration, although $x_{i+1}$ and $x_{i}$ are on different sides, a false position step has been performed in the previous step, thus it will perform an adjustment step with $\lambda = \frac{f(x_{i}) - f(x_{i+1})}{f(x_{i})}$, then
+$$\epsilon_{i+2} \simeq -D \epsilon_{i+1}\epsilon_{i}\epsilon_{i-1},$$
+note the leading term is different from the Pegasus method. There are two options.
+\begin{itemize}
+    \item If $D < 0$, then $\epsilon_{i+2} > 0$ which completes a cycle with two iterations, which is very compact. In this case, we find
+    $$\epsilon_{i+4} \simeq C^{2}  \epsilon_{i+2}^3,$$
+    which implies an order of convergence at $\sqrt{3}$.
+    \item If $D > 0$, then it will perform another adjustment step,
+    $$\epsilon_{i+3} =  \frac{\epsilon_{i+2}\lambda f(x_i) - \epsilon_i f(x_{i+2})}{\lambda f(x_{i}) - f(x_{i+2})},\quad \lambda = \frac{f(x_{i+1})-f(x_{i+2})}{f(x_{i+1})}\frac{f(x_{i})-f(x_{i+1}) }{ f(x_{i})}$$
+    which will make $\epsilon_{i+3} \simeq -C^3 D \epsilon_{i-1}^3 \epsilon_i^3 > 0$, which completes a cycle with three iterations. In this case, we find
+    $$\epsilon_{i+6} \simeq D^{2}  \epsilon_{i+3}^5,$$
+    which implies an order of convergence at $\sqrt[3]{5}$. 
+\end{itemize}
+\end{proof}
+
+\section{Iterative Methods}
+\label{Sec: 0-IT-ME}
+In theory, the bracket methods are also iterative. However, one important phenomenon of bracket methods is that the current iteration may not be generated by the latest iterations. For instance, the false position method will have a stalled endpoint once the iterations are near the root. In the following, we will introduce some iterative methods, which generate new iterations based on the latest iterations.
+
+\subsection{Newton-Raphson Method}
+Let $f\in C^2$, if the current iteration $x_{n}$ is close to a root, then the Newton-Raphson method computes the next iteration $x_{n+1}$ by
+
+$$
+x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}.
+$$
+
+Geometrically, $x_{n+1}$ is the $x$-intercept of the tangent line of $f$ at $(x_n, f(x_n))$, see Fig~\ref{FIG: 0-RO-FI-NE-ME}. Asymptotically, the Newton-Raphson method has a quadratic convergence rate if the root is simple.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.6]{Figures/root_finding_img_2.png}
+    \caption{Newton-Raphson method}
+    \label{FIG: 0-RO-FI-NE-ME}
+\end{figure}
+
+\begin{theorem}
+Suppose $f\in C^2$ and the root is simple, then the order of convergence for the Newton-Raphson method is 2.
+\end{theorem}
+\begin{proof}
+The Taylor expansion of $f$ at $x_n$ is
+$$f(x) = f(x_n) + f'(x_n)(x - x_n) + \frac{f''(\zeta)}{2}(x - x_n)^2$$
+where $\zeta\in (x, x_n)$. The root is $x^{\ast}$, then $f(x^{\ast}) = 0$, thus
+$$0 = f(x_n) + f'(x_n)(x^{\ast} - x_n) + \frac{f''(\zeta)}{2}(x^{\ast} - x_n)^2.$$
+Therefore,
+$$
+-\frac{f''(\zeta)}{f'(x_n)} (x^{\ast} - x_n)^2= x^{\ast} - x_n + \frac{f(x_n)}{f'(x_n)} = x^{\ast} - x_{n+1}.
+$$
+If we denote the error $\epsilon_{n} = x_n - x^{\ast}$, then $\epsilon_{n+1} = \frac{f''(\zeta)}{f'(x_n)} \epsilon_{n}^2$, which implies the order of convergence is 2.
+\end{proof}
+\begin{remark}
+    The analysis can only provide convergence for the initial guess close to the root. If the initial guess is far from the root, then the sequence may diverge.
+\end{remark}
+\subsection{Secant Method}
+\label{SSec: 0-SE-ME}
+The secant method is similar to the false position method, but it always uses the latest two iterations to perform the next iteration. The secant method computes the next iteration $x_{n+1}$ by
+$$
+x_{n+1} = x_n - f(x_n)\frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}.
+$$
+Using the same derivation for the Illinois method, the error $\epsilon_{n} = x_n - x^{\ast}$ satisfies $\epsilon_{n+1} \simeq C \epsilon_{n}\epsilon_{n-1}$, see Figure~\ref{FIG: 0-RO-FI-SE}.
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[scale=0.6]{Figures/root_finding_img_3.png}
+    \caption{Secant method}
+    \label{FIG: 0-RO-FI-SE}
+\end{figure}
+It is easy to see the order of convergence $p$ solves the equation $p^2 - p - 1 = 0$, which gives $p = \frac{1 + \sqrt{5}}{2}$.
+\begin{remark}
+    The secant method can be generalized to higher dimensions, which is known as Broyden's method which iteratively updates both the point position and the approximated Jacobian. 
+\end{remark}
+\subsection{Brent Method}
+Brent's method belongs to the class of hybrid methods. It combines the bisection method, secant method, and inverse quadratic interpolation method. 
+
+The inverse quadratic interpolation can be viewed as a generalization of the secant method. Instead of using previous two iterations to generate the next, it uses the three points $(f_{n-2}, x_{n-2})$, $(f_{n-1}, x_{n-1})$, and $(f_{n}, x_{n})$ to find the next iteration at $(0, x_{n+1})$, its formula can be derived easily by 
 \begin{equation*}
-    \begin{cases}
-        S_k = 0 & k=0,\\
-        S_k = S_{k-1}~\boxed{+}~ \fl{x_k} & k\ge 1,
-    \end{cases}
+    x^{n+1} = \frac{f_n f_{n-1}\cdot x_{n-2}}{(f_n - f_{n-2})(f_{n-1} - f_{n-2})}  +  \frac{f_n f_{n-2}\cdot x_{n-1} }{(f_{n} - f_{n-1})(f_{n-2} - f_{n-1})} +  \frac{f_{n-1} f_{n-2}\cdot  x_{n}}{(f_{n-1} - f_{n})(f_{n-2} - f_{n})}.
 \end{equation*}
-we can carry out a similar analysis. Let $S^{\ast}_j = \sum_{k=1}^j x_k$ and  $\fl{x_k} = x_k ( 1 + \tau_k)$ for $|\tau_k|\le \textup{u}$, denote $\Delta S_j = S_j^{\ast} - S_j$, then
+The error $\eps_{n+1}$ can be found by 
 \begin{equation*}
-    \begin{aligned}
-        \Delta S_j &= S_j^{\ast} - S_j = S_{j}^{\ast} - ( S_{j-1}~\boxed{+}~ \fl{x_j}) \\
-        &= \Delta S_{j-1}(1 + \delta_j) - \delta_j S_{j}^{\ast} - x_j\tau_j(1+\delta_j),
-    \end{aligned}
+    \eps_{n+1} = \frac{f_n f_{n-1} \cdot \eps_{n-2} }{(f_n - f_{n-2})(f_{n-1} - f_{n-2})}  +  \frac{f_n f_{n-2}\cdot \eps_{n-1}  }{(f_{n} - f_{n-1})(f_{n-2} - f_{n-1})} +  \frac{f_{n-1} f_{n-2}\cdot  \eps_{n}}{(f_{n-1} - f_{n})(f_{n-2} - f_{n})}.
 \end{equation*}
-where $|\tau_j|, |\delta_j|\le \textup{u}$. Therefore
-\begin{equation*}
-    \begin{aligned}
-        |\Delta S_n|&\le |\Delta S_{n-1}|(1 + \textup{u}) + \textup{u} \sum_{k=1}^n |x_k| + |x_n| \textup{u}(1 + \textup{u}) \\
-        &\le |\Delta S_{n-2}|(1 + \textup{u})^2 + \textup{u}(1+\textup{u})  \sum_{k=1}^j |x_k| + |x_j| \textup{u}(1 + \textup{u})^2 \\
-        &\quad +  \textup{u} \sum_{k=1}^{j-1} |x_k| + |x_{j-1}| \textup{u}(1 + \textup{u})\\
-        &\le  \cdots \\
-        &\le  \sum_{l=1}^{n} \left( \textup{u}(1 + \textup{u})^{l-1} 
- \sum_{k=1}^l |x_k| + |x_{l}|\text{u}(1 + \textup{u})^{l-1} \right) \\
-        & \le \sum_{l=1}^{n} \left( \textup{u}(1 + \textup{u})^{l-1} \sum_{k=1}^n |x_k|  \right) + \left(\sum_{l=1}^n |x_{l}|\right)\text{u}(1 + \textup{u})^{n-1}\\
-        &= \left(\sum_{l=1}^n |x_{l}|\right) ((1 + \textup{u})^n - 1).
-        \end{aligned}
-\end{equation*}
-Using the previous Lemma~\ref{Lem: 1-Acc} will provide an estimate of $ ((1 + \textup{u})^n - 1)$ as long as $n\textup{u} < 1$.
+With the asymptotic expansion $f_n = f'(x^{\ast}) \eps_n + \frac{1}{2} f''(x^{\ast}) \eps_n^2 + \frac{1}{6} f'''(x^{\ast})\eps_n^3 + o(\eps_n^3)$, we can find the leading term is 
+$$\eps_{n+1} \approx \left[2 \left(\frac{f''(x^{\ast})}{2f'(x^{\ast})} \right)^2 - \frac{f'''(x^{\ast})}{6f'(x^{\ast})} \right]\eps_{n}\eps_{n-1}\eps_{n-2}.$$
+Therefore, the order of convergence $p$ solves $p^3 - p^2 - p - 1 = 0$ which implies $p = \frac{1}{3} + \frac{1}{3}\left(c + \frac{4}{c}\right)\approx 1.83929$, where $c = \sqrt[3]{\frac{38 - \sqrt{1188}}{2}}$. Although the order is greater than secant methods and many other methods, it also has several defects. For instance, if the values $f_n\approx f_{n-1}$ or $f_n\approx f_{n-2}$, the interpolation will be numerically unstable. In such cases, we need to roll back to less effective methods such as the secant method.  
 
 \section{Exercises}
-\label{Sec: Exe-1}
-Assume $n\in \bbN$ and $n\textup{u} < 1$, let $\{x_j\}_{j=1}^n$ be a sequence of real numbers, $\textsc{fl}:\overline{\mathbb{F}}\mapsto \mathbb{F}$ is the rounding operation, $\textup{u}$ is the machine epsilon. In the following, we briefly discuss the rounding error for floating point summation (sum reduction). 
-
-\begin{definition}
-    A reduction $\Pi$ of the floating point summation 
-    $$\fl{x_1} ~\boxed{+}~ \fl{x_2} ~\boxed{+}~\cdots ~\boxed{+}~ \fl{x_n}$$ is an evaluation order for the $~\boxed{+}~$ operations. For example, $n = 4$, then the reduction $\Pi = (3,1,2)$ is corresponding to the following calculation
-$$\fl{x_1} ~\boxed{+}~ \fl{x_2} + \underbrace{(\fl{x_3} ~\boxed{+}~ \fl{x_4})}_{=y_1}\to \underbrace{(\fl{x_1} ~\boxed{+}~ \fl{x_2})}_{=y_2} ~\boxed{+}~ y_1 \to \underbrace{(y_2 ~\boxed{+}~ y_1)}_{=y_3},$$
-where $y_i$ denotes the result of $i$-th $\boxed{+}$ operation in the reduction. The final summation will be $y_{n-1}$. We denote $T_n(\Pi)$ as the result of floating point summation with reduction order $\Pi$.
-\end{definition}
-
-
 \subsection{Theoretical Part}
 \begin{problem}
-    Prove that the native summation has the following error estimate
-    \begin{equation}
-    |T_n(\Pi) - S_n|\le \left( \frac{\textup{u} n }{1 - \textup{u} n } \right)\sum_{j=1}^n |x_j|,
-    \end{equation}
-    where $S_n = \sum_{j=1}^n x_j$ and $\Pi = (1,2,\dots, (n-1))$.
+Briefly explain why the formula $x_2 = x_0 - f_0 \frac{x_1 - x_0}{f_1 - f_0}$ in bracket methods will not suffer from catastrophic cancellation when $x_1 - x_0$ is small.
 \end{problem}
-
 \begin{problem}
-    Prove that
-    \begin{equation}
-    \min_{\Pi}|T_n(\Pi) - S_n| \le \left(\frac{ \textup{u} H }{1 - \textup{u} H  }\right)\sum_{j=1}^n |x_j|,
-    \end{equation}
-    where $H = \lceil\log_2 n \rceil$ and $T_n(\Pi)$ is the floating point summation with reduction order $\Pi$.
+The only difference between the improved Pegasus method and the usual Pegasus method is at the 3rd step in the while loop, which eliminates consecutive false position steps. This change is straightforward, but it leads to an improvement in the order of convergence. Explain why the Illinois method $\lambda = \frac{1}{2}$ cannot be faster by the same technique.
 \end{problem}
-
-\begin{problem}[Horner's scheme]
-\label{Prb: 1-Theo-3}
-The evaluation of polynomial 
-    $$p(x) = a_0 + a_1 x + \dots + a_n x^n$$
-is mostly using Horner's scheme, which writes the polynomial in `nested' form:
-\begin{equation}
-p(x) = a_0 + x (a_1 + x(a_2 + \dots x(a_{n-1} + x(a_n)))).
-\end{equation}                                
-Please find an upper bound of the rounding error for this scheme.         
+\begin{problem}
+Suppose $f\in C^2$ and the root $x^{\ast}$ has a multiplicity of $m>1$, then the order of convergence for the Newton-Raphson method is $1$. The modified Newton-Raphson method
+$$
+x_{n+1} = x_n - m\frac{f(x_n)}{f'(x_n)}
+$$
+has an order of convergence $2$.
 \end{problem}
 
 \subsection{Computational Part}
 The sample codes and test cases are available on GitHub. 
-\begin{problem}[Pairwise summation]
-    Based on the theoretical part, implement an algorithm for the summation $\sum_{j=1}^n x_j$ which has $\cO(\textup{u}\log_2 n)$ rounding error.
-\end{problem}
-
-\begin{problem}[Kahan compensated summation] 
-\label{Prb: 1-Kahan-Sum}
-Suppose $a, b\in\mathbb{R}$, the rounding error for the sum $s = \fl{\fl{a}+\fl{b}}$ ($a\ge b$) can be computed using 
-    $$\fl{\fl{s - \fl{a}}-\fl{b}}$$
-    Based on this property, one can keep track of the rounding error. 
-\begin{algorithm}[!htb]
-    \SetAlgoLined
-    \caption{Kahan compensated summation}
-    \KwData{$\{x_j\}_{j=1}^n\subset \mathbb{R}$}
-    \KwResult{$s_n = \sum_{j=1}^n x_j$ }
-    $j\gets 1$, $e_j \gets 0$, $s_j \gets x_j$ //    initialization; 
-    \\
-    \While{$j < n$}{
-        $j\gets j + 1$\\
-        $y_j = x_j - e_{j-1}$ //remove compensated error; \\ 
-        $s_j = s_{j-1} + y_j$ //perform summation;\\
-        $e_j = (s_j - s_{j-1}) - y_j$ //restore the rounding error;
-    }
-    \label{ALG: KAHAN}
-\end{algorithm}
-    Implement the Algorithm~\ref{ALG: KAHAN} described below and compare the accuracy with naive summation and pairwise summation with test cases.
-\end{problem}
-
-
-\begin{problem}
-    Suppose the inputs $\{x_j\}_{j=1}^n\subset \mathbb{R}$ are randomly distributed (say $x_j\sim U(0,1)$ i.i.d), what is the estimated growth of the expected rounding error in terms of the total number of inputs $n$ for the naive summation and pairwise summation? Please explain your result. You can use Algorithm~\ref{ALG: KAHAN} as the accurate result approximately. 
-\end{problem}
-\newpage
-% \section{Extended Reading}
-\nocite{higham1993accuracy,higham2019new,muller2006elementary}
 \bibliographystyle{apalike}
 \bibliography{chap1}
