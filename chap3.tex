@@ -137,14 +137,14 @@ If $f$ is twice differentiable, then clearly the function $g(x)\approx f'(x)$, w
     &=x_0 - \frac{|f(x_0)|^2}{f(z_1) - f(x_0)} = x_0 - \frac{f(x_0)}{g(x_0)} = x_1.
     \end{aligned}
     \end{equation}
-    When the iterates $x_0, z_1, z_2$ are close to the root $x^{\ast}$, the convergence is linear. Therefore, using the same derivation as Remark~\ref{rem: 4-aitken-conv}, we find 
+    The convergence is linear when the iterates $x_0, z_1, z_2$ are close to the root $x^{\ast}$. Therefore, using the same derivation as Remark~\ref{rem: 4-aitken-conv}, we find 
     \begin{equation*}
        x_1 - x^{\ast} = A x_0 - x^{\ast} = \cO( | x_0 - x^{\ast}|^2 ).
     \end{equation*}
 \end{proof}
 
 \begin{remark}
-    It should be noticed that Steffensen's method evaluates $f$ twice during each iteration, the same as Newton's method (one for $f$ and one for $f'$, although the evaluation of $f'$ is more expensive in practice). That is, each evaluation brings an order of $1$ of convergence on average. From the viewpoint of efficiency, the secant method is preferred, since it only evaluates $f$ once each iteration with an order of $\frac{1+\sqrt{5}}{2}$ of convergence. 
+    It should be noticed that Steffensen's method evaluates $f$ twice during each iteration, the same as Newton's method (one for $f$ and one for $f'$, although the evaluation of $f'$ is more expensive in practice). Each evaluation brings an order of $1$ of convergence on average. From the viewpoint of efficiency, the secant method is preferred, since it only evaluates $f$ once each iteration with an order of $\frac{1+\sqrt{5}}{2}$ of convergence. 
 \end{remark}
 It is natural to generalize Aitken extrapolation to improve the convergence further. Such an idea has been proposed by~\cite{schmidt1941xxxii} and~\cite{shanks1955non}. In~\cite{shanks1955non}, the sequence $S = \{s_n\}_{n\ge 0}$ is specified by the partial sum form,
 \begin{equation}
@@ -172,7 +172,7 @@ and the limit can be derived by Cramer's rule.
 \end{equation}
 Under this case, the $ e_k(s_n) $ is also called the Shanks transformation. When $k=1$, it corresponds to the standard Aitken extrapolation. The explicit form of $ e_k(s_n) $ will be given in the next section.
 \begin{remark}
-    It is quite straightforward to consider iterated Aitken extrapolation as another approach to further accelerate the convergence. See the exercise~\ref{Exer: 4-It-Aitken}. 
+    It is quite straightforward to consider iterated Aitken extrapolation as another approach to accelerate the convergence further. See the exercise~\ref{Exer: 4-It-Aitken}. 
 \end{remark}
 \subsection{Wynn's Epsilon Method}
 \label{SSec: 3-Wynn-Eps-Met}

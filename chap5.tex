@@ -1,19 +1,19 @@
 \chapter{Ordinary Differential Equations}
 The ordinary differential equations in the form
 $$y' = f(y, t),\quad y(a) = y_0$$
-are commonly used in modeling for various fields of physical sciences and biological studies. In this chapter we will derive and analyze the numerical methods for solving the above problems for ordinary differential equations.
+are commonly used in modeling for various fields of physical sciences and biological studies. In this chapter, we will derive and analyze the numerical methods for solving the above problems for ordinary differential equations.
 \section{Initial Value Problem}
 Let $f(y, t): \bbR^n\times [a, b]\to \bbR^N$ be a continuous function, the initial value problem is to determine a differentiable solution $y$ satisfying that 
 \begin{equation}\label{EQ: ODE}
     y' = f(y, t),\quad y(a) = y_0
 \end{equation}
-the derivative $y'\in\bbR$ denotes taking derivatives on all components of $y$. The general existence and uniqueness of solution to ODE~\eqref{EQ: ODE} depends on the Lipschitz condition of $f$
+the derivative $y'\in\bbR$ denotes taking derivatives on all components of $y$. The general existence and uniqueness of the solution to ODE~\eqref{EQ: ODE} depends on the Lipschitz condition of $f$
 $$\|f(y_1, t) - f(y_2, t)\|\le L\|y_1 - y_2\|,\quad t\in[a, b].$$
 \begin{theorem}
     If $f$ is $L$-Lipschitz continuous, then 
     \begin{enumerate}
         \item The ODE~\eqref{EQ: ODE} has a unique continuously differentiable solution $y: [t_0, t_1]\mapsto \bbR^N$.
-        \item The stability with respect to initial condition is Lipschitz, 
+        \item The stability with respect to the initial condition is Lipschitz, 
         $$\|y(t) - \tilde{y}(t)\|\le e^{L(t- t_0)}\|y(t_0) - \tilde{y}(t_0)\|$$
         where $y(t_0), \tilde{y}(t_0)$ are the initial conditions for $y$ and $\tilde{y}$.
     \end{enumerate}
@@ -53,7 +53,7 @@ The local error $E(t, h)$ (the quantity $E(t, h)/h$ is the local truncation erro
 \begin{equation}
     E(t, h) := y(t) + h \phi(t, y(t); h) - y(t + h),\quad 0\le h\le b - t
 \end{equation}
-denotes the induced error by one-step method at time $t+ h$.
+denotes the induced error by the one-step method at time $t+ h$.
 \end{definition}
 \begin{definition}[consistency]
     The \underline{consistency order} is $p$ if 
@@ -147,11 +147,11 @@ denotes the induced error by one-step method at time $t+ h$.
     The proof of consistency order uses Taylor's expansion, see exercises.
 \end{example}
 \subsection{Absolute Stability}
-In the previous section, we have discussed the so-called zero-stability, which shows that small perturbation (comparable to step size) during each step will not cause too much trouble. This stability is with respect to perturbation. The absolute stability is to keep the numerical solution bounded (actually decaying) as $n\to \infty$, which is an asymptotic behavior. The usual toy problem is 
+In the previous section, we discussed the so-called zero-stability, which shows that small perturbation (comparable to step size) during each step will not cause too much trouble. This stability is with respect to perturbation. The absolute stability is to keep the numerical solution bounded (actually decaying) as $n\to \infty$, which is an asymptotic behavior. The usual toy problem is 
 \begin{eqnarray}\label{EQ: ASTAB}
     y'(t) = f(t, y):= \lambda y(t),\quad t > 0
 \end{eqnarray}
-where $\lambda \in \bbC$ and initial condition is $y(0)= 1$. The solution is simple $y(t) = e^{\lambda t}$, of course if $\Re \lambda > 0$, the solution would blow and the solution will decay to zero if $\Re \lambda < 0$. 
+where $\lambda \in \bbC$ and initial condition is $y(0)= 1$. The solution is simple $y(t) = e^{\lambda t}$, of course, if $\Re \lambda > 0$, the solution would blow and the solution will decay to zero if $\Re \lambda < 0$. 
 
 \begin{definition}
     A numerical scheme is absolutely stable if 
@@ -184,8 +184,8 @@ The numerical scheme is called $A$-stable if $\cA\supset\bbC^{-}$. It can be sho
 
 
 \subsection{Rounding Error}
-In this section, we briefly discuss the impact of rounding error. 
-Following the previous theorem about the local error, if each step involves rounding error of size $|\delta_n|\le \delta$ 
+In this section, we briefly discuss the impact of rounding errors. 
+Following the previous theorem about the local error, if each step involves a rounding error of size $|\delta_n|\le \delta$ 
 \begin{equation}
     y_{n+1} = y_n + h_n \phi(t_n, y_n; h_n) + \delta_n 
 \end{equation}
@@ -201,16 +201,16 @@ where $\underline{h} = \min_{n\ge 0} h_n$. When the grid is uniform that $h_n = 
 \subsection{Extrapolation Methods}
 When the grid $\Delta$ is uniform, it is known that 
 $$y(t_n) - y_n = \cO(h^p),$$
-where $p$ is the consistency order. Actually, one can show that $y(t_n) - y_n$ can be written in an asymptotic expansion. For a proof of the following theorem, we refer to~\cite{gragg1965extrapolation}.
+where $p$ is the consistency order. One can show that $y(t_n) - y_n$ can be written in an asymptotic expansion. For a proof of the following theorem, we refer to~\cite{gragg1965extrapolation}.
 \begin{theorem}
     Let $f$ and $\phi$ be $(p+r)$-times continuously partial differentiable in each variable. Then there exists coefficients $c_{p+j}\in C^{r+1- j}([a, b],\bbR^N)$ that $c_{p+j}(a) = 0$ for $j=0,1,\dots, r-1$ and 
     \begin{equation}
         y(t_n) - y_n = \sum_{j=0}^{r-1} c_{p+j}(t_n) h^{p+j} + \cO(h^{p+r}).
     \end{equation}
 \end{theorem}
-In order to find solution's value $y(t_n)$ with higher order of error, one can simply apply Richardson extrapolation.
+To find the solution's value $y(t_n)$ with a higher order of error, one can simply apply Richardson extrapolation.
 \subsection{Adaptive One-step Methods}
-The idea of adaptive one-step method is similar to the adaptive quadrature. The basic algorithm is briefly outlined in the following:
+The idea of the adaptive one-step method is similar to the adaptive quadrature. The basic algorithm is briefly outlined in the following:
 \begin{enumerate}
     \item Using an initial uniform grid $\Delta$ with grid size of $h$, one can compute the numerical solution $y_n$ with error of $e_h = \cO(h^p)$.
     \item For each time step from $t_{n-1}$ to $t_n$, estimate the error of $e_h = y(t_n) - y_n$ from extrapolation, which is approximated by 
@@ -222,7 +222,7 @@ The idea of adaptive one-step method is similar to the adaptive quadrature. The 
             z_n(h)&=w_n(h) + \frac{h}{2}\phi(t_n+\frac{h}{2}, w(h); \frac{h}{2}).
         \end{aligned}
     \end{equation}
-    \item If the error is within certain tolerance threshold, then continue to next time step, otherwise sub-divide $[t_{n-1}, t_n]$ and perform the adaptive one-step method.
+    \item If the error is within a certain tolerance threshold, then continue to the next time step, otherwise sub-divide $[t_{n-1}, t_n]$ and perform the adaptive one-step method.
 \end{enumerate}
 
 \subsection{Multistep Methods}
@@ -237,7 +237,7 @@ An $m$-step method for the ODE~\eqref{EQ: ODE} on uniform grid is formulated by
  \end{remark}
 
  \begin{example}
-     The central difference explicit scheme 
+     The explicit scheme of central difference
      $$y_{n+1} = y_{n-1} + 2h f(t_n, y_n)$$
      Intuitively, 
      \begin{equation}
@@ -262,9 +262,9 @@ We can define the convergence and consistency for $m$-step methods similarly by 
     The consistency order is $p$ if local error 
     $$\|E(t, h)\|\le C h^{p+1}.$$
 \end{definition}
-For the following context, we assume that \emph{$\phi$ is Lipschitz for all variables except the first one}, clearly the linear multi-step methods satisfies this condition. 
+For the following context, we assume that \emph{$\phi$ is Lipschitz for all variables except the first one}, clearly the linear multi-step methods satisfy this condition. 
 \begin{definition}[root condition]
-    The generating polynomial with respect to multi-step method is 
+    The generating polynomial with respect to the multi-step method is 
     \begin{equation}
         p(\xi) := \sum_{j=0}^m c_j \xi^m
     \end{equation}
@@ -275,13 +275,13 @@ For the following context, we assume that \emph{$\phi$ is Lipschitz for all vari
     if a root $|\xi| = 1$, then it is simple. 
 \end{definition}
 \begin{theorem}
-    If root condition is satisfied, then 
+    If the root condition is satisfied, then 
     \begin{equation}
         \|y_l - y(t_l)\|\le C \left(\max_{0\le j\le m-1} \|y_j - y(t_j)\| + \max_{t\in[a. b - mh]} \|E(t, h)\|/h\right)
     \end{equation}
 \end{theorem}
 \begin{proof}
-    Similar to one-step method, we have 
+    Similar to the one-step method, we have 
     \begin{equation}
         \begin{aligned}
             \sum_{j=0}^m c_j y(t_{l+j}) &= h \phi(t_l, y(t_l),\dots, y_{t_{l+m}}; h) + E(t_l, h) \\
@@ -292,7 +292,7 @@ For the following context, we assume that \emph{$\phi$ is Lipschitz for all vari
     \begin{equation}
         \sum_{j=0}^m c_j e_{l+j} = \underbrace{h\left[  \phi(t_l, y_l,\dots, y_{l+m}; h)  - \phi(t_l, y(t_l),\dots, y_{t_{l+m}}; h)  \right]}_{\delta_l} - E(t_l, h)
     \end{equation}
-    The right-hand-side can be reviewed as certain perturbation and left-hand-side is a linear recursive scheme. This can be made into matrix form 
+    The right-hand side can be reviewed as a certain perturbation and left-hand-side is a linear recursive scheme. This can be made into a matrix form 
     \begin{equation}
         \underbrace{\begin{pmatrix}
             e_{l+1} \\ e_{l+2}\\ \vdots \\ e_{l +m} 
@@ -315,13 +315,13 @@ For the following context, we assume that \emph{$\phi$ is Lipschitz for all vari
     \begin{equation}
         E_l = A^l E_0 + \sum_{j=0}^{l-1} A^{l-1-j} \Delta_j 
     \end{equation}
-    If $E_l$ does not below, we need all eigenvalues $\lambda_k$ of $A$ satisfy $|\lambda_k|\le 1$, which are the roots of the polynomial (use elementary operations)
+    If $E_l$ does not below, we need all eigenvalues $\lambda_k$ of $A$ to satisfy $|\lambda_k|\le 1$, which are the roots of the polynomial (use elementary operations)
     $$\det(\lambda I - A) = 0$$
     That is exactly the generating polynomial:
     \begin{equation}
         p(\lambda) = \sum_{j=0}^{m} c_j \lambda^m 
     \end{equation}
-    When the root condition is satisfied, for the $|\lambda_k|<1$, those components will decay exponentially. If $|\lambda_k|=1$, its geometric multiplicity has to be equal to algebraic multiplicity (then the Jordan block is diagonal), otherwise one Jordan block will be with size greater than one,
+    When the root condition is satisfied, for the $|\lambda_k|<1$, those components will decay exponentially. If $|\lambda_k|=1$, its geometric multiplicity has to be equal to algebraic multiplicity (then the Jordan block is diagonal), otherwise, one Jordan block will be with a size greater than one,
      \begin{equation}
         J_k =\begin{pmatrix}
             \lambda_k & 1 &  &  \\ 
@@ -343,7 +343,7 @@ For the following context, we assume that \emph{$\phi$ is Lipschitz for all vari
             s \lambda_k^{s-1} \\ \lambda_k^s \\ 0\\\vdots \\ 0 
         \end{pmatrix}
     \end{equation}   
-    which will lead to unbounded behavior of $A^l$. Of course the root condition eliminates this case. Therefore 
+    which will lead to unbounded behavior of $A^l$. Of course, the root condition eliminates this case. Therefore 
     \begin{equation}
         \|E_{l}\|_{\infty} \le C \left( \|E_0\|_{\infty} + \sum_{j=0}^{l-1} \|\Delta_j\|_{\infty}\right) 
     \end{equation}
