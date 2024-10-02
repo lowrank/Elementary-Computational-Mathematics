@@ -796,7 +796,7 @@ Therefore, the interpolation error on $[a, b]$ is $\frac{1}{8} \|f''\|_{\infty} 
 \end{equation}
 where $\omega(f;\tau)$ is the modulus of continuity of $f$.
 \subsection{Cubic Splines}
-The cubic splines are particularly important in practice. Let $a = x_0 < x_1 <\dots < x_n = b$, and the corresponding values are $y_j$, $j = 0, \dots, n$. The constraints for cubic splines are: piecewise polynomial of degree 3 and continuous second derivative.a Denote the interpolation spline as $s_3$, then $\dd{s_3}$ is a piecewise linear function. On the sub-interval $[x_{j-1}, x_j]$, it can be represented by 
+The cubic splines are particularly important in practice. Let $a = x_0 < x_1 <\dots < x_n = b$, and the corresponding values are $y_j$, $j = 0, \dots, n$. The constraints for cubic splines are: piecewise polynomial of degree 3 and continuous second derivative. Denote the interpolation spline as $s_3$, then $\dd{s_3}$ is a piecewise linear function. On the sub-interval $[x_{j-1}, x_j]$, it can be represented by 
 \begin{equation}
     \dd{s_3}(x) = M_{j-1} \frac{x_j - x}{h_j} + M_j \frac{x - x_{j-1}}{h_j},\quad j = 1,\dots, n,
 \end{equation}

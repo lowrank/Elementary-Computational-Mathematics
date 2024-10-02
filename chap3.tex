@@ -258,7 +258,7 @@ Let $A\in \bbR^{n\times n}$ and $\alpha, \beta,\gamma, \delta\in\bbR$, $\ba, \bb
     \end{pmatrix}\begin{pmatrix}
         \det(A) \\ - \det(A) \bv \\ 0
     \end{pmatrix} = \begin{pmatrix}
-        \det(A) (\alpha - \ba^T A^{-1} \bb) \\ \bzero \\ \det(a) (\gamma - \bd^T A^{-1}\bb)
+        \det(A) (\alpha - \ba^T A^{-1} \bb) \\ \bzero \\ \det(A) (\gamma - \bd^T A^{-1}\bb)
     \end{pmatrix}.
     \end{equation}
     By Schur's complement, 
@@ -878,9 +878,9 @@ The finite difference formula provides a simple and effective way to evaluate th
 \end{example}
 For higher-order derivatives, the rounding error would have an even greater impact on the finite difference schemes. Then it is much more important to avoid $h$ being too small. 
 
-\subsection{Improve by Extrapolation}
+\subsection{Improving by Extrapolation}
 \label{SSec: 3-Imp-by-Ext}
-Now we can combine the previously discussed extrapolation technique to acquire a higher-ordered scheme. We use a very simple example to show how this works. 
+We can combine the previously discussed extrapolation technique to acquire a higher-ordered scheme. We use a very simple example to show how this works. 
 \begin{example}
     Suppose $A(f, h)$ is the central difference scheme for $f'(x)$, which is 
     \begin{equation}
