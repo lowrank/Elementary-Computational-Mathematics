@@ -1,30 +1,62 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% ARTICLE TEMPLATE LATEX %%%%%%%%%%%%%%%%
-\documentclass[12pt,a4paper,final]{book}
+% \PassOptionsToPackage{table}{xcolor}
+
+\documentclass[11pt,a4paper]{book}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[
+    bindingoffset=0.2in,
+    centering,
+    marginparwidth=1.5in,
+    textwidth=5.1in,
+    marginparsep=2em,
+    top=1.75in,
+    bottom=1.75in]{geometry}
+
+% \usepackage[cam,a3,center,pdftex]{crop}
+
+\usepackage{marginnote}
+\usepackage{tabularx}
 \usepackage{fontspec}
 \setmainfont[ Path = font/, 
 UprightFont = *-Regular,
  BoldFont = *-Bold,
- ItalicFont = *-Italic]
+ ItalicFont = *-Italic,
+ BoldItalicFont = *-BoldItalic]
 {GentiumBookPlus}
-% \setmainfont{Gentium Book Plus}
+
+% \newfontfamily{\symbola}[Path = font/]{Symbola}
+
+% \setmonofont[Path = font/]{FiraCodeNerdFont-Regular}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{graphicx}
 \graphicspath{{./Figures/}}
 \usepackage{subfigure}
-
+\usepackage{lipsum}
 \usepackage{titling}
+\usepackage{lettrine}
+\usepackage{GoudyIn}
+\renewcommand{\LettrineFontHook}{\color{Mahogany!70!black}\GoudyInfamily{}}
+% \LettrineTextFont{\itshape}
+\setcounter{DefaultLines}{3}%
 
-\usepackage[Conny]{fncychap}
-
+% \usepackage[Conny]{fncychap}
+% \usepackage[Rejne]{fncychap}
+\usepackage[Lenny]{fncychap}
+\usepackage{framed}
 \usepackage{latexsym}
 \usepackage{xfrac}
-% \usepackage{amssymb}
+\usepackage{romannum}
+\usepackage{amssymb}
+\usepackage{textcomp} 
+\usepackage{marvosym} 
+\usepackage{pifont}
+\usepackage{extarrows}% http://ctan.org/pkg/extarrows
 % include setspace package
 \usepackage{setspace}
-
+\usepackage{wrapfig}
 % include ams math package
 \usepackage{amsmath}
 
@@ -33,7 +65,6 @@ UprightFont = *-Regular,
 
 % include ams theorem package
 \usepackage{amsthm,amsxtra}
-
 % include the showkeys package
 %\usepackage{showkeys}
 \usepackage[final]{showkeys}
@@ -44,7 +75,10 @@ UprightFont = *-Regular,
 
 \usepackage[makeroom]{cancel}
 \usepackage{imakeidx}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{tcolorbox}
+
+% \usepackage[x11names]{xcolor}
 
 
 
@@ -61,20 +95,20 @@ UprightFont = *-Regular,
 % \usepackage{algorithmicx}
 % \usepackage{algpseudocode}
 \usepackage{mathtools}
-
-% include pdftricks (pstricks version)
-
-% \usepackage{pdftricks}
-% \begin{psinputs}
-% 	\usepackage{pstricks}
-% 	\usepackage{pstcol}
-% 	\usepackage{pst-plot}
-% 	\usepackage{pst-tree}
-% 	\usepackage{pst-eps}
-% 	\usepackage{multido}
-% 	\usepackage{pst-node}
-% 	\usepackage{pst-eps}
-% \end{psinputs}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{extarrows}
+\usepackage{mdframed}
+\mdfsetup{skipabove=1em,skipbelow=1em}
+%%%%%%%%%%%%% tikz
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows, arrows.meta, decorations.markings, positioning}
+\usepackage{tikz}
+%%%%%%%%%%%%%
+% code
+\usepackage{minted}
 
 
 % include hyperref package
@@ -94,24 +128,35 @@ plainpages=false,pdfpagelabels]{hyperref}
 % To define headers and footers
 \usepackage{fancyhdr}
 
+\usepackage[affil-it]{authblk}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{azure(colorwheel)}{rgb}{0.0, 0.5, 1.0}
+\definecolor{darkmagenta}{rgb}{0.55, 0.0, 0.55}
+\definecolor{cobalt}{rgb}{0.0, 0.28, 0.67}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % define theorem type of commands
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{theorem}{\color{teal}Theorem}[section]
+\newtheorem{lemma}[theorem]{\color{teal}Lemma}
+\newtheorem{definition}[theorem]{\color{BrickRed}Definition}
+\newtheorem{corollary}[theorem]{\color{teal}Corollary}
+\newtheorem{proposition}[theorem]{\color{teal}Proposition}
+\newtheorem{question}[theorem]{\color{Periwinkle}Definition}
+\newtheorem{problem}[theorem]{\coffee\color{Violet}Problem}
+\newtheorem{hardproblem}[theorem]{\coffee\color{Violet}Problem}
+\newtheorem{easyproblem}[theorem]{\hotspring\color{Violet}Problem}
+\newtheorem{example}[theorem]{\color{darkmagenta}Example}
+\newtheorem{remark}[theorem]{\color{azure(colorwheel)}Remark}
 
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{example}[theorem]{Example}
-\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{exercise}[theorem]{\color{cobalt}Exercise}
 \newtheorem{convention}[theorem]{Convention}
 \newtheorem{statement}[theorem]{Statement}
 \newtheorem{fact}[theorem]{Fact}
-\newtheorem{axiom}[theorem]{Axiom}
-\newtheorem{question}[theorem]{Question}
-\newtheorem{proposition}[theorem]{Proposition} 
-\newtheorem{remark}[theorem]{Remark} 
-\newtheorem{corollary}[theorem]{Corollary} 
-\newtheorem{problem}[theorem]{Problem} 
+\newtheorem{axiom}[theorem]{Axiom} 
 \newtheorem{notation}{Notation}
 \newtheorem{assumption}{Assumption}
 
@@ -255,6 +300,12 @@ plainpages=false,pdfpagelabels]{hyperref}
 \newcommand{\dd}[1]{{#1}''}% 2nd derivative
 \newcommand{\mathtitle}[1]{\texorpdfstring{#1}{}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\hotspring}{\scalebox{1.2}{\Pointinghand}\,}
+\newcommand{\leaves}{\scalebox{1.15}{\textleaf}\,}
+\newcommand{\coffee}{\scalebox{1.2}{\Coffeecup}\,}
+
+\colorlet{gray}{gray!70}
+
 %%%%%%%%%%%%%%%%%%%%%%
 % setup page layout
 %%%%%%%%%%%%%%%%%%%%%%
@@ -264,19 +315,17 @@ plainpages=false,pdfpagelabels]{hyperref}
 % mm - millimeters 
 % cm - centimeters 
 % letter paper: 8.5 inch x 11.0 inch
-\setlength\textwidth{39pc}
-\setlength\textheight{52pc}
-\setlength\hoffset{0pc}
-\setlength\voffset{0pc}
-\setlength\topmargin{0pt}
-\setlength\headheight{0pt}
-\setlength\headsep{50pt}
-\setlength\oddsidemargin{0in}
-\setlength\evensidemargin{0in}
+% \setlength\textwidth{39pc}
+% \setlength\textheight{52pc}
+% \setlength\hoffset{0pc}
+% \setlength\voffset{0pc}
+% \setlength\topmargin{0pt}
+% \setlength\headheight{0pt}
+% \setlength\headsep{50pt}
 
-%\addtolength\oddsidemargin{-1.2cm}
-%\addtolength\evensidemargin{-1.2cm}
-%\addtolength\topmargin{-1.5cm}
+% \addtolength\oddsidemargin{-1.2cm}
+% \addtolength\evensidemargin{-1.2cm}
+% \addtolength\topmargin{-1.5cm}
 
 \setlength{\parindent}{0mm}
 \setlength{\parskip}{1mm}
@@ -295,6 +344,7 @@ plainpages=false,pdfpagelabels]{hyperref}
 }
 
 
+
 \makeatletter
 \newcommand{\chapterauthor}[1]{%
 	{\parindent0pt\vspace*{-25pt}%
@@ -302,11 +352,20 @@ plainpages=false,pdfpagelabels]{hyperref}
 		\par\nobreak\vspace*{35pt}}
 	\@afterheading%
 }
+
 \makeatother
+
+\setstretch{1.05}
+
 \title{Elementary Computational Mathematics}
 \subtitle{Research Training Project I}
-\author{Yimin Zhong}
-\date{\today}
+\author{Yimin Zhong\\\vspace{0.5cm}
+\includegraphics[scale=0.3]{Figures/randomwalk-0.png}}
+\date{}
+\vspace{4cm}
+\affil{\vspace{1cm}Department of Mathematics and Statistics,\\Auburn University}
+\makeindex
+% \date{\today}
 
 \makeindex
 \begin{document}

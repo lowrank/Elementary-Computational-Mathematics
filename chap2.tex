@@ -296,7 +296,7 @@ More importantly, the Chebyshev polynomial has the following optimality property
 \begin{proof}
     Let the roots of $T_{n+1}(x)$ be $z_0, z_1, \dots, z_{n}\in [-1, 1]$, then we can write 
     $$T_{n+1} = 2^{n}(x - z_0)(x-z_1)\dots (x - z_{n}),$$
-    therefore $\frac{1}{2^n} T_{n+1}(x)$ is a polynomial with leading coefficient as $1$. Since $\max_{x\in[-1,1]} |T_{n+1}(x)| = 1$, it is clear that $\max_{x\in [-1,1]} \frac{1}{2^n}|T_{n+1}(x)| = \frac{1}{2^n}$, which is the second equality in~\eqref{EQ: CHEBY}. For the first equality, we try to prove it by contradiction. Let $x_0, x_1, \dots, x_n\in [-1, 1]$, such that 
+    therefore $\frac{1}{2^n} T_{n+1}(x)$ is a polynomial with leading coefficient as $1$. Since $$\max_{x\in[-1,1]} |T_{n+1}(x)| = 1,$$ it is clear that $\max_{x\in [-1,1]} \frac{1}{2^n}|T_{n+1}(x)| = \frac{1}{2^n}$, which is the second equality in~\eqref{EQ: CHEBY}. For the first equality, we try to prove it by contradiction. Let $x_0, x_1, \dots, x_n\in [-1, 1]$, such that 
     $$\max_{x\in[-1,1]}|\omega(x)| < \frac{1}{2^n},$$
     then we define the polynomial $\psi(x) = \frac{1}{2^n}T_{n+1}(x)- \omega(x)$, its degree is at most $n$ due to cancellation, therefore at most have $n$ zeros. On the other side, because $\frac{1}{2^n}T_{n+1}(s_j) = \frac{1}{2^n}(-1)^j$ achieves the extrema at $s_j = \cos(\frac{j\pi}{n+1})$, $j=0,\dots, (n+1)$, the polynomial $\psi(s_j)$ must share the same sign of $\frac{1}{2^n}T_{n+1}(s_j)$. This means $\psi(x)$ changes sign $(n+1)$ times, hence $(n+1)$ zeros. It is a contradiction.
 \end{proof}
