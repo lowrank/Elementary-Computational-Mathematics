@@ -1055,7 +1055,7 @@ The following theorem shows that the B-spline representation is relatively stabl
 \begin{proof}
     
 \end{proof}
-A precision characterization of the constant is conjectured as $D_{k,\infty} < c 2^{k}$, this is known as the ``De Boor's $2^k$ conjecture''~\cite{de1990exact}. Currently, the best-known result is $D_{k,\infty} \le k 2^{k-1}$ by~\cite{scherer1999new}. 
+A precise characterization of the constant is conjectured as $D_{k,\infty} < c 2^{k}$; this is known as the ``De Boor's $2^k$ conjecture''~\cite{de1990exact}. Currently, it has been shown $D_{k,\infty} \le k 2^{k-1}$ by~\cite{scherer1999new} and $D_{k,\infty} \le \cO(\sqrt{k}\log k 2^{k})$ by~\cite{zhong2026improvement}, the conjecture still remains open.
 
 
 
@@ -1064,7 +1064,7 @@ A precision characterization of the constant is conjectured as $D_{k,\infty} < c
 
 \section{Reproducing Kernel Hilbert Space}
 \label{Sec: 2-Rep-Ker-Hil-Spa}
-Let $H$ be a Hilbert space of functions defined on $\cX$, with inner product $\aver{\cdot, \cdot}$ such that the \emph{point evaluation map} $x: H\mapsto \bbC$ is bounded $\forall x\in \cX$. Then $H$ is called \emph{reproducing kernel Hilbert space} or RKHS for short. By Riesz's representation Theorem, there exists $\psi_x\in H$ that 
+Let $H$ be a Hilbert space of functions defined on $\cX$, with inner product $\aver{\cdot, \cdot}$ such that the \emph{point evaluation map} $x: H\mapsto \bbC$ is bounded $\forall x\in \cX$. Then $H$ is called a \emph{reproducing kernel Hilbert space} or RKHS for short. By Riesz's representation Theorem, there exists $\psi_x\in H$ that 
 \begin{equation}
     f(x) = \aver{f, \psi_x},\quad \forall f\in H.
 \end{equation}
